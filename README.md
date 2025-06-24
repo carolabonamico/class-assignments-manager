@@ -77,6 +77,68 @@ Junction table linking assignments to student groups.
 
 ![Screenshot](./img/screenshot.jpg)
 
+## Setup and Installation
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm
+- SQLite3
+
+### Installation Steps
+
+1. **Clone and Install Dependencies**
+
+   ```bash
+   # Clone the repository
+   git clone <repository-url>
+   cd esame2-compiti-carolabonamico
+
+   # Install server dependencies
+   cd server
+   npm install
+
+   # Install client dependencies
+   cd ../client
+   npm install
+   ```
+2. **Database Setup**
+
+   ```bash
+   # Initialize database with test data
+   cd ../server
+   npm run init-db
+   ```
+3. **Start the Application**
+
+   ```bash
+   # Terminal 1: Start server (port 3001)
+   cd server
+   npm start
+
+   # Terminal 2: Start client (port 5173)
+   cd client
+   npm run dev
+   ```
+
+### Database Management Scripts
+
+The server includes convenient npm scripts for database management:
+
+| Script                       | Command                        | Description                                                           |
+| ---------------------------- | ------------------------------ | --------------------------------------------------------------------- |
+| **Initialize DB**      | `npm run init-db`            | Creates database, tables, and inserts test data with secure passwords |
+| **Reset DB**           | `npm run reset-db`           | Completely resets database (⚠️ deletes all data!)                   |
+| **Generate Passwords** | `npm run generate-passwords` | Generates new random password hashes                                  |
+
+#### Database Reset Workflow
+
+```bash
+cd server
+npm run reset-db  # Clean slate with fresh test data
+npm start         # Ready to test
+```
+
 ## Users Credentials
 
 ### Teachers
@@ -116,10 +178,19 @@ Junction table linking assignments to student groups.
 ### Test Data Information
 
 - **Total Users**: 24 (2 teachers + 22 students)
-- **Password Security**: All passwords are hashed using crypto.scrypt with unique salts
+- **Password Security**: All passwords are hashed using Node.js crypto.scrypt with randomly generated salts
+  - Teachers use password: `password123`
+  - Students use password: `student123`
+  - Each user has a unique random salt generated with crypto.randomBytes(8)
+  - Password hashes are automatically applied during database initialization
 - **Pre-loaded Assignments**: Prof. Mario Rossi has created 2 sample assignments:
   - Assignment #1: "Implement a merge sort algorithm..." (CLOSED - evaluated with score 27/30)
     - Group: Giulia Bianchi, Marco Ferrari, Laura Russo
   - Assignment #2: "Design and implement a library management system..." (OPEN - awaiting student response)
     - Group: Alessandro Bruno, Francesca Romano, Davide Ricci, Chiara Marino
 - **Login Format**: Use email as username
+
+### Development Notes
+
+- Database is automatically initialized with secure password hashes when running `npm run init-db`
+- Use `npm run reset-db` to restore the database to initial state during development

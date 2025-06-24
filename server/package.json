@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "start": "nodemon index.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init-db": "sqlite3 compiti.sqlite < create_db.sql && sqlite3 compiti.sqlite < update_passwords_with_salts.sql",
+    "reset-db": "rm -f compiti.sqlite && npm run init-db",
+    "generate-passwords": "node generate_passwords.mjs"
   },
   "author": "Carola Bonamico",
   "license": "ISC",
