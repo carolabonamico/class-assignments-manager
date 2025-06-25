@@ -1,0 +1,376 @@
+# Esame #2 "Compiti" - API Test File
+# Server should be running on http://localhost:3001
+
+### Variables
+@baseUrl = http://localhost:3001
+@teacherEmail = mario.rossi@polito.it
+@teacherPassword = password123
+@studentEmail = giulia.bianchi@studenti.polito.it
+@studentPassword = student123
+
+#########################################
+# AUTHENTICATION TESTS
+#########################################
+
+### 1. Login as Teacher
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{teacherEmail}}",
+  "password": "{{teacherPassword}}"
+}
+
+###
+
+### 2. Login as Student
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{studentEmail}}",
+  "password": "{{studentPassword}}"
+}
+
+###
+
+### 3. Check Current Session
+GET {{baseUrl}}/api/sessions/current
+
+###
+
+### 4. Logout
+DELETE {{baseUrl}}/api/sessions/current
+
+###
+
+#########################################
+# UNAUTHENTICATED ACCESS TESTS (Should fail with 401)
+#########################################
+
+### 5. Try to get students without login (Should return 401)
+GET {{baseUrl}}/api/students
+
+###
+
+### 6. Try to get assignments without login (Should return 401)
+GET {{baseUrl}}/api/assignments
+
+###
+
+### 7. Try to create assignment without login (Should return 401)
+POST {{baseUrl}}/api/assignments
+content-type: application/json
+
+{
+  "question": "Test question without auth",
+  "studentIds": [3, 4, 5]
+}
+
+###
+
+#########################################  
+# TEACHER AUTHENTICATED TESTS
+#########################################
+
+### 8. Login as Teacher (for following tests)
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{teacherEmail}}",
+  "password": "{{teacherPassword}}"
+}
+
+###
+
+### 9. Get all students (Teacher)
+GET {{baseUrl}}/api/students
+
+###
+
+### 10. Get all assignments (Teacher view)
+GET {{baseUrl}}/api/assignments
+
+###
+
+### 11. Get specific assignment (Teacher)
+GET {{baseUrl}}/api/assignments/1
+
+###
+
+### 12. Create new assignment (Teacher)
+POST {{baseUrl}}/api/assignments
+content-type: application/json
+
+{
+  "question": "Implement a REST API for a library management system using Express.js. Include CRUD operations for books and authors.",
+  "studentIds": [10, 11, 12]
+}
+
+###
+
+### 13. Create assignment with invalid data (Should return 400)
+POST {{baseUrl}}/api/assignments
+content-type: application/json
+
+{
+  "question": "",
+  "studentIds": [3]
+}
+
+###
+
+### 14. Create assignment with too many students (Should return 400)
+POST {{baseUrl}}/api/assignments
+content-type: application/json
+
+{
+  "question": "Test question",
+  "studentIds": [3, 4, 5, 6, 7, 8, 9]
+}
+
+###
+
+### 15. Evaluate assignment (Teacher)
+PUT {{baseUrl}}/api/assignments/1/evaluate
+content-type: application/json
+
+{
+  "score": 25
+}
+
+###
+
+### 16. Evaluate with invalid score (Should return 400)
+PUT {{baseUrl}}/api/assignments/1/evaluate
+content-type: application/json
+
+{
+  "score": 35
+}
+
+###
+
+### 17. Get statistics (Teacher only)
+GET {{baseUrl}}/api/statistics
+
+###
+
+#########################################
+# STUDENT AUTHENTICATED TESTS  
+#########################################
+
+### 18. Login as Student (for following tests)
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{studentEmail}}",
+  "password": "{{studentPassword}}"
+}
+
+###
+
+### 19. Get all students (Student)
+GET {{baseUrl}}/api/students
+
+###
+
+### 20. Get assignments (Student view)
+GET {{baseUrl}}/api/assignments
+
+###
+
+### 21. Get specific assignment (Student)
+GET {{baseUrl}}/api/assignments/2
+
+###
+
+### 22. Submit answer to assignment (Student)
+PUT {{baseUrl}}/api/assignments/2/answer
+content-type: application/json
+
+{
+  "answer": "Here is our solution:\n\n1. We designed a RESTful architecture with the following endpoints:\n   - GET /books - List all books\n   - POST /books - Create new book\n   - PUT /books/:id - Update book\n   - DELETE /books/:id - Delete book\n\n2. We implemented proper error handling and validation\n3. We used SQLite as the database\n4. We included authentication middleware\n\nThe complete implementation includes all CRUD operations as requested."
+}
+
+###
+
+### 23. Submit answer with empty content (Should return 400)
+PUT {{baseUrl}}/api/assignments/2/answer
+content-type: application/json
+
+{
+  "answer": ""
+}
+
+###
+
+### 24. Try to access statistics as student (Should return 403)
+GET {{baseUrl}}/api/statistics
+
+###
+
+### 25. Try to create assignment as student (Should return 403)
+POST {{baseUrl}}/api/assignments
+content-type: application/json
+
+{
+  "question": "Student trying to create assignment",
+  "studentIds": [3, 4, 5]
+}
+
+###
+
+### 26. Try to evaluate assignment as student (Should return 403)
+PUT {{baseUrl}}/api/assignments/1/evaluate
+content-type: application/json
+
+{
+  "score": 20
+}
+
+###
+
+#########################################
+# AUTHORIZATION TESTS (Wrong roles)
+#########################################
+
+### 27. Login as different student
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "marco.ferrari@studenti.polito.it",
+  "password": "{{studentPassword}}"
+}
+
+###
+
+### 28. Try to answer assignment not assigned to you (Should return 400/403)
+PUT {{baseUrl}}/api/assignments/2/answer
+content-type: application/json
+
+{
+  "answer": "Trying to answer assignment not assigned to me"
+}
+
+###
+
+#########################################
+# EDGE CASES & ERROR TESTING
+#########################################
+
+### 29. Login with wrong password (Should return 401)
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{teacherEmail}}",
+  "password": "wrongpassword"
+}
+
+###
+
+### 30. Login with non-existent user (Should return 401)
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "nonexistent@example.com",
+  "password": "password"
+}
+
+###
+
+### 31. Get non-existent assignment (Should return 404)
+# Login as teacher first
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{teacherEmail}}",
+  "password": "{{teacherPassword}}"
+}
+
+###
+
+GET {{baseUrl}}/api/assignments/999
+
+###
+
+### 32. Evaluate non-existent assignment (Should return 404/400)
+PUT {{baseUrl}}/api/assignments/999/evaluate
+content-type: application/json
+
+{
+  "score": 20
+}
+
+###
+
+### 33. Answer non-existent assignment (Should return 404/400)
+# Login as student first
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{studentEmail}}",
+  "password": "{{studentPassword}}"
+}
+
+###
+
+PUT {{baseUrl}}/api/assignments/999/answer
+content-type: application/json
+
+{
+  "answer": "Answer to non-existent assignment"
+}
+
+###
+
+#########################################
+# GROUP CONSTRAINTS TESTING
+#########################################
+
+### 34. Login as Teacher for group constraint tests
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{teacherEmail}}",
+  "password": "{{teacherPassword}}"
+}
+
+###
+
+### 35. Try to create assignment with same group twice (Should test group constraints)
+POST {{baseUrl}}/api/assignments
+content-type: application/json
+
+{
+  "question": "Testing group constraints - same students as previous assignment",
+  "studentIds": [3, 4, 5]
+}
+
+###
+
+### 36. Create assignment with different group (Should work)
+POST {{baseUrl}}/api/assignments
+content-type: application/json
+
+{
+  "question": "New assignment with different student group",
+  "studentIds": [6, 7, 8, 9]
+}
+
+###
+
+#########################################
+# FINAL CLEANUP
+# 37. Logout to clean session
+DELETE {{baseUrl}}/api/sessions/current
+
+###
