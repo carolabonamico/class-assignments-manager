@@ -183,7 +183,7 @@ function AssignmentDetail({ user }) {
                       required
                     />
                   </Form.Group>
-                  <Button type="submit" variant="primary" disabled={submitting}>
+                  <Button type="submit" variant="success" disabled={submitting}>
                     {submitting ? 'Invio in corso...' : 'Invia Risposta'}
                   </Button>
                 </Form>

@@ -3,6 +3,7 @@ import { Card, Badge, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import API from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import dayjs from 'dayjs';
 
 function Dashboard({ user }) {
   const [assignments, setAssignments] = useState([]);
@@ -58,10 +59,10 @@ function Dashboard({ user }) {
                       className="text-decoration-none"
                     >
                       <div className="border rounded p-2 hover-bg-light">
-                        <strong>{assignment.question.substring(0, 50)}...</strong>
+                        <span className="text-muted">{assignment.question.substring(0, 50)}...</span>
                         <br />
                         <small className="text-muted">
-                          {user.role === 'teacher' ? 'Creato' : 'Assegnato da'}: {assignment.teacher_name}
+                          Data creazione: {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}
                         </small>
                       </div>
                     </Link>
@@ -94,7 +95,7 @@ function Dashboard({ user }) {
                       className="text-decoration-none"
                     >
                       <div className="border rounded p-2 hover-bg-light">
-                        <strong>{assignment.question.substring(0, 50)}...</strong>
+                        <span className="text-muted">{assignment.question.substring(0, 50)}...</span>
                         <br />
                         <small className="text-muted">
                           Voto: {assignment.score || 'N/A'}/30
@@ -129,7 +130,7 @@ function Dashboard({ user }) {
                   <Button as={Link} to="/create-assignment" variant="success">
                     Crea nuovo compito
                   </Button>
-                  <Button as={Link} to="/statistics" variant="info">
+                  <Button as={Link} to="/statistics" variant="warning">
                     Visualizza statistiche
                   </Button>
                 </>

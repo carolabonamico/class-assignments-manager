@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Table, Form, Badge } from 'react-bootstrap';
+import { Card, Table, Form, Badge, Row, Col } from 'react-bootstrap';
 import API from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -99,50 +99,49 @@ function Statistics() {
           {sortedStats.length === 0 ? (
             <p className="text-muted text-center">Nessuna statistica disponibile.</p>
           ) : (
-            <Table responsive hover>
-              <thead>
-                <tr>
-                  <th>Studente</th>
-                  <th className="text-center">Compiti Aperti</th>
-                  <th className="text-center">Compiti Chiusi</th>
-                  <th className="text-center">Totale</th>
-                  <th className="text-center">Media Ponderata</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedStats.map(student => (
-                  <tr key={student.id}>
-                    <td className="align-middle">
-                      <strong>{student.name}</strong>
-                      <br />
-                      <small className="text-muted ">{student.email}</small>
-                    </td>
-                    <td className="text-center align-middle">
-                      <Badge bg="success">{student.open_assignments}</Badge>
-                    </td>
-                    <td className="text-center align-middle">
-                      <Badge bg="primary">{student.closed_assignments}</Badge>
-                    </td>
-                    <td className="text-center align-middle">
-                      <strong>{student.total_assignments}</strong>
-                    </td>
-                    <td className="text-center align-middle">
-                      {student.weighted_average !== null ? (
-                        <Badge 
-                          bg={student.weighted_average >= 24 ? 'success' : 
-                              student.weighted_average >= 18 ? 'warning' : 'danger'}
-                          text={student.weighted_average >= 24 ? 'white' : 'dark'}
-                        >
-                          {student.weighted_average.toFixed(2)}
-                        </Badge>
-                      ) : (
-                        <span className="text-muted">N/A</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+            <div>
+              {/* Header Row */}
+              <Row className="fw-bold border-bottom pb-2 mb-3">
+                <Col xs={12} md={4}>Studente</Col>
+                <Col xs={3} md={2} className="text-center">Compiti Aperti</Col>
+                <Col xs={3} md={2} className="text-center">Compiti Chiusi</Col>
+                <Col xs={3} md={2} className="text-center">Totale</Col>
+                <Col xs={3} md={2} className="text-center">Media Ponderata</Col>
+              </Row>
+
+              {/* Data Rows */}
+              {sortedStats.map(student => (
+                <Row key={student.id} className="py-3 border-bottom align-items-center hover-row">
+                  <Col xs={12} md={4} className="mb-2 mb-md-0">
+                    <strong>{student.name}</strong>
+                    <br />
+                    <small className="text-muted">{student.email}</small>
+                  </Col>
+                  <Col xs={3} md={2} className="text-center">
+                    <Badge bg="success">{student.open_assignments}</Badge>
+                  </Col>
+                  <Col xs={3} md={2} className="text-center">
+                    <Badge bg="primary">{student.closed_assignments}</Badge>
+                  </Col>
+                  <Col xs={3} md={2} className="text-center">
+                    <strong>{student.total_assignments}</strong>
+                  </Col>
+                  <Col xs={3} md={2} className="text-center">
+                    {student.weighted_average !== null ? (
+                      <Badge 
+                        bg={student.weighted_average >= 24 ? 'success' : 
+                            student.weighted_average >= 18 ? 'warning' : 'danger'}
+                        text={student.weighted_average >= 24 ? 'white' : 'dark'}
+                      >
+                        {student.weighted_average.toFixed(2)} {/* To print just two numbers after comma */}
+                      </Badge>
+                    ) : (
+                      <span className="text-muted">N/A</span>
+                    )}
+                  </Col>
+                </Row>
+              ))}
+            </div>
           )}
         </Card.Body>
       </Card>

@@ -50,7 +50,7 @@ function AssignmentList({ user }) {
         <div className="alert alert-danger">{error}</div>
       )}
 
-      <div className="mb-4" style={{maxWidth: '300px'}}>
+      <div className="mb-4">
         <Form.Group>
           <Form.Label>Filtra per stato:</Form.Label>
           <Form.Select value={filter} onChange={(e) => setFilter(e.target.value)}>
@@ -81,7 +81,12 @@ function AssignmentList({ user }) {
                   {assignment.status === 'open' ? 'Aperto' : 'Chiuso'}
                 </Badge>
                 {assignment.score && (
-                  <Badge bg="warning" text="dark">
+
+                  <Badge 
+                        bg={assignment.score >= 24 ? 'success' : 
+                            assignment.score >= 18 ? 'warning' : 'danger'}
+                        text={'white'}
+                  >
                     {assignment.score}/30
                   </Badge>
                 )}
@@ -95,16 +100,13 @@ function AssignmentList({ user }) {
                 </Card.Title>
                 <Card.Text>
                   <small className="text-muted">
-                    <strong>
-                      {user.role === 'teacher' ? 'Creato' : 'Assegnato da'}:
-                    </strong> {assignment.teacher_name}<br />
                     <strong>Data creazione:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}
                   </small>
                 </Card.Text>
                 {assignment.answer && (
-                  <div className="mb-2 text-success">
+                  <div className="mb-4 text-success">
                       <i className="bi bi-check-circle me-1"></i>
-                      Risposta inviata              
+                      Risposta inviata
                   </div>
                 )}
                 <div className="mt-auto">

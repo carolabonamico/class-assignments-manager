@@ -234,21 +234,6 @@ html, body {
   color: var(--white) !important;
 }
 
-.btn-info {
-  background-color: var(--info-cyan) !important;
-  border: 1px solid var(--info-cyan) !important;
-  color: var(--white) !important;
-  font-weight: var(--font-weight-medium);
-  transition: background-color 0.2s ease;
-}
-
-.btn-info:hover,
-.btn-info:focus {
-  background-color: #138496 !important;
-  border-color: #138496 !important;
-  color: var(--white) !important;
-}
-
 .btn-warning {
   background-color: var(--warning-orange) !important;
   border: 1px solid var(--warning-orange) !important;
@@ -303,7 +288,7 @@ html, body {
   font-weight: var(--font-weight-medium);
 }
 
-/* Navbar Corporate Styling */
+/* Navbar */
 .navbar {
   background: var(--gradient-primary) !important;
   box-shadow: var(--shadow-sm);
@@ -399,6 +384,9 @@ html, body {
 
 /* Login form styles */
 .login-page {
+  position: fixed;
+  top: 0;
+  left: 0;
   min-height: 100vh;
   width: 100vw;
   background-color: var(--white);
@@ -407,6 +395,7 @@ html, body {
   justify-content: center;
   padding: 2rem;
   box-sizing: border-box;
+  z-index: 1000;
 }
 
 .login-card {
@@ -478,27 +467,6 @@ html, body {
   height: 1px;
   background: var(--medium-gray);
   margin: 1.5rem 0;
-}
-
-.demo-section {
-  background-color: var(--light-gray);
-  border: 1px solid var(--medium-gray);
-  border-radius: 0.5rem;
-  padding: 1rem;
-  font-size: 0.875rem;
-}
-
-.demo-item {
-  margin-bottom: 0.5rem;
-  color: var(--dark-gray);
-}
-
-.demo-item:last-child {
-  margin-bottom: 0;
-}
-
-.demo-item strong {
-  color: var(--primary-blue);
 }
 
 /* Hover effects */
