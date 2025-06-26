@@ -7,24 +7,24 @@
  */
 function validateGroupSize(studentIds) {
   if (!Array.isArray(studentIds)) {
-    return { isValid: false, message: 'StudentIds must be an array' };
+    return { isValid: false, message: 'StudentIds deve essere un array' };
   }
   
   if (studentIds.length < 2) {
-    return { isValid: false, message: 'The group must have at least 2 students' };
+    return { isValid: false, message: 'Il gruppo deve avere almeno 2 studenti' };
   }
   
   if (studentIds.length > 6) {
-    return { isValid: false, message: 'The group can have a maximum of 6 students' };
+    return { isValid: false, message: 'Il gruppo può avere un massimo di 6 studenti' };
   }
   
   // Check for duplicates
   const uniqueIds = [...new Set(studentIds)];
   if (uniqueIds.length !== studentIds.length) {
-    return { isValid: false, message: 'There are duplicate students in the group' };
+    return { isValid: false, message: 'Ci sono studenti duplicati nel gruppo' };
   }
   
-  return { isValid: true, message: 'Valid group size' };
+  return { isValid: true, message: 'Dimensione del gruppo valida' };
 }
 
 /**
@@ -34,18 +34,18 @@ function validateGroupSize(studentIds) {
  */
 function validateScore(score) {
   if (typeof score !== 'number') {
-    return { isValid: false, message: 'The score must be a number' };
+    return { isValid: false, message: 'Il punteggio deve essere un numero' };
   }
   
   if (score < 0 || score > 30) {
-    return { isValid: false, message: 'The score must be between 0 and 30' };
+    return { isValid: false, message: 'Il punteggio deve essere compreso tra 0 e 30' };
   }
   
   if (!Number.isInteger(score)) {
-    return { isValid: false, message: 'The score must be an integer' };
+    return { isValid: false, message: 'Il punteggio deve essere un numero intero' };
   }
   
-  return { isValid: true, message: 'Valid score' };
+  return { isValid: true, message: 'Punteggio valido' };
 }
 
 /**
@@ -55,22 +55,22 @@ function validateScore(score) {
  */
 function validateQuestion(question) {
   if (typeof question !== 'string') {
-    return { isValid: false, message: 'The question must be a string' };
+    return { isValid: false, message: 'Il testo della domanda deve essere una stringa' };
   }
   
   if (question.trim().length === 0) {
-    return { isValid: false, message: 'The question cannot be empty' };
+    return { isValid: false, message: 'Il testo della domanda non può essere vuoto' };
   }
   
   if (question.trim().length < 10) {
-    return { isValid: false, message: 'The question must have at least 10 characters' };
+    return { isValid: false, message: 'Il testo della domanda deve avere almeno 10 caratteri' };
   }
   
   if (question.length > 2000) {
-    return { isValid: false, message: 'The question can have a maximum of 2000 characters' };
+    return { isValid: false, message: 'Il testo della domanda può avere un massimo di 2000 caratteri' };
   }
-  
-  return { isValid: true, message: 'Valid question' };
+
+  return { isValid: true, message: 'Domanda valida' };
 }
 
 /**
@@ -80,22 +80,22 @@ function validateQuestion(question) {
  */
 function validateAnswer(answer) {
   if (typeof answer !== 'string') {
-    return { isValid: false, message: 'The answer must be a string' };
+    return { isValid: false, message: 'Il testo della risposta deve essere una stringa' };
   }
   
   if (answer.trim().length === 0) {
-    return { isValid: false, message: 'The answer cannot be empty' };
+    return { isValid: false, message: 'Il testo della risposta non può essere vuoto' };
   }
   
   if (answer.trim().length < 5) {
-    return { isValid: false, message: 'The answer must have at least 5 characters' };
+    return { isValid: false, message: 'Il testo della risposta deve avere almeno 5 caratteri' };
   }
   
   if (answer.length > 5000) {
-    return { isValid: false, message: 'The answer can have a maximum of 5000 characters' };
+    return { isValid: false, message: 'Il testo della risposta può avere un massimo di 5000 caratteri' };
   }
-  
-  return { isValid: true, message: 'Valid answer' };
+
+  return { isValid: true, message: 'Risposta valida' };
 }
 
 /**
