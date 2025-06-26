@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import { AuthProvider } from './context/AuthContext';
 import Navigation from './components/Navigation';
 import LoginForm from './components/LoginForm';
 import Dashboard from './pages/Dashboard';
@@ -14,117 +13,92 @@ import API from './services/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-function AppContent() {
+function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
 
-  // Check if user is logged in on app start
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const userData = await API.getCurrentUser();
-        setUser(userData);
-      } catch {
-        console.log('User not authenticated');
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkAuth();
-  }, []);
+  // NO automatic auth check on startup - wait for user to login
 
-  const handleLogin = async (user) => {
+  const handleLogin = async (credentials) => {
     try {
-      setUser(user);
-      return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.error || error.message || 'Errore durante il login'
-      };
+      const userData = await API.login(credentials);
+      setLoggedIn(true);
+      setUser(userData);
+    } catch (err) {
+      const errorMessage = err.error || err.message || err.toString() || 'Errore durante il login';
+      setMessage({ msg: errorMessage, type: 'danger' });
     }
   };
 
   const handleLogout = async () => {
-    try {
-      await API.logout();
-      setUser(null);
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout error:', error);
-      setUser(null);
-      navigate('/login');
-    }
+    await API.logout();
+    setLoggedIn(false);
+    setUser(null);
+    setMessage('');
   };
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
   return (
-    <AuthProvider user={user} logout={handleLogout}>
-      <div className="App">
-        {user && <Navigation user={user} onLogout={handleLogout} />}
-        {user ? (
-          <Container fluid className="px-0">
-            <div className="main-content">
-              <Routes>
-            <Route 
-              path="/" 
-              element={<Dashboard user={user} />} 
-            />
-            <Route 
-              path="/assignments" 
-              element={<AssignmentList user={user} />} 
-            />
-            <Route 
-              path="/assignments/:id" 
-              element={<AssignmentDetail user={user} />} 
-            />
-            <Route 
-              path="/create-assignment" 
-              element={
-                user.role === 'teacher' ? (
-                  <CreateAssignment user={user} />
-                ) : (
-                  <Navigate to="/" replace />
-                )
-              } 
-            />
-            <Route 
-              path="/statistics" 
-              element={
-                user.role === 'teacher' ? (
-                  <Statistics user={user} />
-                ) : (
-                  <Navigate to="/" replace />
-                )
-              } 
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </div>
-          </Container>
-        ) : (
-          <Routes>
-            <Route 
-              path="/login" 
-              element={<LoginForm onLogin={handleLogin} />} 
-            />
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </Routes>
-        )}
-      </div>
-    </AuthProvider>
-  );
-}
+    <div className="App">
+      {loggedIn && <Navigation user={user} onLogout={handleLogout} />}
+      
+      {/* Show message alerts */}
+      {message && (
+        <div className={`alert alert-${message.type} m-3`} role="alert">
+          {message.msg}
+        </div>
+      )}
 
-function App() {
-  return (
-    <Router>
-      <AppContent />
-    </Router>
+      {loggedIn ? (
+        <Container fluid className="px-0">
+          <div className="main-content">
+            <Routes>
+              <Route 
+                path="/" 
+                element={<Dashboard user={user} />} 
+              />
+              <Route 
+                path="/assignments" 
+                element={<AssignmentList user={user} />} 
+              />
+              <Route 
+                path="/assignments/:id" 
+                element={<AssignmentDetail user={user} />} 
+              />
+              <Route 
+                path="/create-assignment" 
+                element={
+                  user?.role === 'teacher' ? (
+                    <CreateAssignment user={user} />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                } 
+              />
+              <Route 
+                path="/statistics" 
+                element={
+                  user?.role === 'teacher' ? (
+                    <Statistics user={user} />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                } 
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </div>
+        </Container>
+      ) : (
+        <Routes>
+          <Route 
+            path="/login" 
+            element={<LoginForm onLogin={handleLogin} />} 
+          />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      )}
+    </div>
   );
 }
 

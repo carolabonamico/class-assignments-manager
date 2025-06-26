@@ -18,10 +18,6 @@ function CreateAssignment() {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        // Prima verifica la sessione corrente
-        await API.getCurrentUser();
-        
-        // Poi carica gli studenti
         const data = await API.getStudents();
         setStudents(data);
       } catch (err) {
@@ -67,9 +63,6 @@ function CreateAssignment() {
     setError('');
 
     try {
-      // Verifica la sessione prima di procedere
-      await API.getCurrentUser();
-      
       const assignmentData = {
         question: question.trim(),
         studentIds: selectedStudents
