@@ -280,7 +280,7 @@ app.put('/api/assignments/:id/evaluate',
     }
 
     try {
-      const result = await dao.evaluateAssignment(req.params.id, req.user.id, req.body.score);
+      const result = await dao.evaluateAssignment(req.params.id, req.body.score, req.user.id);
       if (result.error) {
         res.status(400).json(result);
       } else {

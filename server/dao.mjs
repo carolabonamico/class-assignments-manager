@@ -283,11 +283,11 @@ export const evaluateAssignment = (assignmentId, score, teacherId) => {
       if (err) {
         reject(err);
       } else if (row === undefined) {
-        resolve({error: "Assignment not found."});
+        resolve({error: "Compito non trovato."});
       } else if (row.teacher_id !== teacherId) {
-        resolve({error: "Unauthorized to evaluate this assignment."});
+        resolve({error: "Non autorizzato a valutare questo compito."});
       } else if (!row.answer) {
-        resolve({error: "Cannot evaluate assignment without an answer."});
+        resolve({error: "Impossibile valutare il compito senza risposta."});
       } else {
         const evaluationDate = new Date().toISOString();
         const sql = 'UPDATE assignments SET score = ?, evaluation_date = ?, status = ? WHERE id = ?';
