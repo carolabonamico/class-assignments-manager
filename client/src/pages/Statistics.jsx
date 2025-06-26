@@ -131,7 +131,7 @@ function Statistics() {
                       <Badge 
                         bg={student.weighted_average >= 24 ? 'success' : 
                             student.weighted_average >= 18 ? 'warning' : 'danger'}
-                        text={student.weighted_average >= 24 ? 'white' : 'dark'}
+                        text={'white'}
                       >
                         {student.weighted_average.toFixed(2)} {/* To print just two numbers after comma */}
                       </Badge>

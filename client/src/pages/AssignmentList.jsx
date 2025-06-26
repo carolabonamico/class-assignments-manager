@@ -80,11 +80,10 @@ function AssignmentList({ user }) {
                 <Badge bg={assignment.status === 'open' ? 'success' : 'primary'}>
                   {assignment.status === 'open' ? 'Aperto' : 'Chiuso'}
                 </Badge>
-                {assignment.score && (
-
+                {assignment.score !== null && assignment.score !== undefined && (
                   <Badge 
-                        bg={assignment.score >= 24 ? 'success' : 
-                            assignment.score >= 18 ? 'warning' : 'danger'}
+                        bg={Number(assignment.score) >= 24 ? 'success' : 
+                            Number(assignment.score) >= 18 ? 'warning' : 'danger'}
                         text={'white'}
                   >
                     {assignment.score}/30
@@ -92,15 +91,15 @@ function AssignmentList({ user }) {
                 )}
               </Card.Header>
               <Card.Body className="d-flex flex-column">
-                <Card.Title className="text-truncate" title={assignment.question}>
-                  {assignment.question.length > 50 
+                <Card.Title className="text-truncate" title={assignment.question || 'Domanda non disponibile'}>
+                  {(assignment.question && assignment.question.length > 50) 
                     ? assignment.question.substring(0, 50) + '...'
-                    : assignment.question
+                    : (assignment.question || 'Domanda non disponibile')
                   }
                 </Card.Title>
                 <Card.Text>
                   <small className="text-muted">
-                    <strong>Data creazione:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}
+                    <strong>Data creazione:</strong> {assignment.created_date ? dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm') : 'Data non disponibile'}
                   </small>
                 </Card.Text>
                 {assignment.answer && (
