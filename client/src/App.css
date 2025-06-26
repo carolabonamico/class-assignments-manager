@@ -54,6 +54,7 @@ body {
   font-weight: var(--font-weight-normal);
   margin: 0;
   padding: 0;
+  padding-top: 75px; /* Aggiunge spazio per la navbar fissa */
   overflow-x: hidden;
 }
 

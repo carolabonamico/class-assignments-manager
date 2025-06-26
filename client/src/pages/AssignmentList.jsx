@@ -103,16 +103,21 @@ function AssignmentList({ user }) {
                     <strong>
                       {user.role === 'teacher' ? 'Creato' : 'Assegnato da'}:
                     </strong> {assignment.teacher_name}<br />
-                    <strong>Data:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}
+                    <strong>Data creazione:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}
                   </small>
                 </Card.Text>
                 {assignment.answer && (
-                  <Card.Text>
-                    <small className="text-success">
+                  <div className="mt-2">
+                    <Badge bg="success" className="me-2">
                       <i className="bi bi-check-circle me-1"></i>
                       Risposta inviata
-                    </small>
-                  </Card.Text>
+                    </Badge>
+                    {assignment.score && (
+                      <Badge bg="warning" text="dark">
+                        Voto: {assignment.score}/30
+                      </Badge>
+                    )}
+                  </div>
                 )}
                 <div className="mt-auto">
                   <Button 

@@ -12,14 +12,21 @@ function CreateAssignment() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [createdAssignmentId, setCreatedAssignmentId] = useState(null);
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
+        // Prima verifica la sessione corrente
+        await API.getCurrentUser();
+        
+        // Poi carica gli studenti
         const data = await API.getStudents();
         setStudents(data);
-      } catch {
-        setError('Errore nel caricamento degli studenti');
+      } catch (err) {
+        console.error('Errore nel caricamento degli studenti:', err);
+        setError('Errore nel caricamento degli studenti. Ricarica la pagina per effettuare nuovamente il login.');
       } finally {
         setLoading(false);
       }
@@ -60,15 +67,27 @@ function CreateAssignment() {
     setError('');
 
     try {
+      // Verifica la sessione prima di procedere
+      await API.getCurrentUser();
+      
       const assignmentData = {
         question: question.trim(),
         studentIds: selectedStudents
       };
 
       const newAssignment = await API.createAssignment(assignmentData);
-      navigate(`/assignments/${newAssignment.id}`);
+      setCreatedAssignmentId(newAssignment.id);
+      setSuccess(`Compito creato con successo!`);
+      setError('');
+      
+      // Reset del form per permettere la creazione di un altro compito
+      setQuestion('');
+      setSelectedStudents([]);
     } catch (err) {
-      if (err.errors) {
+      console.error('Errore nella creazione del compito:', err);
+      if (err.status === 401) {
+        setError('Sessione scaduta. Ricarica la pagina per effettuare nuovamente il login.');
+      } else if (err.errors) {
         setError(err.errors.map(e => e.msg).join(', '));
       } else {
         setError(err.error || 'Errore nella creazione del compito');
@@ -78,18 +97,34 @@ function CreateAssignment() {
     }
   };
 
+  const handleViewAssignment = () => {
+    if (createdAssignmentId) {
+      navigate(`/assignments/${createdAssignmentId}`);
+    }
+  };
+
   if (loading) return <LoadingSpinner />;
 
   return (
     <div className="desktop-layout">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="text-primary-blue">Crea Nuovo Compito</h1>
-        <Button variant="secondary" onClick={() => navigate('/assignments')}>
-          Annulla
-        </Button>
       </div>
 
       {error && <Alert variant="danger">{error}</Alert>}
+      {success && (
+        <Alert variant="success" className="d-flex align-items-center">
+          <div className="flex-grow-1">{success}</div>
+          <Button
+            variant="outline-success"
+            size="sm"
+            onClick={handleViewAssignment}
+            className="me-2"
+          >
+            Visualizza Compito
+          </Button>
+        </Alert>
+      )}
 
       <Form onSubmit={handleSubmit} className="desktop-form">
         <div className="row g-4">
@@ -162,7 +197,6 @@ function CreateAssignment() {
               <Button 
                 type="submit" 
                 variant="success" 
-                size="lg"
                 disabled={submitting || selectedStudents.length < 2}
               >
                 {submitting ? 'Creazione in corso...' : 'Crea Compito'}

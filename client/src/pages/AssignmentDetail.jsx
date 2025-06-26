@@ -135,7 +135,7 @@ function AssignmentDetail({ user }) {
               <small className="text-muted">
                 <strong>Docente:</strong> {assignment.teacher_name}<br />
                 <strong>Data creazione:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}<br />
-                <strong>Studenti nel gruppo:</strong> {assignment.students?.length || 0}
+                <strong>Studenti nel gruppo:</strong> {assignment.students?.length || assignment.groupMembers?.length || 0}
               </small>
             </Card.Body>
           </Card>
@@ -191,13 +191,13 @@ function AssignmentDetail({ user }) {
 
         <div className="col-lg-4">
           {/* Group Members */}
-          {assignment.students && (
+          {(assignment.students?.length > 0 || assignment.groupMembers?.length > 0) && (
             <Card className="mb-4">
               <Card.Header>
                 <h6 className="mb-0">Membri del Gruppo</h6>
               </Card.Header>
               <Card.Body>
-                {assignment.students.map(student => (
+                {(assignment.students || assignment.groupMembers || []).map(student => (
                   <div key={student.id} className="mb-1">
                     <small>{student.name}</small>
                   </div>

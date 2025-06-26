@@ -5,7 +5,7 @@ function Navigation({ user, onLogout }) {
   const location = useLocation();
 
   return (
-    <Navbar bg="primary" variant="dark" expand="lg" className="px-3">
+    <Navbar bg="primary" variant="dark" expand="lg" fixed="top" className="px-3">
       <Navbar.Brand as={Link} to="/">
         <i className="bi bi-clipboard-check me-2"></i>
         Sistema Compiti
