@@ -171,8 +171,10 @@ export const getAssignment = (id, userId, userRole) => {
           if (err) {
             reject(err);
           } else {
-            assignment.groupMembers = groupRows.map((s) => new User(s.id, s.name, s.email, s.role));
-            assignment.groupSize = assignment.groupMembers.length;
+            const groupMembers = groupRows.map((s) => new User(s.id, s.name, s.email, s.role));
+            assignment.groupMembers = groupMembers;
+            assignment.students = groupMembers; // Alias for compatibility
+            assignment.groupSize = groupMembers.length;
             
             // Check if student is authorized to see this assignment
             if (userRole === 'student') {

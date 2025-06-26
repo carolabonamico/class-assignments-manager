@@ -222,8 +222,8 @@ app.post('/api/assignments',
         return res.status(400).json(validation);
       }
 
-      const assignment = await dao.addAssignment(req.body.question, req.body.studentIds, req.user.id);
-      res.status(201).json(assignment);
+      const assignmentId = await dao.addAssignment(req.body.question, req.body.studentIds, req.user.id);
+      res.status(201).json({ id: assignmentId });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

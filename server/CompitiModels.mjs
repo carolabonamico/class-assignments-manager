@@ -31,20 +31,22 @@ export class User {
  * @property {Date|null} evaluation_date - Date when the assignment was evaluated
  */
 export class Assignment {
-  constructor(id, question, created_date, teacher_id, status = 'open', answer = null, answer_date = null, score = null, evaluation_date = null) {
+  constructor(id, question, teacher_id, teacher_name, status = 'open', created_date = null, answer = null, answer_date = null, score = null, evaluation_date = null) {
     this.id = id;
     this.question = question;
-    this.created_date = created_date;
     this.teacher_id = teacher_id;
+    this.teacher_name = teacher_name;
     this.status = status; // 'open' or 'closed'
+    this.created_date = created_date;
     this.answer = answer;
     this.answer_date = answer_date;
     this.score = score; // 0-30
     this.evaluation_date = evaluation_date;
     
     // Additional properties populated by joins
-    this.teacher_name = null;
-    this.students = []; // Array of students in the assignment group
+    this.students = []; // Array of students in the assignment group (alias for groupMembers)
+    this.groupMembers = []; // Array of students in the assignment group
+    this.groupSize = 0;
   }
 }
 
