@@ -218,7 +218,12 @@ function AssignmentDetail({ user }) {
               {assignment.score !== null && assignment.score !== undefined ? (
                 <div>
                   <h4 className="text-center">
-                    <Badge bg="warning" text="dark" className="fs-5">
+                    <Badge 
+                      className="fs-5"
+                      bg={assignment.score >= 24 ? 'success' : 
+                          assignment.score >= 18 ? 'warning' : 'danger'}
+                      text={'white'}
+                    >
                       {assignment.score}/30
                     </Badge>
                   </h4>
