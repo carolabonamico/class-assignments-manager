@@ -55,7 +55,7 @@ export const getUserById = (id) => {
       if (err) {
         reject(err);
       } else if (row === undefined) {
-        resolve({error: "User not found."});
+        resolve({error: "Utente non trovato."});
       } else {
         resolve(new User(row.id, row.name, row.email, row.role));
       }
@@ -147,11 +147,11 @@ export const getAssignment = (id, userId, userRole) => {
       if (err) {
         reject(err);
       } else if (row === undefined) {
-        resolve({error: "Assignment not found."});
+        resolve({error: "Compito non trovato."});
       } else {
         // Check authorization
         if (userRole === 'teacher' && row.teacher_id !== userId) {
-          resolve({error: "Unauthorized access to assignment."});
+          resolve({error: "Accesso non autorizzato a questo compito."});
           return;
         }
         
@@ -180,7 +180,7 @@ export const getAssignment = (id, userId, userRole) => {
             if (userRole === 'student') {
               const isInGroup = assignment.groupMembers.some(member => member.id === userId);
               if (!isInGroup) {
-                resolve({error: "Unauthorized access to assignment."});
+                resolve({error: "Accesso non autorizzato a questo compito."});
                 return;
               }
             }
@@ -247,9 +247,9 @@ export const updateAssignmentAnswer = (assignmentId, answer, studentId) => {
       if (err) {
         reject(err);
       } else if (row === undefined) {
-        resolve({error: "Student not authorized for this assignment."});
+        resolve({error: "Studente non autorizzato per questo compito."});
       } else if (row.status !== 'open') {
-        resolve({error: "Assignment is closed, cannot modify answer."});
+        resolve({error: "Il compito è chiuso, non è possibile modificare la risposta."});
       } else {
         const answerDate = new Date().toISOString();
         const sql = 'UPDATE assignments SET answer = ?, answer_date = ? WHERE id = ?';

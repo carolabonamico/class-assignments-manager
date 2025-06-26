@@ -56,7 +56,7 @@ const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  return res.status(401).json({ error: 'Not authenticated' });
+  return res.status(401).json({ error: 'Non autenticato' });
 };
 
 /**
@@ -67,12 +67,12 @@ const isLoggedIn = (req, res, next) => {
 const requireRole = (requiredRole) => {
   return (req, res, next) => {
     if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+      return res.status(401).json({ error: 'Non autenticato' });
     }
     if (!req.user || req.user.role !== requiredRole) {
       const roleCapitalized = requiredRole.charAt(0).toUpperCase() + requiredRole.slice(1);
       return res.status(403).json({ 
-        error: `Access denied. ${roleCapitalized} role required.` 
+        error: `Accesso negato. ${roleCapitalized} ruolo richiesto.` 
       });
     }
     // User is authenticated and has the required role
@@ -136,7 +136,7 @@ app.get('/api/sessions/current', (req, res) => {
     res.status(200).json(req.user);
   }
   else
-    res.status(401).json({ error: 'Not authenticated' });
+    res.status(401).json({ error: 'Non autenticato' });
 });
 
 /** API ROUTES **/
