@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { AuthProvider } from './context/AuthContext';
 import Navigation from './components/Navigation';
@@ -14,9 +14,10 @@ import API from './services/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-function App() {
+function AppContent() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Check if user is logged in on app start
   useEffect(() => {
@@ -33,10 +34,9 @@ function App() {
     checkAuth();
   }, []);
 
-  const handleLogin = async (credentials) => {
+  const handleLogin = async (user) => {
     try {
-      const userData = await API.login(credentials);
-      setUser(userData);
+      setUser(user);
       return { success: true };
     } catch (error) {
       return { 
@@ -50,8 +50,11 @@ function App() {
     try {
       await API.logout();
       setUser(null);
+      navigate('/login');
     } catch (error) {
       console.error('Logout error:', error);
+      setUser(null);
+      navigate('/login');
     }
   };
 
@@ -61,11 +64,11 @@ function App() {
 
   return (
     <AuthProvider user={user} logout={handleLogout}>
-      <Router>
-        <div className="App">
-          {user && <Navigation user={user} onLogout={handleLogout} />}
-          {user ? (
-            <Container fluid className="mt-4 px-4">
+      <div className="App">
+        {user && <Navigation user={user} onLogout={handleLogout} />}
+        {user ? (
+          <Container fluid className="px-0">
+            <div className="main-content">
               <Routes>
             <Route 
               path="/" 
@@ -101,19 +104,27 @@ function App() {
             />
             <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
-            </Container>
-          ) : (
-            <Routes>
-              <Route 
-                path="/login" 
-                element={<LoginForm onLogin={handleLogin} />} 
-              />
-              <Route path="*" element={<Navigate to="/login" replace />} />
-            </Routes>
-          )}
-        </div>
-      </Router>
+            </div>
+          </Container>
+        ) : (
+          <Routes>
+            <Route 
+              path="/login" 
+              element={<LoginForm onLogin={handleLogin} />} 
+            />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        )}
+      </div>
     </AuthProvider>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 
