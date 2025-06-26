@@ -65,12 +65,17 @@ const API = {
    * @throws {Error} If the request fails or if the user is not authenticated.
    */
   async logout() {
-    return getJson(
-      fetch(APIURL + '/sessions/current', {
-        method: 'DELETE',
-        credentials: 'include'
-      })
-    );
+    const response = await fetch(APIURL + '/sessions/current', {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Logout failed: ${response.status}`);
+    }
+    
+    // Logout endpoint returns empty response, no JSON parsing needed
+    return;
   },
 
   /**

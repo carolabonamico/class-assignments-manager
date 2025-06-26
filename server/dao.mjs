@@ -483,7 +483,7 @@ export const checkGroupConstraints = (studentIds, teacherId) => {
           
           resolve(new GroupValidation(
             false, 
-            `Some students have already worked together in 2 or more assignments: ${conflictingPairs.map(p => `${p.student1} and ${p.student2} (${p.count} times)`).join(', ')}`,
+            `Alcuni studenti hanno già lavorato insieme in 2 o più compiti: ${conflictingPairs.map(p => `${p.student1} and ${p.student2} (${p.count} volte)`).join(', ')}`,
             conflictingPairs
           ));
         } else {
