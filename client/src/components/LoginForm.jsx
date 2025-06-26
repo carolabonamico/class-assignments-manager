@@ -83,17 +83,17 @@ const LoginForm = ({ onLogin }) => {
         <hr className="divider" />
 
         {/* Credenziali Demo */}
-        <div className="demo-section">
-          <div className="demo-item">
+        <div className="text-center">
+          <div>
             <strong>Studente:</strong> giulia.bianchi@studenti.polito.it
           </div>
-          <div className="demo-item">
+          <div>
             <strong>Password:</strong> student123
           </div>
-          <div className="demo-item">
+          <div>
             <strong>Docente:</strong> mario.rossi@polito.it
           </div>
-          <div className="demo-item">
+          <div>
             <strong>Password:</strong> password123
           </div>
         </div>

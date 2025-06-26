@@ -69,7 +69,7 @@ function Statistics() {
         <Card className="desktop-card">
           <Card.Body>
             <h6>Media Classe</h6>
-            <h3 className="text-success">
+            <h3 className="text-primary">
               {stats.length > 0 
                 ? (stats.reduce((sum, s) => sum + (s.weighted_average || 0), 0) / stats.length).toFixed(2)
                 : '0.00'

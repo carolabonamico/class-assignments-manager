@@ -32,10 +32,6 @@
   --font-weight-bold: 700;
 }
 
-/* Reset and Base Styles */
-* {
-  box-sizing: border-box;
-}
 
 #root {
   max-width: 100%;
@@ -68,15 +64,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Container full-width */
-.container-fluid {
-  max-width: none !important;
-  width: 100% !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin: 0 !important;
-}
-
 /* Main content wrapper - Gestisce il padding interno */
 .main-content {
   width: 100% !important;
@@ -95,23 +82,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Override di TUTTI i container Bootstrap per essere full-width */
-.container,
-.container-fluid,
-.container-sm,
-.container-md,
-.container-lg,
-.container-xl,
-.container-xxl {
-  max-width: none !important;
-  width: 100% !important;
-  margin: 0 !important;
-}
 
-/* Override globale per evitare restringimenti */
-* {
-  box-sizing: border-box;
-}
 
 html, body {
   width: 100% !important;
@@ -157,30 +128,6 @@ html, body {
   max-width: none !important;
 }
 
-/* Row Bootstrap override per essere full-width */
-.row {
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-/* Col Bootstrap override */
-.col,
-.col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
-.col-7, .col-8, .col-9, .col-10, .col-11, .col-12,
-.col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6,
-.col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12,
-.col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6,
-.col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
-.col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6,
-.col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12,
-.col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6,
-.col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12,
-.col-xxl, .col-xxl-1, .col-xxl-2, .col-xxl-3, .col-xxl-4, .col-xxl-5, .col-xxl-6,
-.col-xxl-7, .col-xxl-8, .col-xxl-9, .col-xxl-10, .col-xxl-11, .col-xxl-12 {
-  max-width: none !important;
-}
 
 /* Primary Button with Corporate Blue */
 .btn-primary {
@@ -218,7 +165,7 @@ html, body {
   color: var(--white) !important;
 }
 
-/* Altri bottoni semplificati */
+/* Altri bottoni */
 .btn-secondary {
   background-color: var(--dark-gray) !important;
   border: 1px solid var(--dark-gray) !important;
@@ -302,7 +249,7 @@ html, body {
 }
 
 .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.6) !important; /* Stesso grigio del testo Benvenuto */
+  color: rgba(255, 255, 255, 0.6) !important;
   font-weight: var(--font-weight-medium);
   padding: 0.5rem 1rem !important;
   border-radius: 0.375rem;
@@ -322,7 +269,7 @@ html, body {
   font-weight: var(--font-weight-semibold);
 }
 
-/* Card Corporate Styling - Senza animazioni */
+/* Card */
 .card {
   background: var(--white);
   border: 1px solid var(--medium-gray);
@@ -355,7 +302,7 @@ html, body {
   outline: none;
 }
 
-/* Badges Corporate */
+/* Badges */
 .badge {
   font-weight: var(--font-weight-medium);
   padding: 0.5rem 0.75rem;
@@ -376,10 +323,6 @@ html, body {
 
 .bg-danger {
   background: var(--danger-red) !important;
-}
-
-.bg-info {
-  background: var(--info-cyan) !important;
 }
 
 /* Login form styles */
@@ -425,19 +368,6 @@ html, body {
   font-size: 1.5rem;
 }
 
-.login-input {
-  border: 2px solid var(--medium-gray);
-  border-radius: 0.5rem;
-  padding: 0.875rem;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.login-input:focus {
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 0 0.25rem rgba(74, 144, 194, 0.25);
-  outline: none;
-}
 
 .login-button {
   background-color: var(--primary-blue) !important;
@@ -465,7 +395,7 @@ html, body {
 .divider {
   border: none;
   height: 1px;
-  background: var(--medium-gray);
+  background: var(--dark-gray);
   margin: 1.5rem 0;
 }
 

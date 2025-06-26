@@ -41,6 +41,26 @@ function Dashboard({ user }) {
         <div className="alert alert-danger">{error}</div>
       )}
 
+      {user.role == 'student' && (
+        <div className="desktop-grid mb-4">
+          <Card className="desktop-card">
+            <Card.Body>
+              <h6>Media attuale</h6>
+              <h3 className="text-primary">
+                {(() => {
+                  const scoredAssignments = assignments.filter(a => a.score !== null && a.score !== undefined);
+                  if (scoredAssignments.length === 0) {
+                    return "Non è ancora presente alcuna valutazione";
+                  }
+                  const average = scoredAssignments.reduce((sum, a) => sum + a.score, 0) / scoredAssignments.length;
+                  return average.toFixed(2);
+                })()}
+              </h3>
+              </Card.Body>
+            </Card>
+        </div>
+      )}
+
       <div className="desktop-grid">
         <Card className="desktop-card">
           <Card.Header className="d-flex justify-content-between align-items-center">
