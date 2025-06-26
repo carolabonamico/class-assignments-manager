@@ -119,14 +119,10 @@ export const listAssignments = (userId, userRole) => {
       if (err) {
         reject(err);
       } else {
-        const assignments = rows.map((a) => {
-          const assignment = new Assignment(
-            a.id, a.question, a.created_date, a.teacher_id, a.status, 
-            a.answer, a.answer_date, a.score, a.evaluation_date
-          );
-          assignment.teacher_name = a.teacher_name;
-          return assignment;
-        });
+        const assignments = rows.map((a) => new Assignment(
+          a.id, a.question, a.teacher_id, a.teacher_name, a.status, 
+          a.created_date, a.answer, a.answer_date, a.score, a.evaluation_date
+        ));
         resolve(assignments);
       }
     });
@@ -160,10 +156,9 @@ export const getAssignment = (id, userId, userRole) => {
         }
         
         const assignment = new Assignment(
-          row.id, row.question, row.created_date, row.teacher_id, row.status,
-          row.answer, row.answer_date, row.score, row.evaluation_date
+          row.id, row.question, row.teacher_id, row.teacher_name, row.status,
+          row.created_date, row.answer, row.answer_date, row.score, row.evaluation_date
         );
-        assignment.teacher_name = row.teacher_name;
         
         // Get group members
         const groupSql = `SELECT u.id, u.name, u.email, u.role 
@@ -176,12 +171,12 @@ export const getAssignment = (id, userId, userRole) => {
           if (err) {
             reject(err);
           } else {
-            assignment.students = groupRows.map((s) => new User(s.id, s.name, s.email, s.role));
-            assignment.groupSize = assignment.students.length;
+            assignment.groupMembers = groupRows.map((s) => new User(s.id, s.name, s.email, s.role));
+            assignment.groupSize = assignment.groupMembers.length;
             
             // Check if student is authorized to see this assignment
             if (userRole === 'student') {
-              const isInGroup = assignment.students.some(member => member.id === userId);
+              const isInGroup = assignment.groupMembers.some(member => member.id === userId);
               if (!isInGroup) {
                 resolve({error: "Unauthorized access to assignment."});
                 return;
