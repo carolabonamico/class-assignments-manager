@@ -127,8 +127,8 @@ function CreateAssignment() {
       )}
 
       <Form onSubmit={handleSubmit} className="desktop-form">
-        <div className="row g-4">
-          <div className="col-lg-8">
+        <div className="desktop-grid">
+          <div>
             <Card className="desktop-card mb-4">
               <Card.Header>
                 <h5 className="mb-0">Domanda del Compito</h5>
@@ -152,7 +152,7 @@ function CreateAssignment() {
             </Card>
           </div>
 
-          <div className="col-lg-4">
+          <div>
             <Card className="desktop-card mb-4">
               <Card.Header>
                 <h5 className="mb-0">
@@ -164,7 +164,7 @@ function CreateAssignment() {
                   Seleziona da 2 a 6 studenti per questo compito. Il sistema impedisce la formazione di gruppi dove coppie di studenti hanno già lavorato insieme in 2 o più compiti precedenti.
                 </p>
                 
-                <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                <div style={{ maxHeight: '260px', overflowY: 'auto' }}>
                   {students.map(student => (
                     <Form.Check
                       key={student.id}

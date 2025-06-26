@@ -44,11 +44,6 @@ function AssignmentList({ user }) {
     <div className="desktop-layout">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="text-primary-blue">Lista Compiti</h1>
-        {user.role === 'teacher' && (
-          <Button as={Link} to="/create-assignment" variant="success">
-            Crea Nuovo Compito
-          </Button>
-        )}
       </div>
 
       {error && (
@@ -107,16 +102,9 @@ function AssignmentList({ user }) {
                   </small>
                 </Card.Text>
                 {assignment.answer && (
-                  <div className="mt-2">
-                    <Badge bg="success" className="me-2">
+                  <div className="mb-2 text-success">
                       <i className="bi bi-check-circle me-1"></i>
-                      Risposta inviata
-                    </Badge>
-                    {assignment.score && (
-                      <Badge bg="warning" text="dark">
-                        Voto: {assignment.score}/30
-                      </Badge>
-                    )}
+                      Risposta inviata              
                   </div>
                 )}
                 <div className="mt-auto">

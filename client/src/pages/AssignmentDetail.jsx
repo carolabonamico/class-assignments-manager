@@ -120,8 +120,8 @@ function AssignmentDetail({ user }) {
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
 
-      <div className="row g-4">
-        <div className="col-lg-8">
+      <div className="desktop-grid">
+        <div>
           <Card className="mb-4">
             <Card.Header className="d-flex justify-content-between align-items-center">
               <h5 className="mb-0">Domanda</h5>
@@ -150,6 +150,14 @@ function AssignmentDetail({ user }) {
                 <p className="text-muted">Nessuna risposta fornita ancora.</p>
               )}
 
+              {assignment.answer_date && (
+                <div className="mb-3">
+                  <small className="text-muted">
+                  Inviata il: {dayjs(assignment.answer_date).format('DD/MM/YYYY HH:mm')}
+                  </small>
+                </div>
+              )}
+
               {assignment.answer && (
                 <div className="mb-3">
                   <div className="border rounded p-3 bg-light">
@@ -157,11 +165,6 @@ function AssignmentDetail({ user }) {
                       {assignment.answer}
                     </pre>
                   </div>
-                  {assignment.answer_date && (
-                    <small className="text-muted">
-                      Inviata il: {dayjs(assignment.answer_date).format('DD/MM/YYYY HH:mm')}
-                    </small>
-                  )}
                 </div>
               )}
 
@@ -189,7 +192,7 @@ function AssignmentDetail({ user }) {
           </Card>
         </div>
 
-        <div className="col-lg-4">
+        <div>
           {/* Group Members */}
           {(assignment.students?.length > 0 || assignment.groupMembers?.length > 0) && (
             <Card className="mb-4">

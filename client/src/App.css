@@ -1,18 +1,16 @@
-/* Professional Blue Corporate Theme */
 :root {
-  /* Corporate Blue Palette */
-  --primary-blue: #1B365D;        /* Dark Navy Blue */
-  --secondary-blue: #2E5C8A;      /* Medium Blue */
-  --accent-blue: #4A90C2;         /* Bright Blue */
-  --light-blue: #7DB4E6;          /* Light Blue */
+  /* Blue Palette */
+  --primary-blue: #1B365D;
+  --secondary-blue: #2E5C8A;
+  --accent-blue: #4A90C2;
+  --light-blue: #7DB4E6;
   
   /* Supporting Colors */
   --success-green: #28A745;
   --warning-orange: #FD7E14;
   --danger-red: #DC3545;
-  --info-cyan: #17A2B8;
-  
-  /* Neutral Corporate Colors */
+
+  /* Neutral Colors */
   --white: #FFFFFF;
   --light-gray: #F8F9FA;          /* Background */
   --medium-gray: #E9ECEF;         /* Borders */
@@ -56,6 +54,7 @@ body {
   padding: 0;
   padding-top: 75px; /* Aggiunge spazio per la navbar fissa */
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* App Layout - Forza full-width sempre */
@@ -69,7 +68,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Container full-width con padding appropriato */
+/* Container full-width */
 .container-fluid {
   max-width: none !important;
   width: 100% !important;
@@ -84,7 +83,6 @@ body {
   max-width: none !important;
   padding: 2rem !important;
   background-color: var(--light-gray);
-  height: calc(100vh - 94px); /* Sottrae l'altezza della navbar con padding */
   box-sizing: border-box;
 }
 

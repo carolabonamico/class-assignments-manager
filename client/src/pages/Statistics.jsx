@@ -112,21 +112,21 @@ function Statistics() {
               <tbody>
                 {sortedStats.map(student => (
                   <tr key={student.id}>
-                    <td>
+                    <td className="align-middle">
                       <strong>{student.name}</strong>
                       <br />
-                      <small className="text-muted">{student.email}</small>
+                      <small className="text-muted ">{student.email}</small>
                     </td>
-                    <td className="text-center">
+                    <td className="text-center align-middle">
                       <Badge bg="success">{student.open_assignments}</Badge>
                     </td>
-                    <td className="text-center">
+                    <td className="text-center align-middle">
                       <Badge bg="primary">{student.closed_assignments}</Badge>
                     </td>
-                    <td className="text-center">
+                    <td className="text-center align-middle">
                       <strong>{student.total_assignments}</strong>
                     </td>
-                    <td className="text-center">
+                    <td className="text-center align-middle">
                       {student.weighted_average !== null ? (
                         <Badge 
                           bg={student.weighted_average >= 24 ? 'success' : 
