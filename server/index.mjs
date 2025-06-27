@@ -158,12 +158,13 @@ app.get('/api/students', isLoggedIn, async (req, res) => {
 });
 
 /**
- * Route to get a specific student by ID
- * Returns the details of a specific student.
- * @route GET /api/students/:id
- * @param {string} req.params.id - The ID of the student.
- * @returns {object} The student object if found.
- * @returns {object} An error message if the student is not found.
+ * Route to list all assignments
+ * Returns a list of all assignments for the current user.
+ * @route GET /api/assignments
+ * @param {string} req.user.id - The ID of the current user.
+ * @param {string} req.user.role - The role of the current user (teacher or student).
+ * @returns {Array} An array of assignment objects.
+ * @returns {object} An error message if the request fails.
  */
 app.get('/api/assignments', isLoggedIn, async (req, res) => {
   try {

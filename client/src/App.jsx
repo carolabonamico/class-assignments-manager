@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Navigation from './components/Navigation';
@@ -17,8 +17,25 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  // NO automatic auth check on startup - wait for user to login
+  // Check authentication on startup (silently)
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const userData = await API.getCurrentUser();
+        setLoggedIn(true);
+        setUser(userData);
+      } catch {
+        // Silently ignore errors - user is not authenticated
+        setLoggedIn(false);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkAuth();
+  }, []);
 
   const handleLogin = async (credentials) => {
     try {
@@ -37,6 +54,15 @@ function App() {
     setUser(null);
     setMessage('');
   };
+
+  // Show loading spinner while checking authentication
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="App">
