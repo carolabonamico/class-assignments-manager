@@ -173,7 +173,6 @@ export const getAssignment = (id, userId, userRole) => {
           } else {
             const groupMembers = groupRows.map((s) => new User(s.id, s.name, s.email, s.role));
             assignment.groupMembers = groupMembers;
-            assignment.students = groupMembers; // Alias for compatibility
             assignment.groupSize = groupMembers.length;
             
             // Check if student is authorized to see this assignment
@@ -228,7 +227,8 @@ export const addAssignment = (question, studentIds, teacherId) => {
   });
 };
 
-/** * Update an assignment's question
+/**
+ * Update an assignment's question
  * @param {number} assignmentId - The ID of the assignment to update
  * @param {string} question - The new question for the assignment
  * @param {number} teacherId - The ID of the teacher updating the assignment
@@ -381,7 +381,8 @@ export const getStudentStats = (teacherId, orderBy = 'name') => {
   });
 };
 
-/** * Get personal statistics for a student
+/**
+ * Get personal statistics for a student
  * @param {number} studentId - The ID of the student
  * @returns {Promise<StudentStats>} - Returns a StudentStats object with personal statistics
  * @throws {Error} - Throws an error if the query fails
@@ -449,7 +450,7 @@ export const checkGroupConstraints = (studentIds, teacherId) => {
       return;
     }
     
-    const placeholders = pairs.map(() => '(?,?)').join(',');
+    const placeholders = pairs.map(() => '(?,?)').join(',');  // Create placeholders for the pairs in the SQL query
     const sql = `
       SELECT 
         ag1.student_id as student1_id,
@@ -468,7 +469,14 @@ export const checkGroupConstraints = (studentIds, teacherId) => {
       GROUP BY ag1.student_id, ag2.student_id, u1.name, u2.name
       HAVING COUNT(*) >= 2`;
     
-    const params = [...pairs.flat(), teacherId];
+    // This query checks for pairs of students who have collaborated on assignments
+    // and counts how many times they have worked together.
+    // It returns pairs that have collaborated 2 or more times.
+    // `VALUES` is used to insert multiple pairs in a single query.
+    // Note: The pairs are ordered to ensure consistent ordering (smaller ID first).
+    // This prevents duplicate pairs like (2, 1) and (1, 2) from being counted separately.
+    
+    const params = [...pairs.flat(), teacherId];  // Flatten the pairs and add teacherId for the query
     
     db.all(sql, params, (err, rows) => {
       if (err) {

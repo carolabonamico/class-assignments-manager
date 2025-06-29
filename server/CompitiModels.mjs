@@ -44,8 +44,7 @@ export class Assignment {
     this.evaluation_date = evaluation_date;
     
     // Additional properties populated by joins
-    this.students = []; // Array of students in the assignment group (alias for groupMembers)
-    this.groupMembers = []; // Array of students in the assignment group
+    this.groupMembers = []; // Array of student objects who are part of the group for this assignment
     this.groupSize = 0;
   }
 }
