@@ -369,6 +369,81 @@ content-type: application/json
 ###
 
 #########################################
+# ANSWER VALIDATION TESTS
+#########################################
+
+### 38. Login as Student for answer validation tests
+POST {{baseUrl}}/api/sessions
+content-type: application/json
+
+{
+  "username": "{{studentEmail}}",
+  "password": "{{studentPassword}}"
+}
+
+###
+
+### 39. Submit answer with only spaces (Should fail with validation error)
+PUT {{baseUrl}}/api/assignments/1/answer
+content-type: application/json
+
+{
+  "answer": "   "
+}
+
+###
+
+### 40. Submit answer with only tabs and spaces (Should fail with validation error)
+PUT {{baseUrl}}/api/assignments/1/answer
+content-type: application/json
+
+{
+  "answer": "\t  \n  "
+}
+
+###
+
+### 41. Submit empty answer (Should fail with validation error)
+PUT {{baseUrl}}/api/assignments/1/answer
+content-type: application/json
+
+{
+  "answer": ""
+}
+
+###
+
+### 42. Submit valid answer with spaces around text (Should work)
+PUT {{baseUrl}}/api/assignments/1/answer
+content-type: application/json
+
+{
+  "answer": "  Questa è una risposta valida con spazi all'inizio e alla fine  "
+}
+
+###
+
+### 43. Submit valid answer (Should work)
+PUT {{baseUrl}}/api/assignments/1/answer
+content-type: application/json
+
+{
+  "answer": "Risposta valida senza spazi extra"
+}
+
+###
+
+### 44. Submit answer with newlines and spaces only (Should fail)
+PUT {{baseUrl}}/api/assignments/1/answer
+content-type: application/json
+
+{
+  "answer": "\n\n   \t\t  \n"
+}
+
+###
+
+#########################################
 # FINAL CLEANUP
 # 37. Logout to clean session
 DELETE {{baseUrl}}/api/sessions/current
