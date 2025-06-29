@@ -5,9 +5,8 @@ import API from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import dayjs from 'dayjs';
 
-function AssignmentList({ user }) {
+function AssignmentList() {
   const [assignments, setAssignments] = useState([]);
-  const [filteredAssignments, setFilteredAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all'); // all, open, closed
@@ -17,7 +16,6 @@ function AssignmentList({ user }) {
       try {
         const data = await API.getAssignments();
         setAssignments(data);
-        setFilteredAssignments(data);
       } catch {
         setError('Errore nel caricamento dei compiti');
       } finally {
@@ -28,15 +26,12 @@ function AssignmentList({ user }) {
     fetchAssignments();
   }, []);
 
-  useEffect(() => {
-    let filtered = assignments;
-    if (filter === 'open') {
-      filtered = assignments.filter(a => a.status === 'open');
-    } else if (filter === 'closed') {
-      filtered = assignments.filter(a => a.status === 'closed');
-    }
-    setFilteredAssignments(filtered);
-  }, [assignments, filter]);
+  /* Computing the filtered assignments directly instead of using useEffect */
+  const filteredAssignments = assignments.filter(assignment => {
+    if (filter === 'open') return assignment.status === 'open';
+    if (filter === 'closed') return assignment.status === 'closed';
+    return true; // 'all'
+  });
 
   if (loading) return <LoadingSpinner />;
 
@@ -50,6 +45,7 @@ function AssignmentList({ user }) {
         <div className="alert alert-danger">{error}</div>
       )}
 
+      {/* Filter dropdown to select assignment status */}
       <div className="mb-4">
         <Form.Group>
           <Form.Label>Filtra per stato:</Form.Label>
@@ -61,68 +57,71 @@ function AssignmentList({ user }) {
         </Form.Group>
       </div>
 
+      {/* If no assignments match the filter, show a message */}
+      {/* If there are no assignments, show a message with a button to create the first assignment */}
       {filteredAssignments.length === 0 ? (
         <Card className="desktop-card">
           <Card.Body className="text-center">
             <p className="text-muted">Nessun compito trovato con i filtri selezionati.</p>
-            {user.role === 'teacher' && (
-              <Button as={Link} to="/create-assignment" variant="primary">
-                Crea il primo compito
-              </Button>
-            )}
+            <Button as={Link} to="/create-assignment" variant="primary">
+              Crea il primo compito
+            </Button>
           </Card.Body>
         </Card>
       ) : (
-        <div className="assignment-list-desktop">
-          {filteredAssignments.map(assignment => (
-            <Card key={assignment.id} className="desktop-card h-100">
-              <Card.Header className="d-flex justify-content-between align-items-center">
-                <Badge bg={assignment.status === 'open' ? 'success' : 'primary'}>
-                  {assignment.status === 'open' ? 'Aperto' : 'Chiuso'}
-                </Badge>
-                {assignment.score !== null && assignment.score !== undefined && (
-                  <Badge 
-                        bg={Number(assignment.score) >= 24 ? 'success' : 
-                            Number(assignment.score) >= 18 ? 'warning' : 'danger'}
-                        text={'white'}
-                  >
-                    {assignment.score}/30
+        <>
+          {/* Display assignments in a grid layout */}
+          <div className="assignment-list-desktop">
+            {filteredAssignments.map(assignment => (
+              <Card key={assignment.id} className="desktop-card h-100">
+                <Card.Header className="d-flex justify-content-between align-items-center">
+                  <Badge bg={assignment.status === 'open' ? 'success' : 'primary'}>
+                    {assignment.status === 'open' ? 'Aperto' : 'Chiuso'}
                   </Badge>
-                )}
-              </Card.Header>
-              <Card.Body className="d-flex flex-column">
-                <Card.Title className="text-truncate" title={assignment.question || 'Domanda non disponibile'}>
-                  {(assignment.question && assignment.question.length > 50) 
-                    ? assignment.question.substring(0, 50) + '...'
-                    : (assignment.question || 'Domanda non disponibile')
-                  }
-                </Card.Title>
-                <Card.Text>
-                  <small className="text-muted">
-                    <strong>Data creazione:</strong> {assignment.created_date ? dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm') : 'Data non disponibile'}
-                  </small>
-                </Card.Text>
-                {assignment.answer && (
-                  <div className="mb-4 text-success">
-                      <i className="bi bi-check-circle me-1"></i>
-                      Risposta inviata
+                  {assignment.score !== null && assignment.score !== undefined && (
+                    <Badge 
+                          bg={Number(assignment.score) >= 24 ? 'success' : 
+                              Number(assignment.score) >= 18 ? 'warning' : 'danger'}
+                          text={'white'}
+                    >
+                      {assignment.score}/30
+                    </Badge>
+                  )}
+                </Card.Header>
+                <Card.Body className="d-flex flex-column">
+                  <Card.Title className="text-truncate" title={assignment.question || 'Domanda non disponibile'}>
+                    {(assignment.question && assignment.question.length > 50) 
+                      ? assignment.question.substring(0, 50) + '...'
+                      : (assignment.question || 'Domanda non disponibile')
+                    }
+                  </Card.Title>
+                  <Card.Text>
+                    <small className="text-muted">
+                      <strong>Data creazione:</strong> {assignment.created_date ? dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm') : 'Data non disponibile'}
+                    </small>
+                  </Card.Text>
+                  {assignment.answer && (
+                    <div className="mb-4 text-success">
+                        <i className="bi bi-check-circle me-1"></i>
+                        Risposta inviata
+                    </div>
+                  )}
+                  <div className="mt-auto">
+                    <Button 
+                      as={Link} 
+                      to={`/assignments/${assignment.id}`} 
+                      variant="primary" 
+                      size="sm"
+                      className="w-100"
+                    >
+                      Visualizza Dettagli
+                    </Button>
                   </div>
-                )}
-                <div className="mt-auto">
-                  <Button 
-                    as={Link} 
-                    to={`/assignments/${assignment.id}`} 
-                    variant="primary" 
-                    size="sm"
-                    className="w-100"
-                  >
-                    Visualizza Dettagli
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
-          ))}
-        </div>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

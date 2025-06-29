@@ -37,6 +37,9 @@ function App() {
     checkAuth();
   }, []);
 
+  /* Handle user login
+   * This function is called when the user submits the login form
+   */
   const handleLogin = async (credentials) => {
     try {
       const userData = await API.login(credentials);
@@ -48,6 +51,10 @@ function App() {
     }
   };
 
+  /* Handle user logout
+   * This function is called when the user clicks the logout button
+   * It clears the user session and updates the state
+   */
   const handleLogout = async () => {
     await API.logout();
     setLoggedIn(false);
@@ -75,6 +82,7 @@ function App() {
         </div>
       )}
 
+      {/* If user is logged in, show the main content with routes */}
       {loggedIn ? (
         <Container fluid className="px-0">
           <div className="main-content">
@@ -85,7 +93,7 @@ function App() {
               />
               <Route 
                 path="/assignments" 
-                element={<AssignmentList user={user} />} 
+                element={<AssignmentList />} 
               />
               <Route 
                 path="/assignments/:id" 
@@ -95,7 +103,7 @@ function App() {
                 path="/create-assignment" 
                 element={
                   user?.role === 'teacher' ? (
-                    <CreateAssignment user={user} />
+                    <CreateAssignment />
                   ) : (
                     <Navigate to="/" replace />
                   )
@@ -105,7 +113,7 @@ function App() {
                 path="/statistics" 
                 element={
                   user?.role === 'teacher' ? (
-                    <Statistics user={user} />
+                    <Statistics />
                   ) : (
                     <Navigate to="/" replace />
                   )

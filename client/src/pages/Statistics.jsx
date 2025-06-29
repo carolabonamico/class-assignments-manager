@@ -5,7 +5,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 function Statistics() {
   const [stats, setStats] = useState([]);
-  const [sortedStats, setSortedStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [sortBy, setSortBy] = useState('name'); // name, total, average
@@ -15,7 +14,6 @@ function Statistics() {
       try {
         const data = await API.getStatistics();
         setStats(data);
-        setSortedStats(data);
       } catch {
         setError('Errore nel caricamento delle statistiche');
       } finally {
@@ -26,25 +24,23 @@ function Statistics() {
     fetchStats();
   }, []);
 
-  useEffect(() => {
-    let sorted = [...stats];
-    
+  /* Sorting stats based on the selected sortBy option
+  * If sortBy is 'name', sorts alphabetically by student name
+  * If sortBy is 'total', sorts by total assignments (descending)
+  * If sortBy is 'average', sorts by weighted average score (descending)
+  */
+  const sortedStats = [...stats].sort((a, b) => {
     switch (sortBy) {
       case 'name':
-        sorted.sort((a, b) => a.name.localeCompare(b.name));
-        break;
+        return a.name.localeCompare(b.name);
       case 'total':
-        sorted.sort((a, b) => b.total_assignments - a.total_assignments);
-        break;
+        return b.total_assignments - a.total_assignments;
       case 'average':
-        sorted.sort((a, b) => (b.weighted_average || 0) - (a.weighted_average || 0));
-        break;
+        return (b.weighted_average || 0) - (a.weighted_average || 0);
       default:
-        break;
+        return 0;
     }
-    
-    setSortedStats(sorted);
-  }, [stats, sortBy]);
+  });
 
   if (loading) return <LoadingSpinner />;
 
@@ -59,6 +55,7 @@ function Statistics() {
         <div className="alert alert-danger">{error}</div>
       )}
 
+      {/* Display total students and average class score */}
       <div className="desktop-grid mb-4">
         <Card className="desktop-card">
           <Card.Body>
@@ -79,6 +76,9 @@ function Statistics() {
           </Card>
         </div>
 
+      {/* Detailed Statistics Table */}
+      {/* If no stats available, show a message */}
+      {/* If stats are available, display them in a table format */}
       <Card className="desktop-table">
         <Card.Header className="d-flex justify-content-between align-items-center">
           <h5 className="mb-0">Statistiche Dettagliate</h5>
@@ -146,6 +146,7 @@ function Statistics() {
         </Card.Body>
       </Card>
 
+      {/* Note on Weighted Average */}
       <Card className="mt-4">
         <Card.Header>
           <h6 className="mb-0">Note sulla Media Ponderata</h6>

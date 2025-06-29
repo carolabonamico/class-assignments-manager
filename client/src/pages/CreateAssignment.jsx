@@ -31,6 +31,13 @@ function CreateAssignment() {
     fetchStudents();
   }, []);
 
+  /* Handle student selection logic
+    * Toggles the selection of a student
+    * If the student is already selected, it removes them from the selection
+    * If not, it adds them to the selection if the limit of 6 students is not reached
+    * The selection is limited to a maximum of 6 students
+    * If the user tries to select more than 6 students, it does nothing
+  */
   const handleStudentSelection = (studentId) => {
     if (selectedStudents.includes(studentId)) {
       setSelectedStudents(selectedStudents.filter(id => id !== studentId));
@@ -41,6 +48,12 @@ function CreateAssignment() {
     }
   };
 
+  /* Handle form submission
+  * Validates the question and selected students, then submits the assignment
+  * If successful, resets the form and shows a success message
+  * If there's an error, displays it to the user
+  * If the assignment is created successfully, allows the user to view it immediately
+  */
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -73,7 +86,7 @@ function CreateAssignment() {
       setSuccess(`Compito creato con successo!`);
       setError('');
       
-      // Reset del form per permettere la creazione di un altro compito
+      // For reset the form after successful creation to allow creating another assignment
       setQuestion('');
       setSelectedStudents([]);
     } catch (err) {
@@ -104,6 +117,7 @@ function CreateAssignment() {
         <h1 className="text-primary-blue">Crea Nuovo Compito</h1>
       </div>
 
+      {/* Show error or success messages */}
       {error && <Alert variant="danger">{error}</Alert>}
       {success && (
         <Alert variant="success" className="d-flex align-items-center">
@@ -119,6 +133,7 @@ function CreateAssignment() {
         </Alert>
       )}
 
+      {/* Form for creating a new assignment */}
       <Form onSubmit={handleSubmit} className="desktop-form">
         <div className="desktop-grid">
           <div>

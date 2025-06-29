@@ -39,8 +39,15 @@ function AssignmentDetail({ user }) {
     };
 
     fetchAssignment();
-  }, [id]);
+  }, [id]); // TODO: check if this dependency is correct or not
 
+  /* Handle answer submission
+   * This function allows students to submit or modify their answers to the assignment
+   * It validates the answer input and updates the assignment with the new answer
+   * If successful, it fetches the updated assignment data to reflect the changes
+   * If there's an error, it displays an appropriate message
+   * The answer must not be empty
+   */
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
     if (!answer.trim()) {
@@ -65,6 +72,13 @@ function AssignmentDetail({ user }) {
     }
   };
 
+  /* Handle assignment evaluation
+   * This function allows teachers to evaluate the assignment by assigning a score
+   * It validates the score input to ensure it's a number between 0 and 30
+   * If successful, it updates the assignment with the new score and fetches the updated data
+   * If there's an error, it displays an appropriate message
+   * The score must be a number between 0 and 30
+   */
   const handleEvaluate = async (e) => {
     e.preventDefault();
     const scoreNum = parseInt(score);
@@ -92,6 +106,8 @@ function AssignmentDetail({ user }) {
 
   if (loading) return <LoadingSpinner />;
 
+  // If there's an error and no assignment data, show an error message
+  // This can happen if the assignment ID is invalid or the assignment doesn't exist
   if (error && !assignment) {
     return (
       <div>
@@ -120,6 +136,7 @@ function AssignmentDetail({ user }) {
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
 
+      {/* If assignment data is not available, show a loading spinner or error message */}
       <div className="desktop-grid">
         <div>
           <Card className="mb-4">

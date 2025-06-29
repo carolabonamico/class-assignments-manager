@@ -41,6 +41,7 @@ function Dashboard({ user }) {
         <div className="alert alert-danger">{error}</div>
       )}
 
+      {/* Show current average score for students */}
       {user.role == 'student' && (
         <div className="desktop-grid mb-4">
           <Card className="desktop-card">
@@ -61,7 +62,10 @@ function Dashboard({ user }) {
         </div>
       )}
 
+      {/* Display open and closed assignments in a grid layout */}
       <div className="desktop-grid">
+
+        {/* Display open assignments in a card */}
         <Card className="desktop-card">
           <Card.Header className="d-flex justify-content-between align-items-center">
             <h5 className="mb-0">Compiti Aperti</h5>
@@ -98,6 +102,7 @@ function Dashboard({ user }) {
           </Card.Body>
         </Card>
 
+        {/* Display closed assignments in a card */}
         <Card className="desktop-card">
           <Card.Header className="d-flex justify-content-between align-items-center">
             <h5 className="mb-0">Compiti Completati</h5>
@@ -135,6 +140,7 @@ function Dashboard({ user }) {
         </Card>
       </div>
 
+      {/* Quick Actions for teachers */}
       <div className="mt-4">
         <Card className="desktop-card">
           <Card.Header>

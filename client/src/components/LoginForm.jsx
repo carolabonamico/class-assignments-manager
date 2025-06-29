@@ -10,7 +10,7 @@ const LoginForm = ({ onLogin }) => {
     e.preventDefault();
     setLoading(true);
 
-    // Il server si aspetta 'username' invece di 'email'
+    // The server expects the email field to be named "username"
     const loginData = {
       username: credentials.email,
       password: credentials.password
@@ -34,7 +34,7 @@ const LoginForm = ({ onLogin }) => {
   return (
     <div className="login-page">
       <div className="login-card">
-        {/* Logo e Nome Applicazione */}
+        {/* Logo and application name */}
         <div className="login-header">
           <div className="app-logo">
             <i className="bi bi-journal-check" style={{ fontSize: '3rem', color: 'var(--primary-blue)' }}></i>
@@ -42,7 +42,7 @@ const LoginForm = ({ onLogin }) => {
           <h2 className="app-title">Sistema Gestione Compiti</h2>
         </div>
 
-        {/* Form di Login */}
+        {/* Login form */}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Control
@@ -82,7 +82,8 @@ const LoginForm = ({ onLogin }) => {
 
         <hr className="divider" />
 
-        {/* Credenziali Demo */}
+        {/* TODO: remove demo credentials */}
+        {/* Demo credentials */}
         <div className="text-center">
           <div>
             <strong>Studente:</strong> giulia.bianchi@studenti.polito.it
