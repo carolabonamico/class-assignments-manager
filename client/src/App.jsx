@@ -45,6 +45,7 @@ function App() {
       const userData = await API.login(credentials);
       setLoggedIn(true);
       setUser(userData);
+      setMessage(''); // Reset error message after successful login
     } catch (err) {
       const errorMessage = err.error || err.message || err.toString() || 'Errore durante il login';
       setMessage({ msg: errorMessage, type: 'danger' });
@@ -74,7 +75,7 @@ function App() {
   return (
     <div className="App">
       {loggedIn && <Navigation user={user} onLogout={handleLogout} />}
-      
+
       {/* Show message alerts */}
       {message && (
         <div className={`alert alert-${message.type} m-3`} role="alert">

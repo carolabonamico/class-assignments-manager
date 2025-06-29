@@ -1,23 +1,32 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import API from '../services/api';
 
 const LoginForm = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setLoginError('');
 
-    // The server expects the email field to be named "username"
+    if (!credentials.email || !credentials.password) {
+      setLoginError('Email o password errate, ritentare.');
+      return;
+    }
+
+    setLoading(true);
     const loginData = {
       username: credentials.email,
       password: credentials.password
     };
-    
     try {
-      await onLogin(loginData);
+      const result = await onLogin(loginData);
+      if (result === false || result === null || result === undefined) {
+        setLoginError('Email o password errate, ritentare.');
+      }
+    } catch {
+      setLoginError('Errore di connessione, riprovare più tardi.');
     } finally {
       setLoading(false);
     }
@@ -44,6 +53,13 @@ const LoginForm = ({ onLogin }) => {
 
         {/* Login form */}
         <Form onSubmit={handleSubmit}>
+
+          {loginError && (
+            <div className="alert alert-danger mb-2" role="alert">
+              {loginError}
+            </div>
+          )}
+
           <Form.Group className="mb-3">
             <Form.Control
               type="email"
