@@ -109,10 +109,7 @@ function AssignmentList() {
                 </Card.Header>
                 <Card.Body className="d-flex flex-column">
                   <Card.Title className="text-truncate" title={assignment.question || 'Domanda non disponibile'}>
-                    {(assignment.question && assignment.question.length > 50) 
-                      ? assignment.question.substring(0, 50) + '...'
-                      : (assignment.question || 'Domanda non disponibile')
-                    }
+                    {assignment.question || 'Domanda non disponibile'}
                   </Card.Title>
                   <Card.Text>
                     <small className="text-muted">
