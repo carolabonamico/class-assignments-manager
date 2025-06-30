@@ -1,12 +1,12 @@
 /* Utility functions for the task management system */
 
 /**
- * Validates that an answer is not empty or only whitespace
- * @param {string} answer - The answer text to validate
+ * Validates that a string is not empty or only whitespace
+ * @param {string} string - The string to validate
  * @returns {boolean} True if valid, false if empty or only whitespace
  */
-function isValidAnswer(answer) {
-  return typeof answer === 'string' && answer.trim().length > 0;
+function isValidString(string) {
+  return typeof string === 'string' && string.trim().length > 0;
 }
 
 /**
@@ -53,7 +53,7 @@ function generateStudentPairs(studentIds) {
 }
 
 export {
-  isValidAnswer,
+  isValidString,
   calculateWeightedAverage,
   generateStudentPairs
 };
