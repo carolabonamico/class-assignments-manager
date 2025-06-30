@@ -39,7 +39,7 @@ function AssignmentDetail({ user }) {
     };
 
     fetchAssignment();
-  }, [id]); // TODO: check if this dependency is correct or not
+  }, [id]);
 
   /* Handle answer submission
    * This function allows students to submit or modify their answers to the assignment
