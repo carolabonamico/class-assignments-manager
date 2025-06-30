@@ -16,7 +16,7 @@ import './App.css';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState('');
+  const [loginError, setLoginError] = useState('');
   const [loading, setLoading] = useState(true);
 
   // Check authentication on startup (silently)
@@ -34,6 +34,7 @@ function App() {
         setLoading(false);
       }
     };
+
     checkAuth();
   }, []);
 
@@ -45,10 +46,10 @@ function App() {
       const userData = await API.login(credentials);
       setLoggedIn(true);
       setUser(userData);
-      setMessage(''); // Reset error message after successful login
+      setLoginError(''); // Reset error message after successful login
     } catch (err) {
       const errorMessage = err.error || err.message || err.toString() || 'Errore durante il login';
-      setMessage({ msg: errorMessage, type: 'danger' });
+      setLoginError(errorMessage);
     }
   };
 
@@ -60,7 +61,7 @@ function App() {
     await API.logout();
     setLoggedIn(false);
     setUser(null);
-    setMessage('');
+    setLoginError('');
   };
 
   // Show loading spinner while checking authentication
@@ -77,10 +78,9 @@ function App() {
       <div className="App">
         {loggedIn && <Navigation onLogout={handleLogout} />}
 
-        {/* Show message alerts */}
-        {message && (
-          <div className={`alert alert-${message.type} m-3`} role="alert">
-            {message.msg}
+        {loginError && (
+          <div className={`alert alert-danger m-3`} role="alert">
+            {loginError}
           </div>
         )}
 
