@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Badge, Button, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import dayjs from 'dayjs';
@@ -8,6 +8,7 @@ import useAuth from '../hooks/useAuth';
 
 function AssignmentList() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -47,6 +48,7 @@ function AssignmentList() {
         <div className="alert alert-danger">{error}</div>
       )}
 
+      {/* Card Media Attuale */}
       {user.role == 'student' && (
         <div className="desktop-grid mb-4">
           <Card className="desktop-card">
@@ -54,6 +56,7 @@ function AssignmentList() {
               <h6>Media attuale</h6>
               <h3 className="text-primary">
                 {(() => {
+                  // Calculate the average score of all assignments excluding the ones which have not been evaluated yet
                   const scoredAssignments = assignments.filter(a => a.score !== null && a.score !== undefined);
                   if (scoredAssignments.length === 0) {
                     return "N/A";
@@ -93,6 +96,7 @@ function AssignmentList() {
           <div className="assignment-list-desktop">
             {filteredAssignments.map(assignment => (
               <Card key={assignment.id} className="desktop-card h-100">
+
                 <Card.Header className="d-flex justify-content-between align-items-center">
                   <Badge bg={assignment.status === 'open' ? 'success' : 'primary'}>
                     {assignment.status === 'open' ? 'Aperto' : 'Chiuso'}
@@ -107,28 +111,31 @@ function AssignmentList() {
                     </Badge>
                   )}
                 </Card.Header>
+
                 <Card.Body className="d-flex flex-column">
                   <Card.Title className="text-truncate" title={assignment.question || 'Domanda non disponibile'}>
                     {assignment.question || 'Domanda non disponibile'}
                   </Card.Title>
+
                   <Card.Text>
                     <small className="text-muted">
                       <strong>Data creazione:</strong> {assignment.created_date ? dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm') : 'Data non disponibile'}
                     </small>
                   </Card.Text>
+                  
                   {assignment.answer && (
                     <div className="mb-4 text-success">
                         <i className="bi bi-check-circle me-1"></i>
                         Risposta inviata
                     </div>
                   )}
+
                   <div className="mt-auto">
                     <Button 
-                      as={Link} 
-                      to={`/assignments/${assignment.id}`} 
                       variant="primary" 
                       size="sm"
-                      className="w-100"
+                      className="w-100" 
+                      onClick={() => navigate(`/assignments/${assignment.id}`)}
                     >
                       Visualizza Dettagli
                     </Button>
