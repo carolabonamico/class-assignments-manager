@@ -11,7 +11,7 @@ const LoginForm = ({ onLogin }) => {
     setLoginError('');
 
     if (!credentials.email || !credentials.password) {
-      setLoginError('Email o password errate, ritentare.');
+      setLoginError('Email e password necessari.');
       return;
     }
 
@@ -24,6 +24,7 @@ const LoginForm = ({ onLogin }) => {
       const result = await onLogin(loginData);
       if (result === false || result === null || result === undefined) {
         setLoginError('Email o password errate, ritentare.');
+        setCredentials({ email: '', password: '' });
       }
     } catch {
       setLoginError('Errore di connessione, riprovare più tardi.');
