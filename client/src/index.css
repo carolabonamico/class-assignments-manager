@@ -1,16 +1,46 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* Blue Palette */
+  --primary-blue: #1B365D;
+  --secondary-blue: #2E5C8A;
+  --accent-blue: #4A90C2;
+  --light-blue: #7DB4E6;
+  
+  /* Supporting Colors */
+  --success-green: #28A745;
+  --warning-orange: #FD7E14;
+  --danger-red: #DC3545;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Neutral Colors */
+  --white: #FFFFFF;
+  --light-gray: #F8F9FA;          /* Background */
+  --medium-gray: #E9ECEF;         /* Borders */
+  --dark-gray: #6C757D;           /* Muted text */
+  --charcoal: #343A40;            /* Dark text */
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--accent-blue) 100%);
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(27, 54, 93, 0.08);
+  --shadow-lg: 0 8px 24px rgba(27, 54, 93, 0.15);
+  
+  /* Typography */
+  --font-primary: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--font-primary);
+  background: #f8f9fa;
+  color: #213547;
+  box-sizing: border-box;
 }
 
 a {
@@ -22,19 +52,6 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -42,7 +59,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #f9f9f9;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -52,6 +69,11 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
 @media (prefers-color-scheme: light) {
