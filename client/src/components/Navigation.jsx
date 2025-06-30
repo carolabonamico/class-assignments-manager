@@ -17,6 +17,7 @@ function Navigation({ onLogout }) {
         <>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            
             <Nav className="me-auto">
               {user.role === 'teacher' && (
                 <>
@@ -44,6 +45,7 @@ function Navigation({ onLogout }) {
                 </>
               )}
             </Nav>
+
             <Nav>
               <Navbar.Text className="me-3">
                 Benvenuto, <strong>{user.name}</strong> ({user.role === 'teacher' ? 'Docente' : 'Studente'})
@@ -52,6 +54,7 @@ function Navigation({ onLogout }) {
                 Logout
               </Button>
             </Nav>
+
           </Navbar.Collapse>
         </>
       )}

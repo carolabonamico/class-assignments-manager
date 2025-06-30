@@ -16,10 +16,12 @@ const LoginForm = ({ onLogin }) => {
     }
 
     setLoading(true);
+
     const loginData = {
       username: credentials.email,
       password: credentials.password
     };
+
     try {
       const result = await onLogin(loginData);
       if (result === false || result === null || result === undefined) {
@@ -33,6 +35,7 @@ const LoginForm = ({ onLogin }) => {
     }
   };
 
+  // This function updates the state just for the input that changed and the other one remains unchanged
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCredentials(prev => ({
@@ -44,6 +47,7 @@ const LoginForm = ({ onLogin }) => {
   return (
     <div className="login-page">
       <div className="login-card">
+
         {/* Logo and application name */}
         <div className="login-header">
           <div className="app-logo">

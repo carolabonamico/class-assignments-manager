@@ -5,9 +5,7 @@ function LoadingSpinner() {
     <Container className="mt-5">
       <Row>
         <Col className="text-center">
-          <Spinner animation="border" role="status" variant="primary">
-            <span className="visually-hidden">Caricamento...</span>
-          </Spinner>
+          <Spinner animation="border" role="status" variant="primary"/>
           <p className="mt-3">Caricamento...</p>
         </Col>
       </Row>
