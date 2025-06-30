@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function CreateAssignment() {
-  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [question, setQuestion] = useState('');
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -13,15 +11,13 @@ function CreateAssignment() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [createdAssignmentId, setCreatedAssignmentId] = useState(null);
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         const data = await API.getStudents();
         setStudents(data);
-      } catch (err) {
-        console.error('Errore nel caricamento degli studenti:', err);
+      } catch {
         setError('Errore nel caricamento degli studenti. Ricarica la pagina per effettuare nuovamente il login.');
       } finally {
         setLoading(false);
@@ -43,7 +39,7 @@ function CreateAssignment() {
       setSelectedStudents(selectedStudents.filter(id => id !== studentId));
     } else {
       if (selectedStudents.length < 6) {
-        setSelectedStudents([...selectedStudents, studentId]);
+        setSelectedStudents(prev => [...prev, studentId]);
       }
     }
   };
@@ -81,31 +77,22 @@ function CreateAssignment() {
         studentIds: selectedStudents
       };
 
-      const newAssignment = await API.createAssignment(assignmentData);
-      setCreatedAssignmentId(newAssignment.id);
+      await API.createAssignment(assignmentData);
       setSuccess(`Compito creato con successo!`);
       setError('');
       
-      // For reset the form after successful creation to allow creating another assignment
+      // To reset the form after successful creation to allow creating another assignment
       setQuestion('');
       setSelectedStudents([]);
+
     } catch (err) {
-      console.error('Errore nella creazione del compito:', err);
       if (err.status === 401) {
         setError('Sessione scaduta. Ricarica la pagina per effettuare nuovamente il login.');
-      } else if (err.errors) {
-        setError(err.errors.map(e => e.msg).join(', '));
       } else {
-        setError(err.error || 'Errore nella creazione del compito');
+        setError('Errore nella creazione del compito');
       }
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  const handleViewAssignment = () => {
-    if (createdAssignmentId) {
-      navigate(`/assignments/${createdAssignmentId}`);
     }
   };
 
@@ -119,17 +106,10 @@ function CreateAssignment() {
 
       {/* Show error or success messages */}
       {error && <Alert variant="danger">{error}</Alert>}
+      
       {success && (
         <Alert variant="success" className="d-flex align-items-center">
           <div className="flex-grow-1">{success}</div>
-          <Button
-            variant="outline-success"
-            size="sm"
-            onClick={handleViewAssignment}
-            className="me-2"
-          >
-            Visualizza Compito
-          </Button>
         </Alert>
       )}
 
@@ -206,6 +186,7 @@ function CreateAssignment() {
                 type="submit" 
                 variant="success" 
                 disabled={submitting || selectedStudents.length < 2}
+                // Button disabled in case of submitting or if less than 2 students are selected
               >
                 {submitting ? 'Creazione in corso...' : 'Crea Compito'}
               </Button>
