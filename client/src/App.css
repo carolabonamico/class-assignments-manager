@@ -331,19 +331,3 @@ html, body {
   border-color: #c82333 !important;
   color: var(--white) !important;
 }
-
-/* =====================
-   Responsive
-   ===================== */
-
-@media (max-width: 768px) {
-  .container-fluid {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-  .desktop-grid,
-  .assignment-list-desktop {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-}

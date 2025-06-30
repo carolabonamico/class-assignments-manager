@@ -96,25 +96,6 @@ const LoginForm = ({ onLogin }) => {
             </Button>
           </div>
         </Form>
-
-        <hr className="divider" />
-
-        {/* TODO: remove demo credentials */}
-        {/* Demo credentials */}
-        <div className="text-center">
-          <div>
-            <strong>Studente:</strong> giulia.bianchi@studenti.polito.it
-          </div>
-          <div>
-            <strong>Password:</strong> student123
-          </div>
-          <div>
-            <strong>Docente:</strong> mario.rossi@polito.it
-          </div>
-          <div>
-            <strong>Password:</strong> password123
-          </div>
-        </div>
       </div>
     </div>
   );
