@@ -133,9 +133,6 @@ function CreateAssignment() {
                     placeholder="Es: Implementa un algoritmo di ordinamento merge sort in JavaScript e spiega la complessità temporale..."
                     required
                   />
-                  <Form.Text className="text-muted">
-                    Fornisci una descrizione dettagliata del compito che gli studenti dovranno svolgere.
-                  </Form.Text>
                 </Form.Group>
               </Card.Body>
             </Card>
@@ -149,9 +146,6 @@ function CreateAssignment() {
                 </h5>
               </Card.Header>
               <Card.Body>
-                <p className="text-muted small mb-3">
-                  Seleziona da 2 a 6 studenti per questo compito. Il sistema impedisce la formazione di gruppi dove coppie di studenti hanno già lavorato insieme in 2 o più compiti precedenti.
-                </p>
                 
                 <div style={{ maxHeight: '260px', overflowY: 'auto' }}>
                   {students.map(student => (

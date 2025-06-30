@@ -89,7 +89,7 @@ html, body {
 
 /* Navbar */
 .navbar {
-  background: var(--gradient-primary) !important;
+  background: var(--primary-blue) !important;
   box-shadow: var(--shadow-sm);
   padding: 1.5rem 2rem !important;
 }
@@ -124,7 +124,7 @@ html, body {
 }
 
 .card-header {
-  background: linear-gradient(90deg, var(--light-gray) 0%, var(--white) 100%);
+  background: var(--light-gray);
   border-bottom: 1px solid var(--medium-gray);
   padding: 1rem 1.25rem;
   font-weight: var(--font-weight-semibold);

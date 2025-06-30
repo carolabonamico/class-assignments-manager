@@ -17,9 +17,6 @@
   --dark-gray: #6C757D;           /* Muted text */
   --charcoal: #343A40;            /* Dark text */
   
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--accent-blue) 100%);
-  
   /* Shadows */
   --shadow-sm: 0 2px 4px rgba(27, 54, 93, 0.08);
   --shadow-lg: 0 8px 24px rgba(27, 54, 93, 0.15);
