@@ -29,8 +29,8 @@ function Navigation({ onLogout }) {
                   </Nav.Link>
                   <Nav.Link 
                     as={Link} 
-                    to="/create-assignment" 
-                    active={location.pathname === '/create-assignment'}
+                    to="/assignments/new" 
+                    active={location.pathname === '/assignments/new'}
                   >
                     Crea Compito
                   </Nav.Link>

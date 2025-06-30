@@ -23,13 +23,12 @@ git checkout -b evaluation final # check out the version tagged with 'final' and
 ## React Client Application Routes
 
 - `/login` — Authentication page (**public**)
-- `/` — Dashboard homepage with assignments overview and role-based navigation (teacher/student) (**protected**)
+- `/` — Redirects to `/assignments` after login (**protected**)
 - `/assignments` — Assignment list filtered by user role (**protected**)
 - `/assignments/:id` — Assignment detail, answer submission (student) or evaluation (teacher) (**protected**)
 - `/assignments/new` — Create new assignment (teachers only) (**protected, teachers only**)
-- `/statistics` — Student statistics and analytics (teachers only) (**protected, teachers only**)
-
-All routes except `/login` are protected and require authentication. The `/assignments/new` and `/statistics` routes are further restricted to users with the teacher role. Routing is managed with React Router and role-based route protection.
+- `/statistics` — Student statistics (teachers only) (**protected, teachers only**)
+- All other routes redirect to `/assignments` if authenticated, or to `/login` if not authenticated.
 
 ## API Server
 
@@ -524,17 +523,16 @@ The server includes npm scripts for database management:
 
 ### Core Components
 
-- **Navigation.jsx** — Responsive navigation bar with role-based menu items, user profile, and logout functionality.
-- **LoginForm.jsx** — User authentication form with validation and error handling.
-- **LoadingSpinner.jsx** — Reusable loading indicator for asynchronous operations.
+- **Navigation.jsx** — Navigation bar with role-based menu and logout.
+- **LoginForm.jsx** — Authentication form with validation and error handling.
+- **LoadingSpinner.jsx** — Reusable loading indicator.
 
 ### Main Pages
 
-- **Dashboard.jsx** — Homepage with assignments overview, quick stats, and role-based content for teachers and students.
-- **AssignmentList.jsx** — Paginated and filterable list of assignments, with search and sorting features.
-- **AssignmentDetail.jsx** — Detailed view of a single assignment, including answer submission (student), evaluation (teacher), and group information.
-- **CreateAssignment.jsx** — Assignment creation form for teachers, with student selection, group constraint validation, and real-time feedback.
-- **Statistics.jsx** — Student performance analytics and statistics (teachers only), with charts, filters, and export options.
+- **AssignmentList.jsx** — Assignment list, filterable by status and role, with average and contextual actions.
+- **AssignmentDetail.jsx** — Assignment detail, answer/modify (student), evaluation (teacher), group info.
+- **CreateAssignment.jsx** — New assignment creation (teacher only), student selection and constraint validation.
+- **Statistics.jsx** — Student statistics and analytics (teacher only), with filters and sorting.
 
 ## Screenshot
 

@@ -102,7 +102,7 @@ function App() {
                   element={<AssignmentDetail />} 
                 />
                 <Route 
-                  path="/create-assignment" 
+                  path="/assignments/new" 
                   element={
                     user?.role === 'teacher' ? (
                       <CreateAssignment />
