@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
-import API from '../services/api';
+import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function CreateAssignment() {

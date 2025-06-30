@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Table, Form, Badge, Row, Col } from 'react-bootstrap';
-import API from '../services/api';
+import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function Statistics() {

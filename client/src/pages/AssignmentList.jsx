@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, Badge, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import API from '../services/api';
+import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import dayjs from 'dayjs';
 

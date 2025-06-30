@@ -9,7 +9,7 @@ import AssignmentDetail from './pages/AssignmentDetail';
 import CreateAssignment from './pages/CreateAssignment';
 import Statistics from './pages/Statistics';
 import LoadingSpinner from './components/LoadingSpinner';
-import API from './services/api';
+import API from './API/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
