@@ -3,13 +3,13 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Navigation from './components/Navigation';
 import LoginForm from './components/LoginForm';
-import Dashboard from './pages/Dashboard';
 import AssignmentList from './pages/AssignmentList';
 import AssignmentDetail from './pages/AssignmentDetail';
 import CreateAssignment from './pages/CreateAssignment';
 import Statistics from './pages/Statistics';
 import LoadingSpinner from './components/LoadingSpinner';
 import API from './API/api';
+import { AuthProvider } from './contexts/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -73,67 +73,69 @@ function App() {
   }
 
   return (
-    <div className="App">
-      {loggedIn && <Navigation user={user} onLogout={handleLogout} />}
+    <AuthProvider user={user} logout={handleLogout}>
+      <div className="App">
+        {loggedIn && <Navigation onLogout={handleLogout} />}
 
-      {/* Show message alerts */}
-      {message && (
-        <div className={`alert alert-${message.type} m-3`} role="alert">
-          {message.msg}
-        </div>
-      )}
-
-      {/* If user is logged in, show the main content with routes */}
-      {loggedIn ? (
-        <Container fluid className="px-0">
-          <div className="main-content">
-            <Routes>
-              <Route 
-                path="/" 
-                element={<Dashboard user={user} />} 
-              />
-              <Route 
-                path="/assignments" 
-                element={<AssignmentList />} 
-              />
-              <Route 
-                path="/assignments/:id" 
-                element={<AssignmentDetail user={user} />} 
-              />
-              <Route 
-                path="/create-assignment" 
-                element={
-                  user?.role === 'teacher' ? (
-                    <CreateAssignment />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                } 
-              />
-              <Route 
-                path="/statistics" 
-                element={
-                  user?.role === 'teacher' ? (
-                    <Statistics />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                } 
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+        {/* Show message alerts */}
+        {message && (
+          <div className={`alert alert-${message.type} m-3`} role="alert">
+            {message.msg}
           </div>
-        </Container>
-      ) : (
-        <Routes>
-          <Route 
-            path="/login" 
-            element={<LoginForm onLogin={handleLogin} />} 
-          />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      )}
-    </div>
+        )}
+
+        {/* If user is logged in, show the main content with routes */}
+        {loggedIn ? (
+          <Container fluid className="px-0">
+            <div className="main-content">
+              <Routes>
+                <Route 
+                  path="/" 
+                  element={<Navigate to="/assignments" replace />} 
+                />
+                <Route 
+                  path="/assignments" 
+                  element={<AssignmentList />} 
+                />
+                <Route 
+                  path="/assignments/:id" 
+                  element={<AssignmentDetail />} 
+                />
+                <Route 
+                  path="/create-assignment" 
+                  element={
+                    user?.role === 'teacher' ? (
+                      <CreateAssignment />
+                    ) : (
+                      <Navigate to="/assignments" replace />
+                    )
+                  } 
+                />
+                <Route 
+                  path="/statistics" 
+                  element={
+                    user?.role === 'teacher' ? (
+                      <Statistics />
+                    ) : (
+                      <Navigate to="/assignments" replace />
+                    )
+                  } 
+                />
+                <Route path="*" element={<Navigate to="/assignments" replace />} />
+              </Routes>
+            </div>
+          </Container>
+        ) : (
+          <Routes>
+            <Route 
+              path="/login" 
+              element={<LoginForm onLogin={handleLogin} />} 
+            />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        )}
+      </div>
+    </AuthProvider>
   );
 }
 

@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import dayjs from 'dayjs';
+import useAuth from '../hooks/useAuth';
 
 function AssignmentList() {
+  const { user } = useAuth();
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -45,6 +47,26 @@ function AssignmentList() {
         <div className="alert alert-danger">{error}</div>
       )}
 
+      {user.role == 'student' && (
+        <div className="desktop-grid mb-4">
+          <Card className="desktop-card">
+            <Card.Body>
+              <h6>Media attuale</h6>
+              <h3 className="text-primary">
+                {(() => {
+                  const scoredAssignments = assignments.filter(a => a.score !== null && a.score !== undefined);
+                  if (scoredAssignments.length === 0) {
+                    return "N/A";
+                  }
+                  const average = scoredAssignments.reduce((sum, a) => sum + a.score, 0) / scoredAssignments.length;
+                  return average.toFixed(2);
+                })()}
+              </h3>
+              </Card.Body>
+            </Card>
+        </div>
+      )}
+
       {/* Filter dropdown to select assignment status */}
       <div className="mb-4">
         <Form.Group>
@@ -63,9 +85,6 @@ function AssignmentList() {
         <Card className="desktop-card">
           <Card.Body className="text-center">
             <p className="text-muted">Nessun compito trovato con i filtri selezionati.</p>
-            <Button as={Link} to="/create-assignment" variant="primary">
-              Crea il primo compito
-            </Button>
           </Card.Body>
         </Card>
       ) : (
