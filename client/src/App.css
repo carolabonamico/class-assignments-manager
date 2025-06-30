@@ -17,7 +17,7 @@
   --dark-gray: #6C757D;           /* Muted text */
   --charcoal: #343A40;            /* Dark text */
   
-  /* Essential Gradients */
+  /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--accent-blue) 100%);
   
   /* Shadows */
@@ -32,9 +32,9 @@
   --font-weight-bold: 700;
 }
 
-
 #root {
-  max-width: 100%;
+  width: 100% !important;
+  max-width: none !important;
   margin: 0;
   padding: 0;
   text-align: left;
@@ -48,12 +48,18 @@ body {
   font-weight: var(--font-weight-normal);
   margin: 0;
   padding: 0;
-  padding-top: 75px; /* Aggiunge spazio per la navbar fissa */
+  padding-top: 75px; /* Adjust for fixed navbar height */
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-/* App Layout - Forza full-width sempre */
+html, body {
+  width: 100% !important;
+  max-width: none !important;
+  overflow-x: hidden;
+}
+
+/* App Layout - full-width always */
 .App {
   min-height: 100vh;
   width: 100vw !important;
@@ -64,7 +70,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Main content wrapper - Gestisce il padding interno */
+/* Main content wrapper - manages padding and background */
 .main-content {
   width: 100% !important;
   max-width: none !important;
@@ -73,29 +79,16 @@ body {
   box-sizing: border-box;
 }
 
-/* Layout desktop per componenti principali - SEMPRE full-width */
+/* Layout desktop per componenti principali - full-width always */
 .desktop-layout {
   max-width: none !important;
   width: 100% !important;
   margin: 0 !important;
-  padding: 1.5rem !important; /* Padding aggiunto al contenuto delle pagine */
+  padding: 1.5rem !important;
   box-sizing: border-box;
 }
 
-
-
-html, body {
-  width: 100% !important;
-  max-width: none !important;
-  overflow-x: hidden;
-}
-
-#root {
-  width: 100% !important;
-  max-width: none !important;
-}
-
-/* Desktop card styles - Senza animazioni */
+/* Desktop card styles */
 .desktop-card {
   background: var(--white);
   border: 1px solid var(--medium-gray);
@@ -104,7 +97,7 @@ html, body {
   overflow: hidden;
 }
 
-/* Grid desktop per card e contenuti - SEMPRE full-width */
+/* Grid desktop per card e contenuti - full-width always */
 .desktop-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -113,7 +106,7 @@ html, body {
   max-width: none !important;
 }
 
-/* Assignment list desktop grid - SEMPRE full-width */
+/* Assignment list desktop grid - full-width always */
 .assignment-list-desktop {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -122,14 +115,22 @@ html, body {
   max-width: none !important;
 }
 
-/* Form desktop styles - SEMPRE full-width */
+/* Form desktop styles - full width always */
 .desktop-form {
   width: 100% !important;
   max-width: none !important;
 }
 
+/* Vertical Alignment for Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: var(--font-weight-medium);
+}
 
-/* Primary Button with Corporate Blue */
+/* Primary Blue Button */
 .btn-primary {
   background-color: var(--primary-blue) !important;
   border: 1px solid var(--primary-blue) !important;
@@ -147,7 +148,7 @@ html, body {
   color: var(--white) !important;
 }
 
-/* Success Button */
+/* Green Success Button */
 .btn-success {
   background-color: var(--success-green) !important;
   border: 1px solid var(--success-green) !important;
@@ -165,7 +166,7 @@ html, body {
   color: var(--white) !important;
 }
 
-/* Altri bottoni */
+/* Secondary Blue Buttons */
 .btn-secondary {
   background-color: var(--dark-gray) !important;
   border: 1px solid var(--dark-gray) !important;
@@ -181,6 +182,7 @@ html, body {
   color: var(--white) !important;
 }
 
+/* Orange Warning Button */
 .btn-warning {
   background-color: var(--warning-orange) !important;
   border: 1px solid var(--warning-orange) !important;
@@ -196,6 +198,7 @@ html, body {
   color: var(--white) !important;
 }
 
+/* Red Danger Button */
 .btn-danger {
   background-color: var(--danger-red) !important;
   border: 1px solid var(--danger-red) !important;
@@ -211,41 +214,11 @@ html, body {
   color: var(--white) !important;
 }
 
-/* Outline buttons */
-.btn-outline-primary {
-  background-color: transparent !important;
-  border: 1px solid var(--primary-blue) !important;
-  color: var(--primary-blue) !important;
-  transition: all 0.2s ease;
-}
-
-.btn-outline-primary:hover,
-.btn-outline-primary:focus {
-  background-color: var(--primary-blue) !important;
-  border-color: var(--primary-blue) !important;
-  color: var(--white) !important;
-}
-
-/* Centraggio verticale del testo nei bottoni */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-weight: var(--font-weight-medium);
-}
-
 /* Navbar */
 .navbar {
   background: var(--gradient-primary) !important;
   box-shadow: var(--shadow-sm);
   padding: 1.5rem 2rem !important;
-}
-
-.navbar-brand {
-  color: var(--white) !important;
-  font-weight: var(--font-weight-bold);
-  font-size: 1.5rem;
 }
 
 .navbar-nav .nav-link {
@@ -277,31 +250,6 @@ html, body {
   box-shadow: var(--shadow-sm);
 }
 
-.card-header {
-  background: linear-gradient(90deg, var(--light-gray) 0%, var(--white) 100%);
-  border-bottom: 1px solid var(--medium-gray);
-  padding: 1rem 1.25rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--primary-blue);
-}
-
-/* Form Controls */
-.form-control,
-.form-select {
-  border: 2px solid var(--medium-gray);
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 0 0.25rem rgba(74, 144, 194, 0.25);
-  outline: none;
-}
-
 /* Badges */
 .badge {
   font-weight: var(--font-weight-medium);
@@ -325,7 +273,7 @@ html, body {
   background: var(--danger-red) !important;
 }
 
-/* Login form styles */
+/* Login form and button styles */
 .login-page {
   position: fixed;
   top: 0;
@@ -357,18 +305,6 @@ html, body {
   margin-bottom: 2rem;
 }
 
-.app-logo {
-  margin-bottom: 1rem;
-}
-
-.app-title {
-  color: var(--primary-blue);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: 0;
-  font-size: 1.5rem;
-}
-
-
 .login-button {
   background-color: var(--primary-blue) !important;
   border: 1px solid var(--primary-blue) !important;
@@ -399,6 +335,18 @@ html, body {
   margin: 1.5rem 0;
 }
 
+/* Logo and title */
+.app-logo {
+  margin-bottom: 1rem;
+}
+
+.app-title {
+  color: var(--primary-blue);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}
+
 /* Hover effects */
 .hover-bg-light:hover {
   background-color: var(--light-gray) !important;
@@ -417,7 +365,7 @@ html, body {
   border-color: var(--primary-blue) !important;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for mobile */
 @media (max-width: 768px) {
   .container-fluid {
     padding-left: 1rem !important;
