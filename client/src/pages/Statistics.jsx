@@ -67,10 +67,12 @@ function Statistics() {
           <Card.Body>
             <h6>Media Classe</h6>
             <h3 className="text-primary">
-              {stats.length > 0 
-                ? (stats.reduce((sum, s) => sum + (s.weighted_average || 0), 0) / stats.length).toFixed(2)
-                : 'N/A'
-              }
+              {(() => {
+                const studentsWithAvg = stats.filter(s => s.weighted_average !== null);
+                return studentsWithAvg.length > 0
+                  ? (studentsWithAvg.reduce((sum, s) => sum + s.weighted_average, 0) / studentsWithAvg.length).toFixed(2)
+                  : 'N/A';
+              })()}
             </h3>
           </Card.Body>
         </Card>

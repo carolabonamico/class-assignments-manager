@@ -267,7 +267,7 @@ Student statistics (teachers only)
 | Username                             | Password    | Role    | Name                |
 | ------------------------------------ | ----------- | ------- | ------------------- |
 | mario.rossi@polito.it                | password123 | teacher | Prof. Mario Rossi   |
-| anna.verdi@polito.it                 | password123 | teacher | Prof.ssa Anna Verdi |
+| anna.verdi@polito.it                 | password456 | teacher | Prof.ssa Anna Verdi |
 | giulia.bianchi@studenti.polito.it    | student123  | student | Giulia Bianchi      |
 | marco.ferrari@studenti.polito.it     | student123  | student | Marco Ferrari       |
 | laura.russo@studenti.polito.it       | student123  | student | Laura Russo         |

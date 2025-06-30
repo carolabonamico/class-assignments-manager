@@ -43,10 +43,10 @@ CREATE TABLE IF NOT EXISTS "assignment_groups" (
 
 -- Test data insertion
 
--- Teachers insertion (password: "password123" with salt)
+-- Teachers insertion (password with salt)
 INSERT INTO users (name, email, password, salt, role) VALUES 
-('Prof. Mario Rossi', 'mario.rossi@polito.it', 'a8c7b9d5e12f8a6b3c4d9e8f7a6b5c4d', 'salt123', 'teacher'),
-('Prof.ssa Anna Verdi', 'anna.verdi@polito.it', 'b9d8c7e6f3a2b1c5d4e9f8a7b6c5d4e3', 'salt456', 'teacher');
+('Prof. Mario Rossi', 'mario.rossi@polito.it', '3da409b79dd2f30028e33b07d3b05d2e', 'b5467aac119fec66', 'teacher'),
+('Prof.ssa Anna Verdi', 'anna.verdi@polito.it', 'ca3168778c31abfb7ae2c754249e62c2', 'f220730f55075a15', 'teacher');
 
 -- Students insertion (all with password: "student123")
 INSERT INTO users (name, email, password, salt, role) VALUES 

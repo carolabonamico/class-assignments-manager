@@ -4,40 +4,32 @@ import crypto from 'crypto';
  * Generates password data (salt and hashed password) using the scrypt algorithm.
  * @param {string} password - The password to hash.
  * @returns {Promise<object>} A promise that resolves to an object containing the salt and hashed password.
- * @throws {Error} If there is an error during the hashing process.
  */
 function generatePasswordData(password) {
   return new Promise((resolve, reject) => {
-    // Generate random salt
     const salt = crypto.randomBytes(8).toString('hex');
-    
-    // Hash password with salt using scrypt
     crypto.scrypt(password, salt, 16, (err, hashedPassword) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({
-          salt: salt,
-          hash: hashedPassword.toString('hex')
-        });
-      }
+      if (err) reject(err);
+      else resolve({ salt, hash: hashedPassword.toString('hex') });
     });
   });
 }
 
 /**
  * Generates password data for all users (teachers and students).
- * This function generates password data for two teachers and a list of students.
- * Each teacher has a fixed password, while students have a common password.
- * @returns {Promise<void>} A promise that resolves when all password data has been generated.
- * @throws {Error} If there is an error during the password generation process.
+ * Each teacher has a fixed password, students share a common password.
  */
 async function generateAllPasswords() {
-  
   // Teachers
-  const teacher1 = await generatePasswordData('password123');
-  const teacher2 = await generatePasswordData('password123');
-  
+  const teachers = [
+    { name: 'Prof. Mario Rossi', email: 'mario.rossi@polito.it', password: 'password123' },
+    { name: 'Prof.ssa Anna Verdi', email: 'anna.verdi@polito.it', password: 'password456' }
+  ];
+
+  for (const teacher of teachers) {
+    await generatePasswordData(teacher.password);
+  }
+
   // Students
   const students = [
     'giulia.bianchi@studenti.polito.it',
@@ -63,15 +55,10 @@ async function generateAllPasswords() {
     'alessia.desantis@studenti.polito.it',
     'emanuele.marini@studenti.polito.it'
   ];
-  
+
   for (const email of students) {
-    const studentData = await generatePasswordData('student123');
-  }
-  
-  let studentIndex = 0;
-  for (const email of students) {
-    const studentData = await generatePasswordData('student123');
+    await generatePasswordData('student123');
   }
 }
 
-generateAllPasswords().catch(console.error);
+generateAllPasswords().catch(() => {});
