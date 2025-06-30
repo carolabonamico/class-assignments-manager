@@ -309,24 +309,11 @@ export const evaluateAssignment = (assignmentId, score, teacherId) => {
 /**
  * Get statistics for all students of a teacher
  * @param {number} teacherId - The ID of the teacher
- * @param {string} orderBy - The field to order by ('name', 'total', 'average')
  * @returns {Promise<StudentStats[]>} - Returns an array of StudentStats objects
  * @throws {Error} - Throws an error if the query fails
  */
-export const getStudentStats = (teacherId, orderBy = 'name') => {
+export const getStudentStats = (teacherId) => {
   return new Promise((resolve, reject) => {
-    let orderClause;
-    switch(orderBy) {
-      case 'total':
-        orderClause = 'total_assignments DESC, u.name';
-        break;
-      case 'average':
-        orderClause = 'weighted_average DESC, u.name';
-        break;
-      default:
-        orderClause = 'u.name';
-    }
-    
     const sql = `
       SELECT 
         u.id,
@@ -348,8 +335,7 @@ export const getStudentStats = (teacherId, orderBy = 'name') => {
         GROUP BY assignment_id
       ) group_sizes ON a.id = group_sizes.assignment_id
       WHERE u.role = 'student'
-      GROUP BY u.id, u.name, u.email
-      ORDER BY ${orderClause}`;
+      GROUP BY u.id, u.name, u.email`;
     
     db.all(sql, [teacherId], (err, rows) => {
       if (err) {
