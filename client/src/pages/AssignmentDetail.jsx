@@ -52,6 +52,7 @@ function AssignmentDetail() {
    */
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
+
     if (!answer.trim()) {
       setError('La risposta non può essere vuota');
       return;
@@ -67,8 +68,8 @@ function AssignmentDetail() {
       // Refresh assignment data
       const updatedAssignment = await API.getAssignment(id);
       setAssignment(updatedAssignment);
-    } catch (err) {
-      setError(err.error || 'Errore nell\'invio della risposta');
+    } catch {
+      setError('Errore nell\'invio della risposta');
     } finally {
       setSubmitting(false);
     }
@@ -78,11 +79,12 @@ function AssignmentDetail() {
    * This function allows teachers to evaluate the assignment by assigning a score
    * It validates the score input to ensure it's a number between 0 and 30
    * If successful, it updates the assignment with the new score and fetches the updated data
-   * If there's an error, it displays an appropriate message
+   * If there's an error, it displays a message
    * The score must be a number between 0 and 30
    */
   const handleEvaluate = async (e) => {
     e.preventDefault();
+
     const scoreNum = parseInt(score);
     if (isNaN(scoreNum) || scoreNum < 0 || scoreNum > 30) {
       setError('Il punteggio deve essere un numero tra 0 e 30');
@@ -99,8 +101,8 @@ function AssignmentDetail() {
       // Refresh assignment data
       const updatedAssignment = await API.getAssignment(id);
       setAssignment(updatedAssignment);
-    } catch (err) {
-      setError(err.error || 'Errore nella valutazione');
+    } catch {
+      setError('Errore nella valutazione');
     } finally {
       setSubmitting(false);
     }
@@ -114,9 +116,6 @@ function AssignmentDetail() {
     return (
       <div>
         <Alert variant="danger">{error}</Alert>
-        <Button onClick={() => navigate('/assignments')}>
-          Torna alla lista compiti
-        </Button>
       </div>
     );
   }
@@ -150,7 +149,7 @@ function AssignmentDetail() {
           <p>{assignment.question}</p>
           <hr />
           <small className="text-muted">
-            {user.role === 'student' && (
+            {isStudent && (
               <>
                 <strong>Docente:</strong> {assignment.teacher_name}<br />
               </>
@@ -179,6 +178,8 @@ function AssignmentDetail() {
             </div>
           )}
 
+          {/* Display the answer if it exists */}
+          {/* If the student has already submitted an answer, show it in a read-only format */}
           {assignment.answer && (
             <div className="mb-3">
               <div className="border rounded p-3 bg-light">
@@ -189,6 +190,8 @@ function AssignmentDetail() {
             </div>
           )}
 
+          {/* If the student can submit an answer, show the form */}
+          {/* If the student has not submitted an answer yet, show the form to submit one */}
           {canSubmitAnswer && (
             <Form onSubmit={handleSubmitAnswer}>
               <Form.Group className="mb-3">
