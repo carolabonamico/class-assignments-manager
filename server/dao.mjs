@@ -351,11 +351,11 @@ export const getOpenAssignments = (userId, userRole) => {
 };
 
 /**
- * Get student scores (closed assignments with scores)
+ * Get closed assignments and their average score for a student
  * @param {number} studentId - The ID of the student
  * @returns {Promise<{assignments: Assignment[], weightedAverage: number|null}>} - Returns assignments and weighted average
  */
-export const getStudentScores = (studentId) => {
+export const getClosedAvg = (studentId) => {
   return new Promise((resolve, reject) => {
     const sql = `
       SELECT 

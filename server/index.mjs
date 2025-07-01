@@ -159,7 +159,6 @@ app.get('/api/students', isLoggedIn, async (req, res) => {
 
 /**
  * Route to get open assignments for the current user
- * Returns a list of open assignments for the current user.
  * @route GET /api/assignments/open
  * @returns {Array} An array of open assignment objects.
  * @returns {object} An error message if the request fails.
@@ -308,7 +307,6 @@ app.put('/api/assignments/:id/evaluate',
 
 /**
  * Route to get statistics for students
- * Returns statistics about students' assignments, including open and closed assignments, total assignments, and weighted average.
  * @route GET /api/statistics
  * @returns {Array} An array of student statistics objects.
  * @returns {object} An error message if the user is not a teacher or if the request fails.
@@ -323,15 +321,14 @@ app.get('/api/statistics', isTeacher, async (req, res) => {
 });
 
 /**
- * Route to get student scores and weighted average
- * Returns closed assignments with scores and weighted average for a student.
+ * Route to get closed assignments and their average score for the current student
  * @route GET /api/students/scores
  * @returns {object} Object containing assignments array and weightedAverage.
  * @returns {object} An error message if the request fails.
  */
 app.get('/api/students/scores', isStudent, async (req, res) => {
   try {
-    const result = await dao.getStudentScores(req.user.id);
+    const result = await dao.getClosedAvg(req.user.id);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

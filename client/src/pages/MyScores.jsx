@@ -12,7 +12,7 @@ function MyScores() {
   useEffect(() => {
     const fetchScores = async () => {
       try {
-        const result = await API.getStudentScores();
+        const result = await API.getClosedAvg();
         setData(result);
       } catch {
         setError('Errore nel caricamento dei punteggi');

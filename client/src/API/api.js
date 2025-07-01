@@ -212,11 +212,11 @@ const API = {
   },
 
   /**
-   * Get student scores and weighted average
+   * Get closed assignments and their average score for the current student
    * @returns {Promise<Object>} - Returns object with assignments array and weightedAverage
    * @throws {string} - Throws an error message if fetching scores fails
    */
-  async getStudentScores() {
+  async getClosedAvg() {
     const response = await fetch(APIURL + '/students/scores', {
       credentials: 'include'
     });
