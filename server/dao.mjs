@@ -102,7 +102,7 @@ export const listAssignments = (userId, userRole) => {
              FROM assignments a 
              JOIN users u ON a.teacher_id = u.id 
              WHERE a.teacher_id = ? 
-             ORDER BY a.created_date DESC`;
+             ORDER BY a.id DESC`;
       params = [userId];
     } else {
       // Students see assignments they are part of
@@ -111,7 +111,7 @@ export const listAssignments = (userId, userRole) => {
              JOIN users u ON a.teacher_id = u.id 
              JOIN assignment_groups ag ON a.id = ag.assignment_id 
              WHERE ag.student_id = ? 
-             ORDER BY a.created_date DESC`;
+             ORDER BY a.id DESC`;
       params = [userId];
     }
     
@@ -121,7 +121,7 @@ export const listAssignments = (userId, userRole) => {
       } else {
         const assignments = rows.map((a) => new Assignment(
           a.id, a.question, a.teacher_id, a.teacher_name, a.status, 
-          a.created_date, a.answer, a.score
+          a.answer, a.score
         ));
         resolve(assignments);
       }
@@ -157,7 +157,7 @@ export const getAssignment = (id, userId, userRole) => {
         
         const assignment = new Assignment(
           row.id, row.question, row.teacher_id, row.teacher_name, row.status,
-          row.created_date, row.answer, row.score
+          row.answer, row.score
         );
         
         // Get group members
@@ -202,10 +202,9 @@ export const getAssignment = (id, userId, userRole) => {
  */
 export const addAssignment = (question, studentIds, teacherId) => {
   return new Promise((resolve, reject) => {
-    const createdDate = new Date().toISOString();
-    const sql = 'INSERT INTO assignments(question, created_date, teacher_id, status) VALUES (?,?,?,?)';
+    const sql = 'INSERT INTO assignments(question, teacher_id, status) VALUES (?,?,?)';
     
-    db.run(sql, [question, createdDate, teacherId, 'open'], function(err) {
+    db.run(sql, [question, teacherId, 'open'], function(err) {
       if (err) {
         reject(err);
       } else {

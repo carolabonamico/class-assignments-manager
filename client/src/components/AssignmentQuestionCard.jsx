@@ -1,5 +1,4 @@
 import { Card, Badge } from 'react-bootstrap';
-import dayjs from 'dayjs';
 import useAuth from '../hooks/useAuth';
 
 function AssignmentQuestionCard({ assignment }) {
@@ -20,10 +19,9 @@ function AssignmentQuestionCard({ assignment }) {
         <small className="text-muted">
           {isStudent && (
             <>
-              <strong>Docente:</strong> {assignment.teacher_name}<br />
+              <strong>Docente:</strong> {assignment.teacher_name}
             </>
           )}
-          <strong>Data creazione:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}
         </small>
       </Card.Body>
     </Card>

@@ -22,20 +22,18 @@ export class User {
  * Assignment model - represents a homework/assignment
  * @property {number} id - Unique identifier for the assignment
  * @property {string} question - The question or task of the assignment
- * @property {Date} created_date - Date when the assignment was created
  * @property {number} teacher_id - ID of the teacher who created the assignment
  * @property {string} status - Status of the assignment, either 'open' or 'closed'
  * @property {string|null} answer - Answer provided by the student, null if not answered
  * @property {number|null} score - Score given to the assignment, null if not evaluated
  */
 export class Assignment {
-  constructor(id, question, teacher_id, teacher_name, status = 'open', created_date = null, answer = null, score = null) {
+  constructor(id, question, teacher_id, teacher_name, status = 'open', answer = null, score = null) {
     this.id = id;
     this.question = question;
     this.teacher_id = teacher_id;
     this.teacher_name = teacher_name;
     this.status = status; // 'open' or 'closed'
-    this.created_date = created_date;
     this.answer = answer;
     this.score = score; // 0-30
     

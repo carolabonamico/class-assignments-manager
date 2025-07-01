@@ -1,6 +1,5 @@
 import { Card, Badge, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 function AssignmentCard({ assignment }) {
   const navigate = useNavigate();
@@ -34,16 +33,10 @@ function AssignmentCard({ assignment }) {
         </div>
 
         <Card.Text>
-          <small className="text-muted">
-            <strong>Data creazione:</strong> {assignment.created_date ? dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm') : 'Data non disponibile'}
-          </small>
           {assignment.answer && assignment.status !== 'closed' && (
-            <>
-              <br />
-              <small className="text-success">
-                <strong>Risposta inviata</strong>
-              </small>
-            </>
+            <small className="text-success">
+              <strong>Risposta inviata</strong>
+            </small>
           )}
         </Card.Text>
 
