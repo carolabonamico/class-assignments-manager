@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
-import StatsSummaryCard from '../components/StatsSummaryCard';
-import StatsSortFilter from '../components/StatsSortFilter';
 import StatsTable from '../components/StatsTable';
 
 function Statistics() {
@@ -53,10 +51,6 @@ function Statistics() {
         <div className="alert alert-danger">{error}</div>
       )}
 
-      {/* Summary card con totale studenti */}
-      <StatsSummaryCard totalStudents={stats.length} />
-
-      {/* Tabella statistiche con filtro incorporato */}
       <StatsTable 
         stats={sortedStats} 
         sortBy={sortBy} 

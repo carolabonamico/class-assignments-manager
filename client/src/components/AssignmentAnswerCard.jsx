@@ -1,5 +1,4 @@
 import { Card, Form, Button } from 'react-bootstrap';
-import dayjs from 'dayjs';
 
 function AssignmentAnswerCard({ 
   assignment, 
@@ -17,14 +16,6 @@ function AssignmentAnswerCard({
       <Card.Body>
         {!assignment.answer && !canSubmitAnswer && (
           <p className="text-muted">Nessuna risposta fornita ancora.</p>
-        )}
-
-        {assignment.answer_date && (
-          <div className="mb-3">
-            <small className="text-muted">
-              Inviata il: {dayjs(assignment.answer_date).format('DD/MM/YYYY HH:mm')}
-            </small>
-          </div>
         )}
 
         {/* Display the answer if it exists */}

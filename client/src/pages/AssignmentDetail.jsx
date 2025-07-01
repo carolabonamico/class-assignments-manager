@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Alert } from 'react-bootstrap';
+import { Button, Alert, Card } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import AssignmentQuestionCard from '../components/AssignmentQuestionCard';
@@ -108,10 +108,8 @@ function AssignmentDetail() {
     );
   }
 
-  const isTeacher = user.role === 'teacher';
-  const isStudent = user.role === 'student';
-  const canSubmitAnswer = isStudent && assignment.status === 'open';
-  const canEvaluate = isTeacher && assignment.answer && assignment.status === 'open';
+  const canSubmitAnswer = user.role === 'student' && assignment.status === 'open';
+  const canEvaluate = user.role === 'teacher' && assignment.answer && assignment.status === 'open';
 
   return (
     <div className="desktop-layout">
@@ -128,7 +126,7 @@ function AssignmentDetail() {
       {/* Card Domanda - usando il nuovo componente */}
       <AssignmentQuestionCard 
         assignment={assignment} 
-        isStudent={isStudent} 
+        isStudent={user.role === 'student'} 
       />
 
       {/* Form risposta studente - usando il nuovo componente */}
@@ -145,7 +143,7 @@ function AssignmentDetail() {
       {assignment.groupMembers?.length > 0 && (
         <Card className="mb-4">
           <Card.Header>
-            <h6 className="mb-0">Membri del Gruppo</h6>
+            <h5 className="mb-0">Membri del Gruppo</h5>
           </Card.Header>
           <Card.Body>
             {assignment.groupMembers.map(student => (

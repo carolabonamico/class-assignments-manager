@@ -121,7 +121,7 @@ export const listAssignments = (userId, userRole) => {
       } else {
         const assignments = rows.map((a) => new Assignment(
           a.id, a.question, a.teacher_id, a.teacher_name, a.status, 
-          a.created_date, a.answer, a.answer_date, a.score, a.evaluation_date
+          a.created_date, a.answer, a.score
         ));
         resolve(assignments);
       }
@@ -157,7 +157,7 @@ export const getAssignment = (id, userId, userRole) => {
         
         const assignment = new Assignment(
           row.id, row.question, row.teacher_id, row.teacher_name, row.status,
-          row.created_date, row.answer, row.answer_date, row.score, row.evaluation_date
+          row.created_date, row.answer, row.score
         );
         
         // Get group members
@@ -251,10 +251,9 @@ export const updateAssignmentAnswer = (assignmentId, answer, studentId) => {
       } else if (row.status !== 'open') {
         resolve({error: "Il compito è chiuso, non è possibile modificare la risposta."});
       } else {
-        const answerDate = new Date().toISOString();
-        const sql = 'UPDATE assignments SET answer = ?, answer_date = ? WHERE id = ?';
+        const sql = 'UPDATE assignments SET answer = ? WHERE id = ?';
         
-        db.run(sql, [answer, answerDate, assignmentId], function(err) {
+        db.run(sql, [answer, assignmentId], function(err) {
           if (err) {
             reject(err);
           } else {
@@ -289,10 +288,9 @@ export const evaluateAssignment = (assignmentId, score, teacherId) => {
       } else if (!row.answer) {
         resolve({error: "Impossibile valutare il compito senza risposta."});
       } else {
-        const evaluationDate = new Date().toISOString();
-        const sql = 'UPDATE assignments SET score = ?, evaluation_date = ?, status = ? WHERE id = ?';
+        const sql = 'UPDATE assignments SET score = ?, status = ? WHERE id = ?';
         
-        db.run(sql, [score, evaluationDate, 'closed', assignmentId], function(err) {
+        db.run(sql, [score, 'closed', assignmentId], function(err) {
           if (err) {
             reject(err);
           } else {

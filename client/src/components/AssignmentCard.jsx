@@ -12,7 +12,11 @@ function AssignmentCard({ assignment }) {
           {assignment.status === 'open' ? 'Aperto' : 'Chiuso'}
         </Badge>
         {assignment.score !== null && assignment.score !== undefined && (
-          <Badge bg="secondary">
+          <Badge 
+            bg={Number(assignment.score) >= 24 ? 'success' : 
+                Number(assignment.score) >= 18 ? 'warning' : 'danger'}
+            text={'white'}
+          >
             {assignment.score}/30
           </Badge>
         )}
@@ -27,7 +31,7 @@ function AssignmentCard({ assignment }) {
           <small className="text-muted">
             <strong>Data creazione:</strong> {assignment.created_date ? dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm') : 'Data non disponibile'}
           </small>
-          {assignment.answer && (
+          {assignment.answer && assignment.status !== 'closed' && (
             <>
               <br />
               <small className="text-success">

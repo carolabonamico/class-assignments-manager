@@ -26,12 +26,10 @@ export class User {
  * @property {number} teacher_id - ID of the teacher who created the assignment
  * @property {string} status - Status of the assignment, either 'open' or 'closed'
  * @property {string|null} answer - Answer provided by the student, null if not answered
- * @property {Date|null} answer_date - Date when the answer was provided, null if not answered
  * @property {number|null} score - Score given to the assignment, null if not evaluated
- * @property {Date|null} evaluation_date - Date when the assignment was evaluated
  */
 export class Assignment {
-  constructor(id, question, teacher_id, teacher_name, status = 'open', created_date = null, answer = null, answer_date = null, score = null, evaluation_date = null) {
+  constructor(id, question, teacher_id, teacher_name, status = 'open', created_date = null, answer = null, score = null) {
     this.id = id;
     this.question = question;
     this.teacher_id = teacher_id;
@@ -39,9 +37,7 @@ export class Assignment {
     this.status = status; // 'open' or 'closed'
     this.created_date = created_date;
     this.answer = answer;
-    this.answer_date = answer_date;
     this.score = score; // 0-30
-    this.evaluation_date = evaluation_date;
     
     // Additional properties populated by joins
     this.groupMembers = []; // Array of student objects who are part of the group for this assignment

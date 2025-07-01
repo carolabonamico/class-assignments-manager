@@ -23,8 +23,7 @@ function AssignmentQuestionCard({ assignment }) {
               <strong>Docente:</strong> {assignment.teacher_name}<br />
             </>
           )}
-          <strong>Data creazione:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}<br />
-          <strong>Studenti nel gruppo:</strong> {assignment.groupMembers?.length || 0}
+          <strong>Data creazione:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}
         </small>
       </Card.Body>
     </Card>

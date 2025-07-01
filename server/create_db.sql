@@ -25,9 +25,7 @@ CREATE TABLE IF NOT EXISTS "assignments" (
     "teacher_id" INTEGER NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'closed')),
     "answer" TEXT,
-    "answer_date" TEXT,
     "score" INTEGER CHECK(score >= 0 AND score <= 30),
-    "evaluation_date" TEXT,
     PRIMARY KEY("id"),
     FOREIGN KEY("teacher_id") REFERENCES "users"("id")
 );
@@ -75,7 +73,7 @@ INSERT INTO users (name, email, password, salt, role) VALUES
 
 -- Example assignments insertion
 -- Assignment 1: CLOSED (with answer and evaluation)
-INSERT INTO assignments (question, created_date, teacher_id, status, answer, answer_date, score, evaluation_date) VALUES 
+INSERT INTO assignments (question, created_date, teacher_id, status, answer, score) VALUES 
 ('Implement a merge sort algorithm in JavaScript and explain the time complexity.', 
  '2025-06-01T10:00:00.000Z', 
  1, 
@@ -106,9 +104,7 @@ function merge(left, right) {
 }
 
 The time complexity is O(n log n) in the best, average and worst case, where n is the number of elements to sort.',
- '2025-06-03T15:30:00.000Z',
- 27,
- '2025-06-05T09:00:00.000Z');
+ 27);
 
 -- Assignment 2: OPEN (no answer yet)
 INSERT INTO assignments (question, created_date, teacher_id, status) VALUES 

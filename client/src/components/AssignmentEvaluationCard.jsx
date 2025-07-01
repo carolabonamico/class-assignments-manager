@@ -1,5 +1,4 @@
 import { Card, Form, Button, Badge } from 'react-bootstrap';
-import dayjs from 'dayjs';
 
 function AssignmentEvaluationCard({ 
   assignment, 
@@ -18,16 +17,10 @@ function AssignmentEvaluationCard({
         {assignment.score !== null && assignment.score !== undefined ? (
           <div>
             <div className="mb-3 d-flex align-items-center">
-              <strong className="me-2">Punteggio assegnato:</strong>
               <Badge bg="secondary" className="fs-6">
                 {assignment.score}/30
               </Badge>
             </div>
-            {assignment.evaluation_date && (
-              <small className="text-muted">
-                Valutato il: {dayjs(assignment.evaluation_date).format('DD/MM/YYYY HH:mm')}
-              </small>
-            )}
           </div>
         ) : canEvaluate ? (
           <Form onSubmit={onEvaluate}>
