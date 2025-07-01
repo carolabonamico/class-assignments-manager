@@ -13,7 +13,7 @@ export const AuthProvider = ({ children, user, logout }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, handleApiError }}>
+    <AuthContext.Provider value={{ user, logout, handleApiError }}>
       {children}
     </AuthContext.Provider>
   );

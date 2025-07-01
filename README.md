@@ -301,6 +301,8 @@ Student statistics for teacher's assigned tasks (teachers only)
 - `StatsTable.jsx`: table component for student statistics display
 - `StatsSortFilter.jsx`: sorting and filtering controls for statistics
 - `StudentStatsRow.jsx`: row component for student statistics display
+- `ProtectedRoute.jsx`: helper component to protect routes based on user role
+- `AuthenticatedLayout.jsx`: layout component for authenticated routes with navigation and outlet
 
 ### Pages
 
