@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Card, Form, Button, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import QuestionFormCard from '../components/QuestionFormCard';
+import StudentSelectionCard from '../components/StudentSelectionCard';
 
 function CreateAssignment() {
   const [students, setStudents] = useState([]);
@@ -44,26 +46,21 @@ function CreateAssignment() {
     }
   };
 
-  /* Handle form submission
-  * Validates the question and selected students, then submits the assignment
-  * If successful, resets the form and shows a success message
-  * If there's an error, displays it to the user
-  * If the assignment is created successfully, allows the user to view it immediately
-  */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  /* Handle form submission - adapted for new components */
+  const handleSubmit = async (formData) => {
+    const { question: questionText, selectedStudents: studentIds } = formData;
 
-    if (!question || question.trim().length === 0) {
+    if (!questionText || questionText.trim().length === 0) {
       setError('La domanda è obbligatoria');
       return;
     }
 
-    if (selectedStudents.length < 2) {
+    if (studentIds.length < 2) {
       setError('Seleziona almeno 2 studenti');
       return;
     }
 
-    if (selectedStudents.length > 6) {
+    if (studentIds.length > 6) {
       setError('Seleziona massimo 6 studenti');
       return;
     }
@@ -73,8 +70,8 @@ function CreateAssignment() {
 
     try {
       const assignmentData = {
-        question: question.trim(),
-        studentIds: selectedStudents
+        question: questionText.trim(),
+        studentIds: studentIds
       };
 
       await API.createAssignment(assignmentData);
@@ -113,81 +110,27 @@ function CreateAssignment() {
         </Alert>
       )}
 
-      {/* Form for creating a new assignment */}
-      <Form onSubmit={handleSubmit} className="desktop-form">
-        <div className="desktop-grid">
-          <div>
-            <Card className="desktop-card mb-4">
-              <Card.Header>
-                <h5 className="mb-0">Domanda del Compito</h5>
-              </Card.Header>
-              <Card.Body>
-                <Form.Group>
-                  <Form.Label>Scrivi la domanda o il compito da assegnare:</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={8}
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    placeholder="Es: Implementa un algoritmo di ordinamento merge sort in JavaScript e spiega la complessità temporale..."
-                    required
-                  />
-                </Form.Group>
-              </Card.Body>
-            </Card>
-          </div>
-
-          <div>
-            <Card className="desktop-card mb-4">
-              <Card.Header>
-                <h5 className="mb-0">
-                  Seleziona Studenti ({selectedStudents.length}/6)
-                </h5>
-              </Card.Header>
-              <Card.Body>
-                
-                <div style={{ maxHeight: '260px', overflowY: 'auto' }}>
-                  {students.map(student => (
-                    <Form.Check
-                      key={student.id}
-                      type="checkbox"
-                      id={`student-${student.id}`}
-                      label={student.name}
-                      checked={selectedStudents.includes(student.id)}
-                      onChange={() => handleStudentSelection(student.id)}
-                      disabled={!selectedStudents.includes(student.id) && selectedStudents.length >= 6}
-                      className="mb-2"
-                    />
-                  ))}
-                </div>
-
-                {selectedStudents.length < 2 && (
-                  <div className="alert alert-warning mt-3 py-2">
-                    <small>Seleziona almeno 2 studenti</small>
-                  </div>
-                )}
-
-                {selectedStudents.length >= 6 && (
-                  <div className="alert alert-info mt-3 py-2">
-                    <small>Numero massimo di studenti raggiunto (6)</small>
-                  </div>
-                )}
-              </Card.Body>
-            </Card>
-
-            <div className="d-grid">
-              <Button 
-                type="submit" 
-                variant="success" 
-                disabled={submitting || selectedStudents.length < 2}
-                // Button disabled in case of submitting or if less than 2 students are selected
-              >
-                {submitting ? 'Creazione in corso...' : 'Crea Compito'}
-              </Button>
-            </div>
+      {/* Form for creating a new assignment usando i nuovi componenti */}
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit({ question, selectedStudents });
+      }}>
+        <div className="desktop-form">
+          <div className="desktop-grid">
+            <QuestionFormCard
+              question={question}
+              onQuestionChange={setQuestion}
+            />
+            
+            <StudentSelectionCard
+              students={students}
+              selectedStudents={selectedStudents}
+              onStudentToggle={handleStudentSelection}
+              submitting={submitting}
+            />
           </div>
         </div>
-      </Form>
+      </form>
     </div>
   );
 }

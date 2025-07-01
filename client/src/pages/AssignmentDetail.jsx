@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, Button, Form, Alert, Badge } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
-import dayjs from 'dayjs';
+import AssignmentQuestionCard from '../components/AssignmentQuestionCard';
+import AssignmentAnswerCard from '../components/AssignmentAnswerCard';
+import AssignmentEvaluationCard from '../components/AssignmentEvaluationCard';
 import useAuth from '../hooks/useAuth';
 
 function AssignmentDetail() {
@@ -43,17 +45,9 @@ function AssignmentDetail() {
     fetchAssignment();
   }, [id]);
 
-  /* Handle answer submission
-   * This function allows students to submit or modify their answers to the assignment
-   * It validates the answer input and updates the assignment with the new answer
-   * If successful, it fetches the updated assignment data to reflect the changes
-   * If there's an error, it displays an appropriate message
-   * The answer must not be empty
-   */
-  const handleSubmitAnswer = async (e) => {
-    e.preventDefault();
-
-    if (!answer || answer.trim().length === 0) {
+  /* Handle answer submission - adapted for new components */
+  const handleSubmitAnswer = async (answerText) => {
+    if (!answerText || answerText.trim().length === 0) {
       setError('La risposta non può essere vuota');
       return;
     }
@@ -63,11 +57,12 @@ function AssignmentDetail() {
     setSuccess('');
 
     try {
-      await API.submitAnswer(id, answer);
+      await API.submitAnswer(id, answerText);
       setSuccess('Risposta inviata con successo!');
       // Refresh assignment data
       const updatedAssignment = await API.getAssignment(id);
       setAssignment(updatedAssignment);
+      setAnswer(updatedAssignment.answer || '');
     } catch {
       setError('Errore nell\'invio della risposta');
     } finally {
@@ -75,17 +70,9 @@ function AssignmentDetail() {
     }
   };
 
-  /* Handle assignment evaluation
-   * This function allows teachers to evaluate the assignment by assigning a score
-   * It validates the score input to ensure it's a number between 0 and 30
-   * If successful, it updates the assignment with the new score and fetches the updated data
-   * If there's an error, it displays a message
-   * The score must be a number between 0 and 30
-   */
-  const handleEvaluate = async (e) => {
-    e.preventDefault();
-
-    const scoreNum = parseInt(score);
+  /* Handle assignment evaluation - adapted for new components */
+  const handleEvaluate = async (scoreValue) => {
+    const scoreNum = parseInt(scoreValue);
     if (isNaN(scoreNum) || scoreNum < 0 || scoreNum > 30) {
       setError('Il punteggio deve essere un numero tra 0 e 30');
       return;
@@ -101,6 +88,7 @@ function AssignmentDetail() {
       // Refresh assignment data
       const updatedAssignment = await API.getAssignment(id);
       setAssignment(updatedAssignment);
+      setScore(updatedAssignment.score?.toString() || '');
     } catch {
       setError('Errore nella valutazione');
     } finally {
@@ -137,83 +125,21 @@ function AssignmentDetail() {
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
 
-      {/* Card Domanda */}
-      <Card className="mb-4">
-        <Card.Header className="d-flex justify-content-between align-items-center">
-          <h5 className="mb-0">Domanda</h5>
-          <Badge bg={assignment.status === 'open' ? 'success' : 'primary'}>
-            {assignment.status === 'open' ? 'Aperto' : 'Chiuso'}
-          </Badge>
-        </Card.Header>
-        <Card.Body>
-          <p>{assignment.question}</p>
-          <hr />
-          <small className="text-muted">
-            {isStudent && (
-              <>
-                <strong>Docente:</strong> {assignment.teacher_name}<br />
-              </>
-            )}
-            <strong>Data creazione:</strong> {dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm')}<br />
-            <strong>Studenti nel gruppo:</strong> {assignment.groupMembers?.length || 0}
-          </small>
-        </Card.Body>
-      </Card>
+      {/* Card Domanda - usando il nuovo componente */}
+      <AssignmentQuestionCard 
+        assignment={assignment} 
+        isStudent={isStudent} 
+      />
 
-      {/* Card Risposta */}
-      <Card className="mb-4">
-        <Card.Header>
-          <h5 className="mb-0">Risposta</h5>
-        </Card.Header>
-        <Card.Body>
-          {!assignment.answer && !canSubmitAnswer && (
-            <p className="text-muted">Nessuna risposta fornita ancora.</p>
-          )}
-
-          {assignment.answer_date && (
-            <div className="mb-3">
-              <small className="text-muted">
-                Inviata il: {dayjs(assignment.answer_date).format('DD/MM/YYYY HH:mm')}
-              </small>
-            </div>
-          )}
-
-          {/* Display the answer if it exists */}
-          {/* If the student has already submitted an answer, show it in a read-only format */}
-          {assignment.answer && (
-            <div className="mb-3">
-              <div className="border rounded p-3 bg-light">
-                <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
-                  {assignment.answer}
-                </pre>
-              </div>
-            </div>
-          )}
-
-          {/* If the student can submit an answer, show the form */}
-          {/* If the student has not submitted an answer yet, show the form to submit one */}
-          {canSubmitAnswer && (
-            <Form onSubmit={handleSubmitAnswer}>
-              <Form.Group className="mb-3">
-                <Form.Label>
-                  {assignment.answer ? 'Modifica risposta:' : 'Scrivi la tua risposta:'}
-                </Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={10}
-                  value={answer}
-                  onChange={(e) => setAnswer(e.target.value)}
-                  placeholder="Scrivi qui la tua risposta..."
-                  required
-                />
-              </Form.Group>
-              <Button type="submit" variant="success" disabled={submitting}>
-                {submitting ? 'Invio in corso...' : 'Invia Risposta'}
-              </Button>
-            </Form>
-          )}
-        </Card.Body>
-      </Card>
+      {/* Form risposta studente - usando il nuovo componente */}
+      <AssignmentAnswerCard
+        assignment={assignment}
+        answer={answer}
+        setAnswer={setAnswer}
+        canSubmitAnswer={canSubmitAnswer}
+        submitting={submitting}
+        onSubmitAnswer={handleSubmitAnswer}
+      />
 
       {/* Card Membri del Gruppo */}
       {assignment.groupMembers?.length > 0 && (
@@ -231,54 +157,15 @@ function AssignmentDetail() {
         </Card>
       )}
 
-      {/* Card Valutazione */}
-      <Card>
-        <Card.Header>
-          <h6 className="mb-0">Valutazione</h6>
-        </Card.Header>
-        <Card.Body>
-          {assignment.score !== null && assignment.score !== undefined ? (
-            <div>
-              <h4 className="text-center">
-                <Badge 
-                  className="fs-5"
-                  bg={assignment.score >= 24 ? 'success' : 
-                      assignment.score >= 18 ? 'warning' : 'danger'}
-                  text={'white'}
-                >
-                  {assignment.score}/30
-                </Badge>
-              </h4>
-              {assignment.evaluation_date && (
-                <small className="text-muted">
-                  Valutato il: {dayjs(assignment.evaluation_date).format('DD/MM/YYYY HH:mm')}
-                </small>
-              )}
-            </div>
-          ) : canEvaluate ? (
-            <Form onSubmit={handleEvaluate}>
-              <Form.Group className="mb-3">
-                <Form.Label>Assegna punteggio (0-30):</Form.Label>
-                <Form.Control
-                  type="number"
-                  min="0"
-                  max="30"
-                  value={score}
-                  onChange={(e) => setScore(e.target.value)}
-                  required
-                />
-              </Form.Group>
-              <Button type="submit" variant="success" disabled={submitting} className="w-100">
-                {submitting ? 'Salvataggio...' : 'Salva Valutazione'}
-              </Button>
-            </Form>
-          ) : (
-            <p className="text-muted">
-              {!assignment.answer ? 'In attesa della risposta degli studenti' : 'Non ancora valutato'}
-            </p>
-          )}
-        </Card.Body>
-      </Card>
+      {/* Form valutazione docente */}
+      <AssignmentEvaluationCard
+        assignment={assignment}
+        score={score}
+        setScore={setScore}
+        canEvaluate={canEvaluate}
+        submitting={submitting}
+        onEvaluate={handleEvaluate}
+      />
     </div>
   );
 }
