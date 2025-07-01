@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Alert } from 'react-bootstrap';
+import { Alert, Form } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import QuestionFormCard from '../components/QuestionFormCard';
@@ -138,8 +138,8 @@ function CreateAssignment() {
         </Alert>
       )}
 
-      {/* Form for creating a new assignment usando i nuovi componenti */}
-      <form onSubmit={(e) => {
+      {/* Form for creating a new assignment */}
+      <Form onSubmit={(e) => {
         e.preventDefault();
         handleSubmit({ question, selectedStudents });
       }}>
@@ -160,7 +160,7 @@ function CreateAssignment() {
             />
           </div>
         </div>
-      </form>
+      </Form>
     </div>
   );
 }

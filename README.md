@@ -7,11 +7,12 @@
 ## React Client Application Routes
 
 - `/login` — Authentication page (public)
-- `/` — Redirects to `/assignments` after login (protected) and to `/login` if not authenticated
+- `/` — Redirects to `/assignments` if authenticated, or to `/login` if not authenticated
 - `/assignments` — Assignment list filtered by user role (protected)
 - `/assignments/:id` — Assignment detail, answer submission (student) or evaluation (teacher) (protected)
 - `/assignments/new` — Create new assignment (teachers only) (protected)
 - `/statistics` — Student statistics (teachers only) (protected)
+- `*` — Any other route redirects to `/assignments` if authenticated, or to `/login` if not authenticated
 
 ## API Server
 
