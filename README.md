@@ -89,15 +89,13 @@ Assignment list filtered by user role
     {
       "id": "integer",
       "question": "string",
-      "created_date": "string",
       "teacher_id": "integer",
       "teacher_name": "string",
       "status": "open|closed",
       "answer": "string|null",
-      "answer_date": "string|null",
       "score": "integer|null",
-      "evaluation_date": "string|null",
-      "group_members": [ { ...student } ]
+      "groupMembers": [ { ...student } ],
+      "groupSize": "integer"
     },
     ...
   ]
@@ -117,20 +115,41 @@ Assignment detail
   {
     "id": "integer",
     "question": "string",
-    "created_date": "string",
     "teacher_id": "integer",
     "teacher_name": "string",
     "status": "open|closed",
     "answer": "string|null",
-    "answer_date": "string|null",
     "score": "integer|null",
-    "evaluation_date": "string|null",
-    "group_members": [ { ...student } ]
+    "groupMembers": [ { ...student } ],
+    "groupSize": "integer"
   }
   ```
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `404 Not Found`: assignment not found or not accessible
+  - `500 Internal Server Error`: server/database error
+
+### POST `/api/assignments/check-constraints`
+
+Check group constraints before assignment creation (teachers only)
+
+- **Request Body:**
+  ```json
+  {
+    "studentIds": [ "integer", ... ]
+  }
+  ```
+- **Response Body:**
+  ```json
+  {
+    "isValid": "boolean",
+    "error": "string|null"
+  }
+  ```
+- **Error Codes:**
+  - `401 Unauthorized`: not authenticated
+  - `403 Forbidden`: not a teacher
+  - `400 Bad Request`: invalid student IDs array (must be 2-6 students)
   - `500 Internal Server Error`: server/database error
 
 ### POST `/api/assignments`
@@ -147,17 +166,13 @@ Create new assignment (teachers only)
 - **Response Body:**
   ```json
   {
-    "id": "integer",
-    "question": "string",
-    "created_date": "string",
-    "teacher_id": "integer",
-    "status": "open"
+    "id": "integer"
   }
   ```
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a teacher
-  - `400 Bad Request`: missing/invalid fields, group constraints
+  - `400 Bad Request`: missing/invalid fields or validation errors (2-6 students required)
   - `500 Internal Server Error`: server/database error
 
 ### PUT `/api/assignments/:id/answer`
@@ -176,8 +191,7 @@ Submit answer (students only)
   ```json
   {
     "id": "integer",
-    "message": "Answer submitted successfully",
-    "answer_date": "string"
+    "message": "Answer submitted successfully"
   }
   ```
 - **Error Codes:**
@@ -203,7 +217,6 @@ Evaluate assignment (teachers only)
   {
     "id": "integer",
     "score": "integer",
-    "evaluation_date": "string",
     "status": "closed",
     "message": "Assignment evaluated successfully"
   }
@@ -240,22 +253,33 @@ Student statistics (teachers only)
 
 ## Database Tables
 
-| Table Name        | Main Columns & Types                                                                         | Purpose/Description                                |
-| ----------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| users             | id (int, PK), name (text), email (text, unique), password (text), salt (text), role (text)   | Stores all users (students and teachers)           |
-| assignments       | id (int, PK), question (text), created_date (text), teacher_id (int, FK), status (text), ... | Stores assignments with metadata and status        |
-| assignment_groups | assignment_id (int, FK), student_id (int, FK), PK (assignment_id, student_id)                | Links assignments to student groups (many-to-many) |
+| Table Name        | Main Columns & Types                                                                           | Purpose/Description                                |
+| ----------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| users             | id (int, PK), name (text), email (text, unique), password (text), salt (text), role (text)     | Stores all users (students and teachers)           |
+| assignments       | id (int, PK), question (text), teacher_id (int, FK), status (text), answer (text), score (int) | Stores assignments with metadata and status        |
+| assignment_groups | assignment_id (int, FK), student_id (int, FK), PK (assignment_id, student_id)                  | Links assignments to student groups (many-to-many) |
 
 (PK = Primary Key, FK = Foreign Key)
 
 ## Main React Components
 
+### Components
+
 - `Navigation.jsx`: navigation bar with role-based menu and logout
 - `LoginForm.jsx`: authentication form with validation and error handling
 - `LoadingSpinner.jsx`: loading indicator
+- `QuestionFormCard.jsx`: component for assignment question input
+- `StudentSelectionCard.jsx`: component for student selection with constraint validation
+- `AssignmentCard.jsx`: card component for assignment list display
+- `AssignmentQuestionCard.jsx`: component for assignment question display
+- `AssignmentAnswerCard.jsx`: component for answer submission and display
+- `AssignmentEvaluationCard.jsx`: component for assignment evaluation
+  
+### Pages
+
 - `AssignmentList.jsx`: assignment list, filterable by status and role
-- `AssignmentDetail.jsx`: assignment detail, answer/modify (student), evaluation (teacher)
-- `CreateAssignment.jsx`: new assignment creation (teacher only)
+- `AssignmentDetail.jsx`: assignment detail, answer submission (student) or evaluation (teacher)
+- `CreateAssignment.jsx`: new assignment creation with live pair constraint validation (teacher only)
 - `Statistics.jsx`: student statistics and analytics (teacher only)
 
 ## Screenshot
