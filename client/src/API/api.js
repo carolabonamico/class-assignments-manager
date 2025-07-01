@@ -84,7 +84,7 @@ const API = {
    * @throws {string} - Throws an error message if checking constraints fails
    */
   async checkPairConstraints(studentIds) {
-    const response = await fetch(APIURL + '/assignments/check-constraints', {
+    const response = await fetch(APIURL + '/groups/validate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ const API = {
    * @throws {string} - Throws an error message if fetching statistics fails
    */
   async getStatistics() {
-    const response = await fetch(APIURL + '/statistics', {
+    const response = await fetch(APIURL + '/students/statistics', {
       credentials: 'include'
     });
     
@@ -217,7 +217,7 @@ const API = {
    * @throws {string} - Throws an error message if fetching scores fails
    */
   async getClosedAvg() {
-    const response = await fetch(APIURL + '/students/scores', {
+    const response = await fetch(APIURL + '/assignments/closed-with-average', {
       credentials: 'include'
     });
     

@@ -91,21 +91,11 @@ function App() {
               <Routes>
                 <Route 
                   path="/" 
-                  element={<Navigate to="/open-assignments" replace />} 
+                  element={<Navigate to="/assignments" replace />} 
                 />
                 <Route 
-                  path="/open-assignments" 
+                  path="/assignments" 
                   element={<OpenAssignments />} 
-                />
-                <Route 
-                  path="/my-scores" 
-                  element={
-                    user?.role === 'student' ? (
-                      <MyScores />
-                    ) : (
-                      <Navigate to="/open-assignments" replace />
-                    )
-                  } 
                 />
                 <Route 
                   path="/assignments/new" 
@@ -113,7 +103,17 @@ function App() {
                     user?.role === 'teacher' ? (
                       <CreateAssignment />
                     ) : (
-                      <Navigate to="/open-assignments" replace />
+                      <Navigate to="/assignments" replace />
+                    )
+                  } 
+                />
+                <Route 
+                  path="/my/scores" 
+                  element={
+                    user?.role === 'student' ? (
+                      <MyScores />
+                    ) : (
+                      <Navigate to="/assignments" replace />
                     )
                   } 
                 />
@@ -123,11 +123,11 @@ function App() {
                     user?.role === 'teacher' ? (
                       <Statistics />
                     ) : (
-                      <Navigate to="/open-assignments" replace />
+                      <Navigate to="/assignments" replace />
                     )
                   } 
                 />
-                <Route path="*" element={<Navigate to="/open-assignments" replace />} />
+                <Route path="*" element={<Navigate to="/assignments" replace />} />
               </Routes>
             </div>
           </Container>

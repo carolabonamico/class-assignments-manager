@@ -19,15 +19,15 @@ function Navigation({ onLogout }) {
           <Navbar.Collapse id="basic-navbar-nav">
             
             <Nav className="me-auto">
+              <Nav.Link 
+                as={Link} 
+                to="/assignments" 
+                active={location.pathname === '/assignments'}
+              >
+                Compiti Aperti
+              </Nav.Link>
               {user.role === 'teacher' && (
                 <>
-                  <Nav.Link 
-                    as={Link} 
-                    to="/open-assignments" 
-                    active={location.pathname === '/open-assignments'}
-                  >
-                    Compiti Aperti
-                  </Nav.Link>
                   <Nav.Link 
                     as={Link} 
                     to="/assignments/new" 
@@ -46,22 +46,13 @@ function Navigation({ onLogout }) {
               )}
               
               {user.role === 'student' && (
-                <>
-                  <Nav.Link 
-                    as={Link} 
-                    to="/open-assignments" 
-                    active={location.pathname === '/open-assignments'}
-                  >
-                    Compiti Aperti
-                  </Nav.Link>
-                  <Nav.Link 
-                    as={Link} 
-                    to="/my-scores" 
-                    active={location.pathname === '/my-scores'}
-                  >
-                    I Miei Punteggi
-                  </Nav.Link>
-                </>
+              <Nav.Link 
+                as={Link} 
+                to="/my/scores" 
+                active={location.pathname === '/my/scores'}
+              >
+                I Miei Punteggi
+              </Nav.Link>
               )}
             </Nav>
 

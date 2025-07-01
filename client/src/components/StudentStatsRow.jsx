@@ -24,7 +24,7 @@ function StudentStatsRow({ student }) {
         {student.closed_assignments || 0}
       </Col>
       <Col md={2} className="text-center">
-        {student.total_assignments || 0}
+        {student.open_assignments + student.closed_assignments || 0}
       </Col>
       <Col md={2} className="text-center">
         <span

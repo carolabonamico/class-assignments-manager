@@ -188,7 +188,6 @@ export const getStudentStats = (teacherId) => {
       SELECT 
         u.id,
         u.name,
-        u.email,
         COUNT(CASE WHEN a.status = 'open' THEN 1 END) as open_assignments,
         COUNT(CASE WHEN a.status = 'closed' THEN 1 END) as closed_assignments,
         GROUP_CONCAT(
@@ -224,8 +223,7 @@ export const getStudentStats = (teacherId) => {
           
           return new StudentStats(
             row.id, 
-            row.name, 
-            row.email,
+            row.name,
             row.open_assignments || 0,
             row.closed_assignments || 0, 
             weightedAverage
@@ -272,13 +270,6 @@ export const checkGroupConstraints = (studentIds, teacherId) => {
       AND a.teacher_id = ?
       GROUP BY ag1.student_id, ag2.student_id, u1.name, u2.name
       HAVING COUNT(*) >= 2`;
-    
-    // This query checks for pairs of students who have collaborated on assignments
-    // and counts how many times they have worked together.
-    // It returns pairs that have collaborated 2 or more times.
-    // `VALUES` is used to insert multiple pairs in a single query.
-    // Note: The pairs are ordered to ensure consistent ordering (smaller ID first).
-    // This prevents duplicate pairs like (2, 1) and (1, 2) from being counted separately.
     
     const params = [...pairs.flat(), teacherId];  // Flatten the pairs and add teacherId for the query
     
@@ -341,8 +332,7 @@ export const getOpenAssignments = (userId, userRole) => {
         reject(err);
       } else {
         const assignments = rows.map((a) => new Assignment(
-          a.id, a.question, a.teacher_id, a.teacher_name, a.status, 
-          a.answer, a.score
+          a.id, a.question, a.teacher_id, a.teacher_name, a.status, a.answer, a.score
         ));
         resolve(assignments);
       }
@@ -378,12 +368,10 @@ export const getClosedAvg = (studentId) => {
         reject(err);
       } else {
         const assignments = rows.map((a) => {
-          const assignment = new Assignment(
+          return new Assignment(
             a.id, a.question, a.teacher_id, a.teacher_name, a.status, 
-            a.answer, a.score
+            a.answer, a.score, a.group_size
           );
-          assignment.groupSize = a.group_size;
-          return assignment;
         });
         
         // Calculate weighted average

@@ -34,10 +34,9 @@ export class Assignment {
  * Student statistics model - used for teacher statistics page
  */
 export class StudentStats {
-  constructor(id, name, email, open_assignments = 0, closed_assignments = 0, weighted_average = null) {
+  constructor(id, name, open_assignments = 0, closed_assignments = 0, weighted_average = null) {
     this.id = id;
     this.name = name;
-    this.email = email;
     this.open_assignments = open_assignments;
     this.closed_assignments = closed_assignments;
     this.weighted_average = weighted_average;

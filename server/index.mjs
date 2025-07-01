@@ -175,11 +175,11 @@ app.get('/api/assignments/open', isLoggedIn, async (req, res) => {
 /**
  * Route to check group constraints before assignment creation
  * Allows teachers to validate if a group of students can work together.
- * @route POST /api/assignments/check-constraints
+ * @route POST /api/groups/validate
  * @param {Array} req.body.studentIds - An array of student IDs to check (2-6 students).
  * @returns {object} Validation result with isValid boolean and error message if applicable.
  */
-app.post('/api/assignments/check-constraints', 
+app.post('/api/groups/validate', 
   isTeacher,
   [
     check('studentIds').isArray({ min: 2, max: 6 }).withMessage('Select 2-6 students')
@@ -266,7 +266,7 @@ app.put('/api/assignments/:id/answer',
       if (result.error) {
         res.status(400).json(result);
       } else {
-        res.json(result);
+        res.status(200).json(result);
       }
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -297,7 +297,7 @@ app.put('/api/assignments/:id/evaluate',
       if (result.error) {
         res.status(400).json(result);
       } else {
-        res.json(result);
+        res.status(200).json(result);
       }
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -307,11 +307,11 @@ app.put('/api/assignments/:id/evaluate',
 
 /**
  * Route to get statistics for students
- * @route GET /api/statistics
+ * @route GET /api/students/statistics
  * @returns {Array} An array of student statistics objects.
  * @returns {object} An error message if the user is not a teacher or if the request fails.
  */
-app.get('/api/statistics', isTeacher, async (req, res) => {
+app.get('/api/students/statistics', isTeacher, async (req, res) => {
   try {
     const stats = await dao.getStudentStats(req.user.id);
     res.json(stats);
@@ -322,11 +322,11 @@ app.get('/api/statistics', isTeacher, async (req, res) => {
 
 /**
  * Route to get closed assignments and their average score for the current student
- * @route GET /api/students/scores
+ * @route GET /api/assignments/closed-with-average
  * @returns {object} Object containing assignments array and weightedAverage.
  * @returns {object} An error message if the request fails.
  */
-app.get('/api/students/scores', isStudent, async (req, res) => {
+app.get('/api/assignments/closed-with-average', isStudent, async (req, res) => {
   try {
     const result = await dao.getClosedAvg(req.user.id);
     res.json(result);

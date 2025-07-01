@@ -8,10 +8,10 @@
 
 - `/login` — Authentication page (public)
 - `/` — Redirects to `/assignments` if authenticated, or to `/login` if not authenticated
-- `/assignments` — Assignment list filtered by user role (protected)
-- `/assignments/:id` — Assignment detail, answer submission (student) or evaluation (teacher) (protected)
-- `/assignments/new` — Create new assignment (teachers only) (protected)
-- `/statistics` — Student statistics (teachers only) (protected)
+- `/assignments` — Open assignments list for answer submission (students) or evaluation (teachers) (protected)
+- `/assignments/new` — Create new assignment with live constraint validation (teachers only) (protected)
+- `/statistics` — Student statistics with sortable data (teachers only) (protected)
+- `/my/scores` — Student's closed assignments and weighted average (students only) (protected)
 - `*` — Any other route redirects to `/assignments` if authenticated, or to `/login` if not authenticated
 
 ## API Server
@@ -36,6 +36,8 @@ Login, create user session
     "role": "teacher|student"
   }
   ```
+- **Success Codes:**
+  - `200 OK`: login successful
 - **Error Codes:**
   - `401 Unauthorized`: invalid credentials
   - `500 Internal Server Error`: server/database error
@@ -53,6 +55,8 @@ Get authenticated user
     "role": "teacher|student"
   }
   ```
+- **Success Codes:**
+  - `200 OK`: user data retrieved successfully
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `500 Internal Server Error`: server/database error
@@ -62,6 +66,8 @@ Get authenticated user
 Logout
 
 - **Response Body:** (empty)
+- **Success Codes:**
+  - `200 OK`: logout successful
 - **Error Codes:**
   - `500 Internal Server Error`: server/database error
 
@@ -76,13 +82,15 @@ List all students
     ...
   ]
   ```
+- **Success Codes:**
+  - `200 OK`: students list retrieved successfully
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `500 Internal Server Error`: server/database error
 
-### GET `/api/assignments`
+### GET `/api/assignments/open`
 
-Assignment list filtered by user role
+Get open assignments filtered by user role
 
 - **Response Body:**
   ```json
@@ -92,45 +100,21 @@ Assignment list filtered by user role
       "question": "string",
       "teacher_id": "integer",
       "teacher_name": "string",
-      "status": "open|closed",
+      "status": "open",
       "answer": "string|null",
-      "score": "integer|null",
-      "groupMembers": [ { ...student } ],
+      "score": "null",
       "groupSize": "integer"
     },
     ...
   ]
   ```
+- **Success Codes:**
+  - `200 OK`: assignments retrieved successfully
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `500 Internal Server Error`: server/database error
 
-### GET `/api/assignments/:id`
-
-Assignment detail
-
-- **Parameters:**
-  - `:id` — Assignment ID (integer, required)
-- **Response Body:**
-  ```json
-  {
-    "id": "integer",
-    "question": "string",
-    "teacher_id": "integer",
-    "teacher_name": "string",
-    "status": "open|closed",
-    "answer": "string|null",
-    "score": "integer|null",
-    "groupMembers": [ { ...student } ],
-    "groupSize": "integer"
-  }
-  ```
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `404 Not Found`: assignment not found or not accessible
-  - `500 Internal Server Error`: server/database error
-
-### POST `/api/assignments/check-constraints`
+### POST `/api/groups/validate`
 
 Check group constraints before assignment creation (teachers only)
 
@@ -147,6 +131,8 @@ Check group constraints before assignment creation (teachers only)
     "error": "string|null"
   }
   ```
+- **Success Codes:**
+  - `200 OK`: validation completed successfully
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a teacher
@@ -170,6 +156,8 @@ Create new assignment (teachers only)
     "id": "integer"
   }
   ```
+- **Success Codes:**
+  - `201 Created`: assignment created successfully
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a teacher
@@ -195,6 +183,8 @@ Submit answer (students only)
     "message": "Answer submitted successfully"
   }
   ```
+- **Success Codes:**
+  - `200 OK`: answer submitted successfully
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a student
@@ -222,15 +212,47 @@ Evaluate assignment (teachers only)
     "message": "Assignment evaluated successfully"
   }
   ```
+- **Success Codes:**
+  - `200 OK`: assignment evaluated successfully
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a teacher
   - `400 Bad Request`: invalid score, assignment not open
   - `500 Internal Server Error`: server/database error
 
-### GET `/api/statistics`
+### GET `/api/assignments/closed-with-average`
 
-Student statistics (teachers only)
+Get student's closed assignments and weighted average (students only)
+
+- **Response Body:**
+  ```json
+  {
+    "assignments": [
+      {
+        "id": "integer",
+        "question": "string",
+        "teacher_id": "integer",
+        "teacher_name": "string",
+        "status": "closed",
+        "answer": "string",
+        "score": "integer",
+        "groupSize": "integer"
+      },
+      ...
+    ],
+    "weightedAverage": "number|null"
+  }
+  ```
+- **Success Codes:**
+  - `200 OK`: data retrieved successfully
+- **Error Codes:**
+  - `401 Unauthorized`: not authenticated
+  - `403 Forbidden`: not a student
+  - `500 Internal Server Error`: server/database error
+
+### GET `/api/students/statistics`
+
+Student statistics for teacher's assigned tasks (teachers only)
 
 - **Response Body:**
   ```json
@@ -238,7 +260,6 @@ Student statistics (teachers only)
     {
       "id": "integer",
       "name": "string",
-      "email": "string",
       "open_assignments": "integer",
       "closed_assignments": "integer",
       "total_assignments": "integer",
@@ -247,6 +268,8 @@ Student statistics (teachers only)
     ...
   ]
   ```
+- **Success Codes:**
+  - `200 OK`: statistics retrieved successfully
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a teacher
@@ -266,26 +289,35 @@ Student statistics (teachers only)
 
 ### Components
 
-- `Navigation.jsx`: navigation bar with role-based menu and logout
+- `Navigation.jsx`: navigation bar with role-based menu and logout functionality
 - `LoginForm.jsx`: authentication form with validation and error handling
-- `LoadingSpinner.jsx`: loading indicator
-- `QuestionFormCard.jsx`: component for assignment question input
-- `StudentSelectionCard.jsx`: component for student selection with constraint validation
-- `AssignmentCard.jsx`: card component for assignment list display
-- `AssignmentQuestionCard.jsx`: component for assignment question display
-- `AssignmentAnswerCard.jsx`: component for answer submission and display
-- `AssignmentEvaluationCard.jsx`: component for assignment evaluation
-  
+- `LoadingSpinner.jsx`: reusable loading indicator component
+- `QuestionFormCard.jsx`: card component for assignment question input
+- `StudentSelectionCard.jsx`: component for student selection with real-time constraint validation
+- `AssignmentCard.jsx`: modular card component for assignment display and interaction
+- `StudentAverageCard.jsx`: component displaying student's weighted average score
+- `ClosedAssignmentTable.jsx`: table component for displaying closed assignments
+- `ClosedAssignmentRow.jsx`: row component for closed assignment display
+- `StatsTable.jsx`: table component for student statistics display
+- `StatsSortFilter.jsx`: sorting and filtering controls for statistics
+- `StudentStatsRow.jsx`: row component for student statistics display
+
 ### Pages
 
-- `AssignmentList.jsx`: assignment list, filterable by status and role
-- `AssignmentDetail.jsx`: assignment detail, answer submission (student) or evaluation (teacher)
-- `CreateAssignment.jsx`: new assignment creation with live pair constraint validation (teacher only)
-- `Statistics.jsx`: student statistics and analytics (teacher only)
+- `OpenAssignments.jsx`: displays open assignments for answer submission (students) or evaluation (teachers)
+- `CreateAssignment.jsx`: assignment creation with live constraint validation and real-time feedback (teachers only)
+- `Statistics.jsx`: comprehensive student statistics with sorting capabilities (teachers only)
+- `MyScores.jsx`: displays student's closed assignments and weighted average across all teachers (students only)
 
-## Screenshot
+## Screenshots
 
-![Screenshot](./img/screenshot.jpg)
+<img src="images/creaNuovoCompito.png" alt="Assignment creation" width="800">
+
+*Assignment creation page*
+
+<img src="images/statoClasse.png" alt="Students situation" width="800">
+
+*Student statistics with sortable data*
 
 ## Users Credentials
 
