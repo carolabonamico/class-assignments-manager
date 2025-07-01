@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { isValidString } from '../../../server/utils.mjs';
 
 function CreateAssignment() {
   const [students, setStudents] = useState([]);
@@ -54,7 +53,7 @@ function CreateAssignment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isValidString(question)) {
+    if (!question || question.trim().length === 0) {
       setError('La domanda è obbligatoria');
       return;
     }

@@ -5,7 +5,6 @@ import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import dayjs from 'dayjs';
 import useAuth from '../hooks/useAuth';
-import { isValidString } from '../../../server/utils.mjs';
 
 function AssignmentDetail() {
   const { user } = useAuth();
@@ -54,7 +53,7 @@ function AssignmentDetail() {
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
 
-    if (!isValidString(answer)) {
+    if (!answer || answer.trim().length === 0) {
       setError('La risposta non può essere vuota');
       return;
     }

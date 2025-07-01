@@ -1,15 +1,6 @@
 /* Utility functions for the task management system */
 
 /**
- * Validates that a string is not empty or only whitespace
- * @param {string} string - The string to validate
- * @returns {boolean} True if valid, false if empty or only whitespace
- */
-function isValidString(string) {
-  return typeof string === 'string' && string.trim().length > 0;
-}
-
-/**
  * Calculates the weighted average of a student
  * @param {Array} assignments - Array of assignments with score and groupSize
  * @returns {number|null} Weighted average or null if no assignments evaluated
@@ -53,7 +44,6 @@ function generateStudentPairs(studentIds) {
 }
 
 export {
-  isValidString,
   calculateWeightedAverage,
   generateStudentPairs
 };

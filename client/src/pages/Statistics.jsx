@@ -24,11 +24,7 @@ function Statistics() {
     fetchStats();
   }, []);
 
-  /* Sorting stats based on the selected sortBy option
-  * If sortBy is 'name', sorts alphabetically by student name
-  * If sortBy is 'total', sorts by total assignments (descending)
-  * If sortBy is 'average', sorts by weighted average score (descending)
-  */
+  // Sorting implementation
   const sortedStats = [...stats].sort((a, b) => {
     switch (sortBy) {
       case 'name':
@@ -38,7 +34,7 @@ function Statistics() {
       case 'average':
         return (b.weighted_average || 0) - (a.weighted_average || 0);
       default:
-        return 0; // It means no sorting
+        return 0;
     }
   });
 
@@ -55,25 +51,12 @@ function Statistics() {
         <div className="alert alert-danger">{error}</div>
       )}
 
-      {/* Display total students and average class score */}
+      {/* Display total students*/}
       <div className="desktop-grid mb-4">
         <Card className="desktop-card">
           <Card.Body>
             <h6>Totale Studenti</h6>
             <h3 className="text-primary">{stats.length}</h3>
-          </Card.Body>
-        </Card>
-        <Card className="desktop-card">
-          <Card.Body>
-            <h6>Media Classe</h6>
-            <h3 className="text-primary">
-              {(() => {
-                const studentsWithAvg = stats.filter(s => s.weighted_average !== null);
-                return studentsWithAvg.length > 0
-                  ? (studentsWithAvg.reduce((sum, s) => sum + s.weighted_average, 0) / studentsWithAvg.length).toFixed(2)
-                  : 'N/A';
-              })()}
-            </h3>
           </Card.Body>
         </Card>
       </div>

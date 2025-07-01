@@ -6,7 +6,6 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import session from 'express-session';
 import * as dao from './dao.mjs';
-import { isValidString } from './utils.mjs';
 
 // Init express
 const app = new express();
@@ -244,7 +243,7 @@ app.post('/api/assignments',
 app.put('/api/assignments/:id/answer',
   isStudent,
   [check('answer').custom(value => {
-    if (!isValidString(value)) {
+    if (!value || typeof value !== 'string' || value.trim().length === 0) {
       throw new Error('La risposta non può essere vuota o contenere solo spazi');
     }
     return true;

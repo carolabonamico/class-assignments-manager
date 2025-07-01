@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Card, Badge, Button, Form } from 'react-bootstrap';
+import { Card, Badge, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import StudentAverageCard from '../components/StudentAverageCard';
+import AssignmentFilter from '../components/AssignmentFilter';
 import dayjs from 'dayjs';
 import useAuth from '../hooks/useAuth';
 
@@ -48,42 +50,13 @@ function AssignmentList() {
         <div className="alert alert-danger">{error}</div>
       )}
 
-      {/* Card Media Attuale */}
-      {user.role == 'student' && (
-        <div className="desktop-grid mb-4">
-          <Card className="desktop-card">
-            <Card.Body>
-              <h6>Media attuale</h6>
-              <h3 className="text-primary">
-                {(() => {
-                  // Calculate the average score of all assignments excluding the ones which have not been evaluated yet
-                  const scoredAssignments = assignments.filter(a => a.score !== null && a.score !== undefined);
-                  if (scoredAssignments.length === 0) {
-                    return "N/A";
-                  }
-                  const average = scoredAssignments.reduce((sum, a) => sum + a.score, 0) / scoredAssignments.length;
-                  return average.toFixed(2);
-                })()}
-              </h3>
-              </Card.Body>
-            </Card>
-        </div>
+
+      {user.role === 'student' && (
+        <StudentAverageCard assignments={assignments} />
       )}
 
-      {/* Filter dropdown to select assignment status */}
-      <div className="mb-4">
-        <Form.Group>
-          <Form.Label>Filtra per stato:</Form.Label>
-          <Form.Select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">Tutti i compiti</option>
-            <option value="open">Solo aperti</option>
-            <option value="closed">Solo chiusi</option>
-          </Form.Select>
-        </Form.Group>
-      </div>
+      <AssignmentFilter filter={filter} onFilterChange={setFilter} />
 
-      {/* If no assignments match the filter, show a message */}
-      {/* If there are no assignments, show a message with a button to create the first assignment */}
       {filteredAssignments.length === 0 ? (
         <Card className="desktop-card">
           <Card.Body className="text-center">
@@ -121,14 +94,16 @@ function AssignmentList() {
                     <small className="text-muted">
                       <strong>Data creazione:</strong> {assignment.created_date ? dayjs(assignment.created_date).format('DD/MM/YYYY HH:mm') : 'Data non disponibile'}
                     </small>
+                    {assignment.answer && (
+                      <>
+                        <br />
+                        <small className="text-success">
+                            <strong>Risposta inviata</strong>
+                        </small>
+                      </>
+                    )}
                   </Card.Text>
                   
-                  {assignment.answer && (
-                    <div className="mb-4 text-success">
-                        <i className="bi bi-check-circle me-1"></i>
-                        Risposta inviata
-                    </div>
-                  )}
 
                   <div className="mt-auto">
                     <Button 

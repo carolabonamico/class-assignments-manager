@@ -367,58 +367,6 @@ export const getStudentStats = (teacherId) => {
   });
 };
 
-/**
- * Get personal statistics for a student
- * @param {number} studentId - The ID of the student
- * @returns {Promise<StudentStats>} - Returns a StudentStats object with personal statistics
- * @throws {Error} - Throws an error if the query fails
- */
-export const getPersonalStats = (studentId) => {
-  return new Promise((resolve, reject) => {
-    const sql = `
-      SELECT 
-        COUNT(CASE WHEN a.status = 'open' THEN 1 END) as open_assignments,
-        COUNT(CASE WHEN a.status = 'closed' THEN 1 END) as closed_assignments,
-        COUNT(*) as total_assignments,
-        GROUP_CONCAT(
-          CASE WHEN a.status = 'closed' AND a.score IS NOT NULL 
-          THEN a.score || '/' || group_sizes.size 
-          END
-        ) as scores_and_sizes
-      FROM assignment_groups ag
-      JOIN assignments a ON ag.assignment_id = a.id
-      JOIN (
-        SELECT assignment_id, COUNT(*) as size
-        FROM assignment_groups
-        GROUP BY assignment_id
-      ) group_sizes ON a.id = group_sizes.assignment_id
-      WHERE ag.student_id = ?`;
-    
-    db.get(sql, [studentId], (err, row) => {
-      if (err) {
-        reject(err);
-      } else {
-        let weightedAverage = null;
-        
-        if (row.scores_and_sizes) {
-          const scoreData = row.scores_and_sizes.split(',').map(item => {
-            const [score, size] = item.split('/');
-            return { score: parseInt(score), groupSize: parseInt(size) };
-          });
-          weightedAverage = calculateWeightedAverage(scoreData);
-        }
-        
-        resolve({
-          openAssignments: row.open_assignments,
-          closedAssignments: row.closed_assignments,
-          totalAssignments: row.total_assignments,
-          weightedAverage: weightedAverage
-        });
-      }
-    });
-  });
-};
-
 /** GROUP VALIDATION **/
 
 /**
