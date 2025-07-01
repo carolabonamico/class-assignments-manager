@@ -6,7 +6,7 @@ function ClosedAssignmentRow({ assignment }) {
     <Row key={assignment.id}>
         <Col md={8}>
             <div>
-            {assignment.question}
+                {assignment.question}
             </div>
         </Col>
         <Col className="text-center" md={4}>

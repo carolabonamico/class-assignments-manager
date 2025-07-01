@@ -8,12 +8,9 @@ function StudentStatsRow({ student }) {
     return `${average.toFixed(1)}/30`;
   };
 
-  const getAverageBadgeVariant = (average) => {
-    if (average === null || average === undefined) return 'secondary';
-    if (average >= 24) return 'success';
-    if (average >= 18) return 'warning';
-    return 'danger';
-  };
+  const weightedAverage = student.weighted_average;
+  const weightedAverageDisplay = getWeightedAverageDisplay(weightedAverage);
+  const isNumber = typeof weightedAverage === 'number' && !isNaN(weightedAverage);
 
   return (
     <Row className="border-bottom py-3 align-items-center">
@@ -30,9 +27,17 @@ function StudentStatsRow({ student }) {
         {student.total_assignments || 0}
       </Col>
       <Col md={2} className="text-center">
-        <Badge bg={getAverageBadgeVariant(student.weighted_average)}>
-          {getWeightedAverageDisplay(student.weighted_average)}
-        </Badge>
+        <span
+          className={
+            !isNumber
+              ? ''
+              : weightedAverage >= 18
+              ? 'text-success'
+              : 'text-danger'
+          }
+        >
+          {weightedAverageDisplay}
+        </span>
       </Col>
     </Row>
   );
