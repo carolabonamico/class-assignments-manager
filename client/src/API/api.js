@@ -115,6 +115,30 @@ const API = {
   },
 
   /**
+   * Check if creating an assignment with selected students would violate pair constraints
+   * @param {Array<number>} studentIds - Array of student IDs to check
+   * @returns {Promise<Object>} - Returns {isValid: boolean, error?: string}
+   * @throws {string} - Throws an error message if checking constraints fails
+   */
+  async checkPairConstraints(studentIds) {
+    const response = await fetch(APIURL + '/assignments/check-constraints', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ studentIds }),
+    });
+    
+    if (response.ok) {
+      return await response.json();
+    } else {
+      const errDetails = await response.text();
+      throw errDetails;
+    }
+  },
+
+  /**
    * Create a new assignment (teacher only)
    * @param {Object} assignmentData - The data for the new assignment
    * @returns {Promise<Object>} - Returns the created assignment object

@@ -197,6 +197,40 @@ app.get('/api/assignments/:id', isLoggedIn, async (req, res) => {
 });
 
 /**
+ * Route to check group constraints before assignment creation
+ * Allows teachers to validate if a group of students can work together.
+ * @route POST /api/assignments/check-constraints
+ * @param {Array} req.body.studentIds - An array of student IDs to check (2-6 students).
+ * @returns {object} Validation result with isValid boolean and error message if applicable.
+ */
+app.post('/api/assignments/check-constraints', 
+  isTeacher,
+  [
+    check('studentIds').isArray({ min: 2, max: 6 }).withMessage('Select 2-6 students')
+  ],
+  async (req, res) => {
+    console.log('CHECK CONSTRAINTS called with:', req.body);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log('Validation errors:', errors.array());
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const validation = await dao.checkGroupConstraints(req.body.studentIds, req.user.id);
+      console.log('Constraint check result:', validation);
+      res.status(200).json({
+        isValid: validation.isValid,
+        error: validation.error
+      });
+    } catch (err) {
+      console.log('Error in constraint check:', err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+/**
  * Route to create a new assignment
  * Allows teachers to create a new assignment for a group of students.
  * @route POST /api/assignments

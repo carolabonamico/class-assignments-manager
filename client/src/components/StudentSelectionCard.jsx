@@ -4,7 +4,9 @@ function StudentSelectionCard({
   students, 
   selectedStudents, 
   onStudentToggle, 
-  submitting
+  submitting,
+  constraintError,
+  checkingConstraints
 }) {
   return (
     <Card className="desktop-card mb-4">
@@ -40,6 +42,18 @@ function StudentSelectionCard({
             <small>Numero massimo di studenti raggiunto (6)</small>
           </div>
         )}
+
+        {checkingConstraints && selectedStudents.length >= 2 && (
+          <div className="alert alert-info mt-3 py-2">
+            <small>Controllo vincoli in corso...</small>
+          </div>
+        )}
+
+        {constraintError && (
+          <div className="alert alert-danger mt-3 py-2">
+            <small>{constraintError}</small>
+          </div>
+        )}
       </Card.Body>
 
       <Card.Footer>
@@ -47,7 +61,12 @@ function StudentSelectionCard({
           <Button 
             type="submit" 
             variant="success" 
-            disabled={submitting || selectedStudents.length < 2}
+            disabled={
+              submitting || 
+              selectedStudents.length < 2 || 
+              checkingConstraints || 
+              !!constraintError
+            }
           >
             {submitting ? 'Creazione in corso...' : 'Crea Compito'}
           </Button>

@@ -13,6 +13,8 @@ function CreateAssignment() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [constraintError, setConstraintError] = useState('');
+  const [checkingConstraints, setCheckingConstraints] = useState(false);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -35,14 +37,40 @@ function CreateAssignment() {
     * If not, it adds them to the selection if the limit of 6 students is not reached
     * The selection is limited to a maximum of 6 students
     * If the user tries to select more than 6 students, it does nothing
+    * After changing selection, checks pair constraints via API
   */
-  const handleStudentSelection = (studentId) => {
+  const handleStudentSelection = async (studentId) => {
+    let newSelection;
     if (selectedStudents.includes(studentId)) {
-      setSelectedStudents(selectedStudents.filter(id => id !== studentId));
+      newSelection = selectedStudents.filter(id => id !== studentId);
     } else {
       if (selectedStudents.length < 6) {
-        setSelectedStudents(prev => [...prev, studentId]);
+        newSelection = [...selectedStudents, studentId];
+      } else {
+        return; // Don't change selection if limit reached
       }
+    }
+    
+    setSelectedStudents(newSelection);
+    
+    // Check constraints after updating selection
+    if (newSelection.length >= 2) {
+      setCheckingConstraints(true);
+      try {
+        const result = await API.checkPairConstraints(newSelection);
+        if (!result.isValid) {
+          setConstraintError(result.error || 'Vincolo sulle coppie violato');
+        } else {
+          setConstraintError('');
+        }
+      } catch (err) {
+        console.warn('Error checking constraints:', err);
+        setConstraintError('');
+      } finally {
+        setCheckingConstraints(false);
+      }
+    } else {
+      setConstraintError('');
     }
   };
 
@@ -127,6 +155,8 @@ function CreateAssignment() {
               selectedStudents={selectedStudents}
               onStudentToggle={handleStudentSelection}
               submitting={submitting}
+              constraintError={constraintError}
+              checkingConstraints={checkingConstraints}
             />
           </div>
         </div>
