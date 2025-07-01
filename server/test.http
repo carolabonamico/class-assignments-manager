@@ -53,8 +53,8 @@ GET {{baseUrl}}/api/students
 
 ###
 
-### 6. Try to get assignments without login (Should return 401)
-GET {{baseUrl}}/api/assignments
+### 6. Try to get open assignments without login (Should return 401)
+GET {{baseUrl}}/api/assignments/open
 
 ###
 
@@ -89,17 +89,37 @@ GET {{baseUrl}}/api/students
 
 ###
 
-### 10. Get all assignments (Teacher view)
-GET {{baseUrl}}/api/assignments
+### 10. Get open assignments (Teacher view)
+GET {{baseUrl}}/api/assignments/open
 
 ###
 
-### 11. Get specific assignment (Teacher)
+### 10b. Validate group constraints (Teacher)
+POST {{baseUrl}}/api/groups/validate
+content-type: application/json
+
+{
+  "studentIds": [10, 11, 12]
+}
+
+###
+
+### 11. Test group validation with invalid data (Should return 400)
+POST {{baseUrl}}/api/groups/validate
+content-type: application/json
+
+{
+  "studentIds": [3]
+}
+
+###
+
+### 12. Get specific assignment (Not implemented yet - Should return 501 or 404)
 GET {{baseUrl}}/api/assignments/1
 
 ###
 
-### 12. Create new assignment (Teacher)
+### 13. Create new assignment (Teacher)
 POST {{baseUrl}}/api/assignments
 content-type: application/json
 
@@ -110,7 +130,7 @@ content-type: application/json
 
 ###
 
-### 13. Create assignment with invalid data (Should return 400)
+### 14. Create assignment with invalid data (Should return 400)
 POST {{baseUrl}}/api/assignments
 content-type: application/json
 
@@ -121,7 +141,8 @@ content-type: application/json
 
 ###
 
-### 14. Create assignment with too many students (Should return 400)
+### 15. Create assignment with too many students (Should return 400)
+### 15. Create assignment with too many students (Should return 400)
 POST {{baseUrl}}/api/assignments
 content-type: application/json
 
@@ -132,7 +153,7 @@ content-type: application/json
 
 ###
 
-### 15. Evaluate assignment (Teacher)
+### 16. Evaluate assignment (Teacher)
 PUT {{baseUrl}}/api/assignments/1/evaluate
 content-type: application/json
 
@@ -142,7 +163,7 @@ content-type: application/json
 
 ###
 
-### 16. Evaluate with invalid score (Should return 400)
+### 17. Evaluate with invalid score (Should return 400)
 PUT {{baseUrl}}/api/assignments/1/evaluate
 content-type: application/json
 
@@ -152,8 +173,13 @@ content-type: application/json
 
 ###
 
-### 17. Get statistics (Teacher only)
-GET {{baseUrl}}/api/statistics
+### 18. Get student statistics (Teacher only)
+GET {{baseUrl}}/api/students/statistics
+
+###
+
+### 18. Get student statistics (Teacher only)
+GET {{baseUrl}}/api/students/statistics
 
 ###
 
@@ -161,7 +187,8 @@ GET {{baseUrl}}/api/statistics
 # STUDENT AUTHENTICATED TESTS  
 #########################################
 
-### 18. Login as Student (for following tests)
+### 19. Login as Student (for following tests)
+### 19. Login as Student (for following tests)
 POST {{baseUrl}}/api/sessions
 content-type: application/json
 
@@ -172,22 +199,22 @@ content-type: application/json
 
 ###
 
-### 19. Get all students (Student)
+### 20. Get all students (Student)
 GET {{baseUrl}}/api/students
 
 ###
 
-### 20. Get assignments (Student view)
-GET {{baseUrl}}/api/assignments
+### 21. Get open assignments (Student view)
+GET {{baseUrl}}/api/assignments/open
 
 ###
 
-### 21. Get specific assignment (Student)
+### 22. Get specific assignment (Student - Should return 501 or 404)
 GET {{baseUrl}}/api/assignments/2
 
 ###
 
-### 22. Submit answer to assignment (Student)
+### 23. Submit answer to assignment (Student)
 PUT {{baseUrl}}/api/assignments/2/answer
 content-type: application/json
 
@@ -197,7 +224,7 @@ content-type: application/json
 
 ###
 
-### 23. Submit answer with empty content (Should return 400)
+### 24. Submit answer with empty content (Should return 400)
 PUT {{baseUrl}}/api/assignments/2/answer
 content-type: application/json
 
@@ -207,12 +234,18 @@ content-type: application/json
 
 ###
 
-### 24. Try to access statistics as student (Should return 403)
-GET {{baseUrl}}/api/statistics
+### 25. Get student's closed assignments and average (Student only)
+GET {{baseUrl}}/api/assignments/closed-with-average
 
 ###
 
-### 25. Try to create assignment as student (Should return 403)
+### 26. Try to access statistics as student (Should return 403)
+GET {{baseUrl}}/api/students/statistics
+
+###
+
+### 27. Try to create assignment as student (Should return 403)
+### 27. Try to create assignment as student (Should return 403)
 POST {{baseUrl}}/api/assignments
 content-type: application/json
 
@@ -223,7 +256,7 @@ content-type: application/json
 
 ###
 
-### 26. Try to evaluate assignment as student (Should return 403)
+### 28. Try to evaluate assignment as student (Should return 403)
 PUT {{baseUrl}}/api/assignments/1/evaluate
 content-type: application/json
 
@@ -233,11 +266,22 @@ content-type: application/json
 
 ###
 
+### 29. Try to validate groups as student (Should return 403)
+POST {{baseUrl}}/api/groups/validate
+content-type: application/json
+
+{
+  "studentIds": [3, 4, 5]
+}
+
+###
+
 #########################################
 # AUTHORIZATION TESTS (Wrong roles)
 #########################################
 
-### 27. Login as different student
+### 30. Login as different student
+### 30. Login as different student
 POST {{baseUrl}}/api/sessions
 content-type: application/json
 
@@ -248,7 +292,7 @@ content-type: application/json
 
 ###
 
-### 28. Try to answer assignment not assigned to you (Should return 400/403)
+### 31. Try to answer assignment not assigned to you (Should return 400/403)
 PUT {{baseUrl}}/api/assignments/2/answer
 content-type: application/json
 
@@ -262,7 +306,7 @@ content-type: application/json
 # EDGE CASES & ERROR TESTING
 #########################################
 
-### 29. Login with wrong password (Should return 401)
+### 32. Login with wrong password (Should return 401)
 POST {{baseUrl}}/api/sessions
 content-type: application/json
 
@@ -273,7 +317,7 @@ content-type: application/json
 
 ###
 
-### 30. Login with non-existent user (Should return 401)
+### 33. Login with non-existent user (Should return 401)
 POST {{baseUrl}}/api/sessions
 content-type: application/json
 
@@ -284,7 +328,7 @@ content-type: application/json
 
 ###
 
-### 31. Get non-existent assignment (Should return 404)
+### 34. Get non-existent assignment (Should return 404)
 # Login as teacher first
 POST {{baseUrl}}/api/sessions
 content-type: application/json
@@ -300,7 +344,8 @@ GET {{baseUrl}}/api/assignments/999
 
 ###
 
-### 32. Evaluate non-existent assignment (Should return 404/400)
+### 35. Evaluate non-existent assignment (Should return 404/400)
+### 35. Evaluate non-existent assignment (Should return 404/400)
 PUT {{baseUrl}}/api/assignments/999/evaluate
 content-type: application/json
 
@@ -310,7 +355,7 @@ content-type: application/json
 
 ###
 
-### 33. Answer non-existent assignment (Should return 404/400)
+### 36. Answer non-existent assignment (Should return 404/400)
 # Login as student first
 POST {{baseUrl}}/api/sessions
 content-type: application/json
@@ -335,7 +380,7 @@ content-type: application/json
 # GROUP CONSTRAINTS TESTING
 #########################################
 
-### 34. Login as Teacher for group constraint tests
+### 37. Login as Teacher for group constraint tests
 POST {{baseUrl}}/api/sessions
 content-type: application/json
 
@@ -346,7 +391,17 @@ content-type: application/json
 
 ###
 
-### 35. Try to create assignment with same group twice (Should test group constraints)
+### 38. Validate group constraints with valid group
+POST {{baseUrl}}/api/groups/validate
+content-type: application/json
+
+{
+  "studentIds": [3, 4, 5]
+}
+
+###
+
+### 39. Try to create assignment with same group twice (Should test group constraints)
 POST {{baseUrl}}/api/assignments
 content-type: application/json
 
@@ -357,7 +412,7 @@ content-type: application/json
 
 ###
 
-### 36. Create assignment with different group (Should work)
+### 40. Create assignment with different group (Should work)
 POST {{baseUrl}}/api/assignments
 content-type: application/json
 
@@ -372,7 +427,7 @@ content-type: application/json
 # ANSWER VALIDATION TESTS
 #########################################
 
-### 38. Login as Student for answer validation tests
+### 41. Login as Student for answer validation tests
 POST {{baseUrl}}/api/sessions
 content-type: application/json
 
@@ -383,7 +438,7 @@ content-type: application/json
 
 ###
 
-### 39. Submit answer with only spaces (Should fail with validation error)
+### 42. Submit answer with only spaces (Should fail with validation error)
 PUT {{baseUrl}}/api/assignments/1/answer
 content-type: application/json
 
@@ -393,7 +448,7 @@ content-type: application/json
 
 ###
 
-### 40. Submit answer with only tabs and spaces (Should fail with validation error)
+### 43. Submit answer with only tabs and spaces (Should fail with validation error)
 PUT {{baseUrl}}/api/assignments/1/answer
 content-type: application/json
 
@@ -403,7 +458,7 @@ content-type: application/json
 
 ###
 
-### 41. Submit empty answer (Should fail with validation error)
+### 44. Submit empty answer (Should fail with validation error)
 PUT {{baseUrl}}/api/assignments/1/answer
 content-type: application/json
 
@@ -413,7 +468,7 @@ content-type: application/json
 
 ###
 
-### 42. Submit valid answer with spaces around text (Should work)
+### 45. Submit valid answer with spaces around text (Should work)
 PUT {{baseUrl}}/api/assignments/1/answer
 content-type: application/json
 
@@ -423,7 +478,7 @@ content-type: application/json
 
 ###
 
-### 43. Submit valid answer (Should work)
+### 46. Submit valid answer (Should work)
 PUT {{baseUrl}}/api/assignments/1/answer
 content-type: application/json
 
@@ -433,7 +488,7 @@ content-type: application/json
 
 ###
 
-### 44. Submit answer with newlines and spaces only (Should fail)
+### 47. Submit answer with newlines and spaces only (Should fail)
 PUT {{baseUrl}}/api/assignments/1/answer
 content-type: application/json
 
@@ -444,8 +499,10 @@ content-type: application/json
 ###
 
 #########################################
-# FINAL CLEANUP
-# 37. Logout to clean session
+# CLEANUP
+#########################################
+
+### 48. Logout to clean session
 DELETE {{baseUrl}}/api/sessions/current
 
 ###
