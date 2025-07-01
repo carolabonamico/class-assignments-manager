@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Navigation from './components/Navigation';
 import LoginForm from './components/LoginForm';
+import OpenAssignments from './pages/OpenAssignments';
+import MyScores from './pages/MyScores';
 import AssignmentList from './pages/AssignmentList';
 import AssignmentDetail from './pages/AssignmentDetail';
 import CreateAssignment from './pages/CreateAssignment';
@@ -91,7 +93,21 @@ function App() {
               <Routes>
                 <Route 
                   path="/" 
-                  element={<Navigate to="/assignments" replace />} 
+                  element={<Navigate to="/open-assignments" replace />} 
+                />
+                <Route 
+                  path="/open-assignments" 
+                  element={<OpenAssignments />} 
+                />
+                <Route 
+                  path="/my-scores" 
+                  element={
+                    user?.role === 'student' ? (
+                      <MyScores />
+                    ) : (
+                      <Navigate to="/open-assignments" replace />
+                    )
+                  } 
                 />
                 <Route 
                   path="/assignments" 
@@ -107,7 +123,7 @@ function App() {
                     user?.role === 'teacher' ? (
                       <CreateAssignment />
                     ) : (
-                      <Navigate to="/assignments" replace />
+                      <Navigate to="/open-assignments" replace />
                     )
                   } 
                 />
@@ -117,11 +133,11 @@ function App() {
                     user?.role === 'teacher' ? (
                       <Statistics />
                     ) : (
-                      <Navigate to="/assignments" replace />
+                      <Navigate to="/open-assignments" replace />
                     )
                   } 
                 />
-                <Route path="*" element={<Navigate to="/assignments" replace />} />
+                <Route path="*" element={<Navigate to="/open-assignments" replace />} />
               </Routes>
             </div>
           </Container>

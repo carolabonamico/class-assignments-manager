@@ -188,6 +188,31 @@ const API = {
   },
 
   /**
+   * Update assignment answer (student only)
+   * @param {string} assignmentId - The ID of the assignment to update
+   * @param {string} answer - The answer to submit
+   * @returns {Promise<Object>} - Returns the updated assignment object
+   * @throws {string} - Throws an error message if updating the answer fails
+   */
+  async updateAssignmentAnswer(assignmentId, answer) {
+    const response = await fetch(APIURL + `/assignments/${assignmentId}/answer`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ answer }),
+    });
+    
+    if (response.ok) {
+      return await response.json();
+    } else {
+      const errDetail = await response.json();
+      throw errDetail;
+    }
+  },
+
+  /**
    * Evaluate an assignment (teacher only)
    * @param {string} assignmentId - The ID of the assignment to evaluate
    * @param {number} score - The score to assign to the assignment
@@ -228,7 +253,43 @@ const API = {
       const errDetails = await response.text();
       throw errDetails;
     }
-  }
+  },
+
+  /**
+   * Get open assignments for the current user
+   * @returns {Promise<Array>} - Returns an array of open assignment objects
+   * @throws {string} - Throws an error message if fetching assignments fails
+   */
+  async getOpenAssignments() {
+    const response = await fetch(APIURL + '/assignments/open', {
+      credentials: 'include'
+    });
+    
+    if (response.ok) {
+      return await response.json();
+    } else {
+      const errDetails = await response.text();
+      throw errDetails;
+    }
+  },
+
+  /**
+   * Get student scores and weighted average
+   * @returns {Promise<Object>} - Returns object with assignments array and weightedAverage
+   * @throws {string} - Throws an error message if fetching scores fails
+   */
+  async getStudentScores() {
+    const response = await fetch(APIURL + '/students/scores', {
+      credentials: 'include'
+    });
+    
+    if (response.ok) {
+      return await response.json();
+    } else {
+      const errDetails = await response.text();
+      throw errDetails;
+    }
+  },
 };
 
 export default API;

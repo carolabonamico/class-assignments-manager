@@ -432,3 +432,102 @@ export const checkGroupConstraints = (studentIds, teacherId) => {
     });
   });
 };
+
+/**
+ * Get open assignments for a user (both students and teachers)
+ * @param {number} userId - The ID of the user
+ * @param {string} userRole - The role of the user ('teacher' or 'student')
+ * @returns {Promise<Assignment[]>} - Returns an array of open Assignment objects
+ */
+export const getOpenAssignments = (userId, userRole) => {
+  return new Promise((resolve, reject) => {
+    let sql;
+    let params;
+    
+    if (userRole === 'teacher') {
+      // Teachers see all open assignments they created
+      sql = `SELECT a.*, u.name as teacher_name 
+             FROM assignments a 
+             JOIN users u ON a.teacher_id = u.id 
+             WHERE a.teacher_id = ? AND a.status = 'open'
+             ORDER BY a.id DESC`;
+      params = [userId];
+    } else {
+      // Students see open assignments they are part of
+      sql = `SELECT a.*, u.name as teacher_name 
+             FROM assignments a 
+             JOIN users u ON a.teacher_id = u.id 
+             JOIN assignment_groups ag ON a.id = ag.assignment_id 
+             WHERE ag.student_id = ? AND a.status = 'open'
+             ORDER BY a.id DESC`;
+      params = [userId];
+    }
+    
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        const assignments = rows.map((a) => new Assignment(
+          a.id, a.question, a.teacher_id, a.teacher_name, a.status, 
+          a.answer, a.score
+        ));
+        resolve(assignments);
+      }
+    });
+  });
+};
+
+/**
+ * Get student scores (closed assignments with scores)
+ * @param {number} studentId - The ID of the student
+ * @returns {Promise<{assignments: Assignment[], weightedAverage: number|null}>} - Returns assignments and weighted average
+ */
+export const getStudentScores = (studentId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT 
+        a.*,
+        u.name as teacher_name,
+        group_sizes.size as group_size
+      FROM assignments a 
+      JOIN users u ON a.teacher_id = u.id 
+      JOIN assignment_groups ag ON a.id = ag.assignment_id 
+      LEFT JOIN (
+        SELECT assignment_id, COUNT(*) as size
+        FROM assignment_groups
+        GROUP BY assignment_id
+      ) group_sizes ON a.id = group_sizes.assignment_id
+      WHERE ag.student_id = ? AND a.status = 'closed' AND a.score IS NOT NULL
+      ORDER BY a.id DESC`;
+    
+    db.all(sql, [studentId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        const assignments = rows.map((a) => {
+          const assignment = new Assignment(
+            a.id, a.question, a.teacher_id, a.teacher_name, a.status, 
+            a.answer, a.score
+          );
+          assignment.groupSize = a.group_size;
+          return assignment;
+        });
+        
+        // Calculate weighted average
+        let weightedAverage = null;
+        if (assignments.length > 0) {
+          const scoreData = assignments.map(a => ({
+            score: a.score,
+            groupSize: a.groupSize
+          }));
+          weightedAverage = calculateWeightedAverage(scoreData);
+        }
+        
+        resolve({
+          assignments,
+          weightedAverage
+        });
+      }
+    });
+  });
+};

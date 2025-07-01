@@ -23,10 +23,10 @@ function Navigation({ onLogout }) {
                 <>
                   <Nav.Link 
                     as={Link} 
-                    to="/assignments" 
-                    active={location.pathname === '/assignments'}
+                    to="/open-assignments" 
+                    active={location.pathname === '/open-assignments'}
                   >
-                    Compiti
+                    Compiti Aperti
                   </Nav.Link>
                   <Nav.Link 
                     as={Link} 
@@ -41,6 +41,25 @@ function Navigation({ onLogout }) {
                     active={location.pathname === '/statistics'}
                   >
                     Statistiche
+                  </Nav.Link>
+                </>
+              )}
+              
+              {user.role === 'student' && (
+                <>
+                  <Nav.Link 
+                    as={Link} 
+                    to="/open-assignments" 
+                    active={location.pathname === '/open-assignments'}
+                  >
+                    Compiti Aperti
+                  </Nav.Link>
+                  <Nav.Link 
+                    as={Link} 
+                    to="/my-scores" 
+                    active={location.pathname === '/my-scores'}
+                  >
+                    I Miei Punteggi
                   </Nav.Link>
                 </>
               )}
