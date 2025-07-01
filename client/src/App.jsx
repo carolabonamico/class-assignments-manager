@@ -5,7 +5,6 @@ import Navigation from './components/Navigation';
 import LoginForm from './components/LoginForm';
 import OpenAssignments from './pages/OpenAssignments';
 import MyScores from './pages/MyScores';
-import AssignmentDetail from './pages/AssignmentDetail';
 import CreateAssignment from './pages/CreateAssignment';
 import Statistics from './pages/Statistics';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -107,10 +106,6 @@ function App() {
                       <Navigate to="/open-assignments" replace />
                     )
                   } 
-                />
-                <Route 
-                  path="/assignments/:id" 
-                  element={<AssignmentDetail />} 
                 />
                 <Route 
                   path="/assignments/new" 
