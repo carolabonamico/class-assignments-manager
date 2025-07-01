@@ -24,7 +24,10 @@ function StudentAverageCard({ assignments }) {
         <Card.Body>
           <h6>Media Punteggi</h6>
           <h3 className="text-primary">
-            {calculateSimpleAverage()}/30
+            {calculateSimpleAverage() === "N/A"
+              ? "N/A"
+              : `${calculateSimpleAverage()}/30`
+            }
           </h3>
         </Card.Body>
       </Card>

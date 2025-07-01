@@ -8,6 +8,12 @@ function AssignmentAnswerCard({
   submitting, 
   onSubmitAnswer 
 }) {
+  // Handle form submission with preventDefault
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    onSubmitAnswer(answer);
+  };
+
   return (
     <Card className="mb-4">
       <Card.Header>
@@ -31,7 +37,7 @@ function AssignmentAnswerCard({
 
         {/* If the student can submit an answer, show the form */}
         {canSubmitAnswer && (
-          <Form onSubmit={onSubmitAnswer}>
+          <Form onSubmit={handleFormSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>
                 {assignment.answer ? 'Modifica risposta:' : 'Scrivi la tua risposta:'}

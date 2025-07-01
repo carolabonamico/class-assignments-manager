@@ -8,6 +8,12 @@ function AssignmentEvaluationCard({
   submitting, 
   onEvaluate 
 }) {
+  // Handle form submission with preventDefault
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    onEvaluate(score);
+  };
+
   return (
     <Card className="mb-4">
       <Card.Header>
@@ -23,7 +29,7 @@ function AssignmentEvaluationCard({
             </div>
           </div>
         ) : canEvaluate ? (
-          <Form onSubmit={onEvaluate}>
+          <Form onSubmit={handleFormSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Assegna un punteggio (0-30):</Form.Label>
               <Form.Control
@@ -46,10 +52,7 @@ function AssignmentEvaluationCard({
           </Form>
         ) : (
           <p className="text-muted">
-            {!assignment.answer 
-              ? 'Nessuna risposta da valutare ancora.' 
-              : 'Compito già valutato o chiuso.'
-            }
+            {'Nessuna valutazione presente.'}
           </p>
         )}
       </Card.Body>
