@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, Table, Badge } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
+import StudentAverageCard from '../components/StudentAverageCard';
 
 function MyScores() {
   const [data, setData] = useState({ assignments: [], weightedAverage: null });
@@ -38,26 +39,10 @@ function MyScores() {
       )}
 
       {/* Weighted Average Card */}
-      <Card className="desktop-card mb-4">
-        <Card.Header>
-          <h5 className="mb-0">Media Ponderata</h5>
-        </Card.Header>
-        <Card.Body className="text-center">
-          {weightedAverage !== null ? (
-            <div>
-              <h2 className="text-primary display-4 mb-0">
-                {weightedAverage.toFixed(2)}
-              </h2>
-              <p className="text-muted">/ 30</p>
-            </div>
-          ) : (
-            <div>
-              <h4 className="text-muted">Non ancora disponibile</h4>
-              <p className="text-muted">Completa almeno un compito per vedere la tua media</p>
-            </div>
-          )}
-        </Card.Body>
-      </Card>
+      <StudentAverageCard 
+        average={weightedAverage} 
+        label="Media Ponderata" 
+      />
 
       {/* Assignments Table */}
       <Card className="desktop-card">
@@ -122,46 +107,6 @@ function MyScores() {
         </Card.Body>
       </Card>
 
-      {/* Summary Statistics */}
-      {assignments.length > 0 && (
-        <Card className="desktop-card mt-4">
-          <Card.Header>
-            <h5 className="mb-0">Statistiche</h5>
-          </Card.Header>
-          <Card.Body>
-            <div className="row text-center">
-              <div className="col-md-3">
-                <div className="border-end">
-                  <h4 className="text-primary">{assignments.length}</h4>
-                  <p className="text-muted mb-0">Compiti Completati</p>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="border-end">
-                  <h4 className="text-success">
-                    {assignments.filter(a => a.score >= 18).length}
-                  </h4>
-                  <p className="text-muted mb-0">Superati</p>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="border-end">
-                  <h4 className="text-danger">
-                    {assignments.filter(a => a.score < 18).length}
-                  </h4>
-                  <p className="text-muted mb-0">Non Superati</p>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <h4 className="text-info">
-                  {Math.max(...assignments.map(a => a.score))}
-                </h4>
-                <p className="text-muted mb-0">Punteggio Massimo</p>
-              </div>
-            </div>
-          </Card.Body>
-        </Card>
-      )}
     </div>
   );
 }

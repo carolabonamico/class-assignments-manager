@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Card, Form, Button, Alert, Badge } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import useAuth from '../hooks/useAuth';
 
 function OpenAssignments() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -137,14 +135,6 @@ function OpenAssignments() {
                 ? 'Non ci sono compiti aperti da valutare.' 
                 : 'Non hai compiti aperti al momento.'}
             </p>
-            {user.role === 'teacher' && (
-              <Button 
-                variant="primary" 
-                onClick={() => navigate('/assignments/new')}
-              >
-                Crea Nuovo Compito
-              </Button>
-            )}
           </Card.Body>
         </Card>
       ) : (

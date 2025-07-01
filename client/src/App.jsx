@@ -5,7 +5,6 @@ import Navigation from './components/Navigation';
 import LoginForm from './components/LoginForm';
 import OpenAssignments from './pages/OpenAssignments';
 import MyScores from './pages/MyScores';
-import AssignmentList from './pages/AssignmentList';
 import AssignmentDetail from './pages/AssignmentDetail';
 import CreateAssignment from './pages/CreateAssignment';
 import Statistics from './pages/Statistics';
@@ -108,10 +107,6 @@ function App() {
                       <Navigate to="/open-assignments" replace />
                     )
                   } 
-                />
-                <Route 
-                  path="/assignments" 
-                  element={<AssignmentList />} 
                 />
                 <Route 
                   path="/assignments/:id" 
