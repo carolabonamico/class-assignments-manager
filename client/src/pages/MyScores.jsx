@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Card, Table } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StudentAverageCard from '../components/StudentAverageCard';
+import ClosedAssignmentTable from '../components/ClosedAssignmentTable';
 
 function MyScores() {
   const [data, setData] = useState({ assignments: [], weightedAverage: null });
@@ -45,43 +45,7 @@ function MyScores() {
       />
 
       {/* Assignments Table */}
-      <Card className="desktop-card">
-        <Card.Header>
-          <h5 className="mb-0">Compiti Completati</h5>
-        </Card.Header>
-        <Card.Body>
-          {assignments.length === 0 ? (
-            <div className="text-center py-4">
-              <p className="text-muted">Non hai ancora completato nessun compito.</p>
-            </div>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <th>Domanda</th>
-                  <th className="text-center">Punteggio</th>
-                </tr>
-              </thead>
-              <tbody>
-                {assignments.map(assignment => (
-                  <tr key={assignment.id}>
-                    <td>
-                      <div>
-                        {assignment.question}
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <span className={`${assignment.score >= 18 ? 'text-success' : 'text-danger'}`}>
-                        {assignment.score}/30
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-        </Card.Body>
-      </Card>
+      <ClosedAssignmentTable assignments={assignments}/>
 
     </div>
   );
