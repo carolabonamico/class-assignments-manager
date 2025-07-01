@@ -66,69 +66,6 @@ export const listStudents = () => {
 /** ASSIGNMENTS **/
 
 /**
- * Get a specific assignment by ID
- * @param {number} id - The ID of the assignment
- * @param {number} userId - The ID of the user requesting the assignment
- * @param {string} userRole - The role of the user ('teacher' or 'student')
- * @returns {Promise<Assignment|{error: string}>} - Returns an Assignment object if found, or an error object if not found or unauthorized
- */
-export const getAssignment = (id, userId, userRole) => {
-  return new Promise((resolve, reject) => {
-    const sql = `SELECT a.*, u.name as teacher_name 
-                 FROM assignments a 
-                 JOIN users u ON a.teacher_id = u.id 
-                 WHERE a.id = ?`;
-    
-    db.get(sql, [id], (err, row) => {
-      if (err) {
-        reject(err);
-      } else if (row === undefined) {
-        resolve({error: "Compito non trovato."});
-      } else {
-        // Check authorization
-        if (userRole === 'teacher' && row.teacher_id !== userId) {
-          resolve({error: "Accesso non autorizzato a questo compito."});
-          return;
-        }
-        
-        const assignment = new Assignment(
-          row.id, row.question, row.teacher_id, row.teacher_name, row.status,
-          row.answer, row.score
-        );
-        
-        // Get group members
-        const groupSql = `SELECT u.id, u.name, u.email, u.role 
-                          FROM users u 
-                          JOIN assignment_groups ag ON u.id = ag.student_id 
-                          WHERE ag.assignment_id = ? 
-                          ORDER BY u.name`;
-        
-        db.all(groupSql, [id], (err, groupRows) => {
-          if (err) {
-            reject(err);
-          } else {
-            const groupMembers = groupRows.map((s) => new User(s.id, s.name, s.email, s.role));
-            assignment.groupMembers = groupMembers;
-            assignment.groupSize = groupMembers.length;
-            
-            // Check if student is authorized to see this assignment
-            if (userRole === 'student') {
-              const isInGroup = assignment.groupMembers.some(member => member.id === userId);
-              if (!isInGroup) {
-                resolve({error: "Accesso non autorizzato a questo compito."});
-                return;
-              }
-            }
-            
-            resolve(assignment);
-          }
-        });
-      }
-    });
-  });
-};
-
-/**
  * Add a new assignment
  * @param {string} question - The question or task of the assignment
  * @param {number[]} studentIds - Array of student IDs to assign the homework to

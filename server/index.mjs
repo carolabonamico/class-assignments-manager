@@ -166,32 +166,8 @@ app.get('/api/students', isLoggedIn, async (req, res) => {
  */
 app.get('/api/assignments/open', isLoggedIn, async (req, res) => {
   try {
-    console.log('Getting open assignments for user:', req.user.id, 'role:', req.user.role);
     const assignments = await dao.getOpenAssignments(req.user.id, req.user.role);
-    console.log('Found assignments:', assignments.length);
     res.json(assignments);
-  } catch (err) {
-    console.error('Error getting open assignments:', err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-/**
- * Route to get a specific assignment by ID
- * Returns the details of a specific assignment.
- * @route GET /api/assignments/:id
- * @param {string} req.params.id - The ID of the assignment.
- * @returns {object} The assignment object if found.
- * @returns {object} An error message if the assignment is not found.
- */
-app.get('/api/assignments/:id', isLoggedIn, async (req, res) => {
-  try {
-    const assignment = await dao.getAssignment(req.params.id, req.user.id, req.user.role);
-    if (assignment.error) {
-      res.status(404).json(assignment);
-    } else {
-      res.json(assignment);
-    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

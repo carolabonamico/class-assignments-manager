@@ -78,25 +78,6 @@ const API = {
   },
 
   /**
-   * Get a specific assignment by ID
-   * @param {string} id - The ID of the assignment to retrieve
-   * @returns {Promise<Object>} - Returns the assignment object if found
-   * @throws {string} - Throws an error message if fetching the assignment fails
-   */
-  async getAssignment(id) {
-    const response = await fetch(APIURL + `/assignments/${id}`, {
-      credentials: 'include'
-    });
-    
-    if (response.ok) {
-      return await response.json();
-    } else {
-      const errDetails = await response.text();
-      throw errDetails;
-    }
-  },
-
-  /**
    * Check if creating an assignment with selected students would violate pair constraints
    * @param {Array<number>} studentIds - Array of student IDs to check
    * @returns {Promise<Object>} - Returns {isValid: boolean, error?: string}
@@ -134,31 +115,6 @@ const API = {
       },
       credentials: 'include',
       body: JSON.stringify(assignmentData),
-    });
-    
-    if (response.ok) {
-      return await response.json();
-    } else {
-      const errDetails = await response.text();
-      throw errDetails;
-    }
-  },
-
-  /**
-   * Submit an answer to an assignment (student only)
-   * @param {string} assignmentId - The ID of the assignment to answer
-   * @param {string} answer - The answer to submit
-   * @returns {Promise<Object>} - Returns the updated assignment object with the submitted answer
-   * @throws {string} - Throws an error message if submitting the answer fails
-   */
-  async submitAnswer(assignmentId, answer) {
-    const response = await fetch(APIURL + `/assignments/${assignmentId}/answer`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ answer }),
     });
     
     if (response.ok) {
