@@ -158,24 +158,6 @@ app.get('/api/students', isLoggedIn, async (req, res) => {
 });
 
 /**
- * Route to list all assignments
- * Returns a list of all assignments for the current user.
- * @route GET /api/assignments
- * @param {string} req.user.id - The ID of the current user.
- * @param {string} req.user.role - The role of the current user (teacher or student).
- * @returns {Array} An array of assignment objects.
- * @returns {object} An error message if the request fails.
- */
-app.get('/api/assignments', isLoggedIn, async (req, res) => {
-  try {
-    const assignments = await dao.listAssignments(req.user.id, req.user.role);
-    res.json(assignments);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-/**
  * Route to get open assignments for the current user
  * Returns a list of open assignments for the current user.
  * @route GET /api/assignments/open

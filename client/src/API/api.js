@@ -78,24 +78,6 @@ const API = {
   },
 
   /**
-   * Get assignments for the current user (teacher or student)
-   * @returns {Promise<Array>} - Returns an array of assignment objects
-   * @throws {string} - Throws an error message if fetching assignments fails
-   */
-  async getAssignments() {
-    const response = await fetch(APIURL + '/assignments', {
-      credentials: 'include'
-    });
-    
-    if (response.ok) {
-      return await response.json();
-    } else {
-      const errDetails = await response.text();
-      throw errDetails;
-    }
-  },
-
-  /**
    * Get a specific assignment by ID
    * @param {string} id - The ID of the assignment to retrieve
    * @returns {Promise<Object>} - Returns the assignment object if found

@@ -1,7 +1,7 @@
 /* Data Access Object (DAO) module for accessing Compiti system */
 
 import sqlite from 'sqlite3';
-import { User, Assignment, StudentStats, StudentPair, GroupValidation } from './CompitiModels.mjs';
+import { User, Assignment, StudentStats, GroupValidation } from './CompitiModels.mjs';
 import { calculateWeightedAverage, generateStudentPairs } from './utils.mjs';
 import crypto from 'crypto';
 
@@ -43,26 +43,6 @@ export const getUser = (email, password) => {
   });
 };
 
-/**
- * Get a user by ID
- * @param {number} id - The ID of the user
- * @returns {Promise<User|{error: string}>} - Returns a User object if found, or an error object if not found
- */
-export const getUserById = (id) => {
-  return new Promise((resolve, reject) => {
-    const sql = 'SELECT id, name, email, role FROM users WHERE id = ?';
-    db.get(sql, [id], (err, row) => {
-      if (err) {
-        reject(err);
-      } else if (row === undefined) {
-        resolve({error: "Utente non trovato."});
-      } else {
-        resolve(new User(row.id, row.name, row.email, row.role));
-      }
-    });
-  });
-};
-
 /** STUDENTS **/
 
 /**
@@ -84,50 +64,6 @@ export const listStudents = () => {
 };
 
 /** ASSIGNMENTS **/
-
-/**
- * List assignments for a user based on their role
- * @param {number} userId - The ID of the user
- * @param {string} userRole - The role of the user ('teacher' or 'student')
- * @returns {Promise<Assignment[]>} - Returns an array of Assignment objects
- */
-export const listAssignments = (userId, userRole) => {
-  return new Promise((resolve, reject) => {
-    let sql;
-    let params;
-    
-    if (userRole === 'teacher') {
-      // Teachers see all assignments they created
-      sql = `SELECT a.*, u.name as teacher_name 
-             FROM assignments a 
-             JOIN users u ON a.teacher_id = u.id 
-             WHERE a.teacher_id = ? 
-             ORDER BY a.id DESC`;
-      params = [userId];
-    } else {
-      // Students see assignments they are part of
-      sql = `SELECT a.*, u.name as teacher_name 
-             FROM assignments a 
-             JOIN users u ON a.teacher_id = u.id 
-             JOIN assignment_groups ag ON a.id = ag.assignment_id 
-             WHERE ag.student_id = ? 
-             ORDER BY a.id DESC`;
-      params = [userId];
-    }
-    
-    db.all(sql, params, (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        const assignments = rows.map((a) => new Assignment(
-          a.id, a.question, a.teacher_id, a.teacher_name, a.status, 
-          a.answer, a.score
-        ));
-        resolve(assignments);
-      }
-    });
-  });
-};
 
 /**
  * Get a specific assignment by ID
