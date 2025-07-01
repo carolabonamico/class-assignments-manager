@@ -23,9 +23,15 @@ function AssignmentCard({ assignment }) {
       </Card.Header>
 
       <Card.Body className="d-flex flex-column">
-        <Card.Title className="text-truncate" title={assignment.question || 'Domanda non disponibile'}>
-          {assignment.question || 'Domanda non disponibile'}
+        <Card.Title className="fs-6 fw-bold mb-3">
+          Compito:
         </Card.Title>
+
+        <div className="mb-3">
+          <p className="mb-0" style={{ fontSize: '0.95rem', lineHeight: '1.4' }}>
+            {assignment.question || 'Domanda non disponibile'}
+          </p>
+        </div>
 
         <Card.Text>
           <small className="text-muted">
