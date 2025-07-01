@@ -54,9 +54,7 @@ function StudentSelectionCard({
             <small>{constraintError}</small>
           </div>
         )}
-      </Card.Body>
 
-      <Card.Footer>
         <div className="d-grid">
           <Button 
             type="submit" 
@@ -71,7 +69,9 @@ function StudentSelectionCard({
             {submitting ? 'Creazione in corso...' : 'Crea Compito'}
           </Button>
         </div>
-      </Card.Footer>
+        
+      </Card.Body>
+      
     </Card>
   );
 }

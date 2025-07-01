@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Table, Badge } from 'react-bootstrap';
+import { Card, Table } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StudentAverageCard from '../components/StudentAverageCard';
@@ -55,49 +55,25 @@ function MyScores() {
               <p className="text-muted">Non hai ancora completato nessun compito.</p>
             </div>
           ) : (
-            <Table responsive hover>
+            <Table>
               <thead>
                 <tr>
-                  <th>#</th>
                   <th>Domanda</th>
-                  <th>Docente</th>
-                  <th>Dimensione Gruppo</th>
-                  <th>Punteggio</th>
-                  <th>Stato</th>
+                  <th className="text-center">Punteggio</th>
                 </tr>
               </thead>
               <tbody>
                 {assignments.map(assignment => (
                   <tr key={assignment.id}>
                     <td>
-                      <strong>#{assignment.id}</strong>
-                    </td>
-                    <td>
-                      <div style={{ maxWidth: '300px' }}>
-                        {assignment.question.length > 100 
-                          ? `${assignment.question.substring(0, 100)}...`
-                          : assignment.question
-                        }
+                      <div>
+                        {assignment.question}
                       </div>
                     </td>
-                    <td>{assignment.teacherName}</td>
-                    <td>
-                      <Badge bg="info">
-                        {assignment.groupSize} {assignment.groupSize === 1 ? 'studente' : 'studenti'}
-                      </Badge>
-                    </td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className={`fw-bold ${assignment.score >= 18 ? 'text-success' : 'text-danger'}`}>
-                          {assignment.score}
-                        </span>
-                        <span className="text-muted ms-1">/30</span>
-                      </div>
-                    </td>
-                    <td>
-                      <Badge bg={assignment.score >= 18 ? 'success' : 'danger'}>
-                        {assignment.score >= 18 ? 'Superato' : 'Non Superato'}
-                      </Badge>
+                    <td className="text-center">
+                      <span className={`${assignment.score >= 18 ? 'text-success' : 'text-danger'}`}>
+                        {assignment.score}/30
+                      </span>
                     </td>
                   </tr>
                 ))}
