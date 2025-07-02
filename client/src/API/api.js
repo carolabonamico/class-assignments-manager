@@ -18,10 +18,17 @@ const API = {
     });
     
     if (response.ok) {
-      return await response.json();
+      const user = await response.json();
+      return user;
     } else {
-      const errDetails = await response.text();
-      throw errDetails;
+      if (response.status === 401) {
+        throw "Invalid credentials";
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        const errDetails = await response.text();
+        throw errDetails;
+      }
     }
   },
 
@@ -39,7 +46,13 @@ const API = {
     if (response.ok) {
       return user;
     } else {
-      throw user; // an object with the error coming from the server
+      if (response.status === 401) {
+        throw {error: "Not authenticated"};
+      } else if (response.status === 500) {
+        throw {error: "Internal server error"};
+      } else {
+        throw user; // an object with the error coming from the server
+      }
     }
   },
 
@@ -56,6 +69,8 @@ const API = {
     
     if (response.ok) {
       return null;
+    } else if (response.status === 500) {
+      throw "Internal server error";
     }
   },
 
@@ -72,8 +87,13 @@ const API = {
     if (response.ok) {
       return await response.json();
     } else {
-      const errDetails = await response.text();
-      throw errDetails;
+      if (response.status === 401) {
+        throw "Not authenticated";
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        throw new Error("Internal server error");
+      }
     }
   },
 
@@ -96,8 +116,18 @@ const API = {
     if (response.ok) {
       return await response.json();
     } else {
-      const errDetails = await response.text();
-      throw errDetails;
+      if (response.status === 401) {
+        throw "Not authenticated";
+      } else if (response.status === 403) {
+        throw "Not a teacher";
+      } else if (response.status === 400) {
+        const errData = await response.json();
+        throw errData.error || "Invalid student IDs array (must be 2-6 students)";
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        throw new Error("Internal server error");
+      }
     }
   },
 
@@ -120,8 +150,26 @@ const API = {
     if (response.ok) {
       return await response.json();
     } else {
-      const errDetails = await response.text();
-      throw errDetails;
+      if (response.status === 401) {
+        throw "Not authenticated";
+      } else if (response.status === 403) {
+        throw "Not a teacher";
+      } else if (response.status === 400) {
+        const errData = await response.json();
+        throw errData.error || "Missing/invalid fields or validation errors (2-6 students required)";
+      } else if (response.status === 422) {
+        const errMessage = await response.json();
+        throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        let errMessage = await response.json();
+        if (response.status === 422)
+          errMessage = `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`
+        else
+          errMessage = errMessage.error;
+        throw errMessage;
+      }
     }
   },
 
@@ -145,8 +193,26 @@ const API = {
     if (response.ok) {
       return await response.json();
     } else {
-      const errDetail = await response.json();
-      throw errDetail;
+      if (response.status === 401) {
+        throw "Not authenticated";
+      } else if (response.status === 403) {
+        throw "Not a student";
+      } else if (response.status === 400) {
+        const errData = await response.json();
+        throw errData.error || "Empty/invalid answer, assignment not open";
+      } else if (response.status === 422) {
+        const errMessage = await response.json();
+        throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        let errMessage = await response.json();
+        if (response.status === 422)
+          errMessage = `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`
+        else
+          errMessage = errMessage.error;
+        throw errMessage;
+      }
     }
   },
 
@@ -170,8 +236,26 @@ const API = {
     if (response.ok) {
       return await response.json();
     } else {
-      const errDetails = await response.text();
-      throw errDetails;
+      if (response.status === 401) {
+        throw "Not authenticated";
+      } else if (response.status === 403) {
+        throw "Not a teacher";
+      } else if (response.status === 400) {
+        const errData = await response.json();
+        throw errData.error || "Invalid score, assignment not open";
+      } else if (response.status === 422) {
+        const errMessage = await response.json();
+        throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        let errMessage = await response.json();
+        if (response.status === 422)
+          errMessage = `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`
+        else
+          errMessage = errMessage.error;
+        throw errMessage;
+      }
     }
   },
 
@@ -188,8 +272,15 @@ const API = {
     if (response.ok) {
       return await response.json();
     } else {
-      const errDetails = await response.text();
-      throw errDetails;
+      if (response.status === 401) {
+        throw "Not authenticated";
+      } else if (response.status === 403) {
+        throw "Not a teacher";
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        throw "Internal server error";
+      }
     }
   },
 
@@ -206,8 +297,13 @@ const API = {
     if (response.ok) {
       return await response.json();
     } else {
-      const errDetails = await response.text();
-      throw errDetails;
+      if (response.status === 401) {
+        throw "Not authenticated";
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        throw "Internal server error";
+      }
     }
   },
 
@@ -224,8 +320,15 @@ const API = {
     if (response.ok) {
       return await response.json();
     } else {
-      const errDetails = await response.text();
-      throw errDetails;
+      if (response.status === 401) {
+        throw "Not authenticated";
+      } else if (response.status === 403) {
+        throw "Not a student";
+      } else if (response.status === 500) {
+        throw "Internal server error";
+      } else {
+        throw "Internal server error";
+      }
     }
   },
 };
