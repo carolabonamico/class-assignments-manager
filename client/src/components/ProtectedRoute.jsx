@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
-function ProtectedRoute({ children, role, userRole }) {
-  if (role && userRole !== role) {
+function ProtectedRoute({ children, requiredRole, userRole }) {
+  if (requiredRole && userRole !== requiredRole) {
     return <Navigate to="/assignments" replace />;
   }
 

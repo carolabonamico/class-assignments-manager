@@ -1,4 +1,4 @@
-import { Card, Form, Button } from 'react-bootstrap';
+import { Card, Form, Button, Alert } from 'react-bootstrap';
 
 function StudentSelectionCard({ 
   students, 
@@ -32,27 +32,27 @@ function StudentSelectionCard({
         </div>
 
         {selectedStudents.length < 2 && (
-          <div className="alert alert-warning mt-3 py-2">
+          <Alert variant="warning" className="mt-3 py-2">
             <small>Seleziona almeno 2 studenti</small>
-          </div>
+          </Alert>
         )}
 
         {selectedStudents.length >= 6 && (
-          <div className="alert alert-info mt-3 py-2">
+          <Alert variant="info" className="mt-3 py-2">
             <small>Numero massimo di studenti raggiunto (6)</small>
-          </div>
+          </Alert>
         )}
 
         {checkingConstraints && selectedStudents.length >= 2 && (
-          <div className="alert alert-info mt-3 py-2">
+          <Alert variant="info" className="mt-3 py-2">
             <small>Controllo vincoli in corso...</small>
-          </div>
+          </Alert>
         )}
 
         {constraintError && (
-          <div className="alert alert-danger mt-3 py-2">
+          <Alert variant="danger" className="mt-3 py-2">
             <small>{constraintError}</small>
-          </div>
+          </Alert>
         )}
 
         <div className="d-grid">

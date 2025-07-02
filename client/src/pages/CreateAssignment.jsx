@@ -133,7 +133,7 @@ function CreateAssignment() {
       {error && <Alert variant="danger">{error}</Alert>}
       
       {success && (
-        <Alert variant="success" onClose={() => setError('')} dismissible className="d-flex align-items-center">
+        <Alert variant="success" onClose={() => setSuccess('')} dismissible className="d-flex align-items-center">
           <div className="flex-grow-1">{success}</div>
         </Alert>
       )}

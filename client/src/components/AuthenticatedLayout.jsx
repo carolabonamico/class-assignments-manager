@@ -1,21 +1,22 @@
-import { Container } from 'react-bootstrap';
+import { Alert, Container, Row } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 import Navigation from './Navigation';
-import useAuth from '../hooks/useAuth';
 
-function AuthenticatedLayout() {
-  const { logout } = useAuth();
-
+function AuthenticatedLayout({ message, setMessage, onLogout }) {
   return (
-    <div className="App">
-      <Navigation onLogout={logout} />
-      
-      <Container fluid className="px-0">
+    <>
+      <Navigation onLogout={onLogout} />
+      <Container fluid className="mt-3">
+        {message && <Row>
+          <Alert variant={message.type} onClose={() => setMessage('')} dismissible>
+            {message.msg}
+          </Alert>
+        </Row>}
         <div className="main-content">
           <Outlet />
         </div>
       </Container>
-    </div>
+    </>
   );
 }
 

@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import LoginForm from './components/LoginForm';
-import OpenAssignments from './pages/OpenAssignments';
-import MyScores from './pages/MyScores';
-import CreateAssignment from './pages/CreateAssignment';
-import Statistics from './pages/Statistics';
-import LoadingSpinner from './components/LoadingSpinner';
-import AuthenticatedLayout from './components/AuthenticatedLayout';
-import ProtectedRoute from './components/ProtectedRoute';
-import API from './API/api';
-import { AuthProvider } from './contexts/AuthContext';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import AuthenticatedLayout from "./components/AuthenticatedLayout";
+import LoginForm from "./components/LoginForm";
+import OpenAssignments from "./pages/OpenAssignments";
+import MyScores from "./pages/MyScores";
+import CreateAssignment from "./pages/CreateAssignment";
+import Statistics from "./pages/Statistics";
+import LoadingSpinner from "./components/LoadingSpinner";
+import ProtectedRoute from "./components/ProtectedRoute";
+import API from "./API/api";
+import { AuthProvider } from "./contexts/AuthContext";
+import "./App.css";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [loginError, setLoginError] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Check authentication on startup
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -33,27 +33,21 @@ function App() {
         setLoading(false);
       }
     };
-
     checkAuth();
   }, []);
 
   const handleLogin = async (credentials) => {
-    try {
-      const userData = await API.login(credentials);
-      setLoggedIn(true);
-      setUser(userData);
-      setLoginError('');
-    } catch (err) {
-      const errorMessage = err.error || err.message || err.toString() || 'Errore durante il login';
-      setLoginError(errorMessage);
-    }
+    const userData = await API.login(credentials);
+    setLoggedIn(true);
+    setUser(userData);
+    setMessage({ msg: `Benvenuto, ${userData.name}!`, type: 'success' });
   };
 
   const handleLogout = async () => {
     await API.logout();
     setLoggedIn(false);
     setUser(null);
-    setLoginError('');
+    setMessage('');
   };
 
   if (loading) {
@@ -66,75 +60,49 @@ function App() {
 
   return (
     <AuthProvider user={user} logout={handleLogout}>
-      {loginError && (
-        <div className={`alert alert-danger m-3`} role="alert">
-          {loginError}
-        </div>
-      )}
-
       <Routes>
-        {/* Public routes */}
-        <Route 
-          path="/login" 
-          element={
-            loggedIn ? (
-              <Navigate to="/assignments" replace />
-            ) : (
-              <LoginForm onLogin={handleLogin} />
-            )
-          } 
-        />
-        
-        {/* Protected routes with shared layout */}
-        <Route 
-          path="/" 
-          element={
-            loggedIn ? (
-              <AuthenticatedLayout />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        >
-          <Route index element={<Navigate to="/assignments" replace />} />
-          <Route path="assignments" element={<OpenAssignments />} />
+        <Route element={<AuthenticatedLayout message={message} setMessage={setMessage} onLogout={handleLogout} />}>
+          <Route path="/" element={loggedIn ? <Navigate to="/assignments" replace /> : <Navigate to="/login" replace />} />
+          <Route path="/assignments" element={loggedIn ? <OpenAssignments /> : <Navigate to="/login" replace />} />
           <Route 
-            path="assignments/new" 
+            path="/assignments/new" 
             element={
-              <ProtectedRoute role="teacher" userRole={user?.role}>
-                <CreateAssignment />
-              </ProtectedRoute>
+              loggedIn ? (
+                <ProtectedRoute requiredRole="teacher" userRole={user?.role}>
+                  <CreateAssignment />
+                </ProtectedRoute>
+              ) : (
+                <Navigate to="/login" replace />
+              )
             } 
           />
           <Route 
-            path="my/scores" 
+            path="/my/scores" 
             element={
-              <ProtectedRoute role="student" userRole={user?.role}>
-                <MyScores />
-              </ProtectedRoute>
+              loggedIn ? (
+                <ProtectedRoute requiredRole="student" userRole={user?.role}>
+                  <MyScores />
+                </ProtectedRoute>
+              ) : (
+                <Navigate to="/login" replace />
+              )
             } 
           />
           <Route 
-            path="statistics" 
+            path="/statistics" 
             element={
-              <ProtectedRoute role="teacher" userRole={user?.role}>
-                <Statistics />
-              </ProtectedRoute>
+              loggedIn ? (
+                <ProtectedRoute requiredRole="teacher" userRole={user?.role}>
+                  <Statistics />
+                </ProtectedRoute>
+              ) : (
+                <Navigate to="/login" replace />
+              )
             } 
           />
         </Route>
-
-        {/* Catch all */}
-        <Route 
-          path="*" 
-          element={
-            loggedIn ? (
-              <Navigate to="/assignments" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          } 
-        />
+        <Route path="/login" element={loggedIn ? <Navigate replace to="/assignments" /> : <LoginForm handleLogin={handleLogin} />} />
+        <Route path="*" element={loggedIn ? <Navigate to="/assignments" replace /> : <Navigate to="/login" replace />} />
       </Routes>
     </AuthProvider>
   );

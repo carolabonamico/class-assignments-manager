@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Alert } from 'react';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StudentAverageCard from '../components/StudentAverageCard';
@@ -35,7 +35,7 @@ function MyScores() {
       </div>
 
       {error && (
-        <div className="alert alert-danger">{error}</div>
+        <Alert variant="danger">{error}</Alert>
       )}
 
       {/* Weighted Average Card */}

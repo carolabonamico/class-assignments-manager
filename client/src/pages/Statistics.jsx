@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Alert } from 'react';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StatsTable from '../components/StatsTable';
@@ -48,7 +48,7 @@ function Statistics() {
       </p>
 
       {error && (
-        <div className="alert alert-danger">{error}</div>
+        <Alert variant="danger">{error}</Alert>
       )}
 
       <StatsTable 
