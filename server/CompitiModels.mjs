@@ -39,6 +39,7 @@ export class StudentStats {
     this.name = name;
     this.open_assignments = open_assignments;
     this.closed_assignments = closed_assignments;
+    this.total_assignments = closed_assignments + open_assignments;
     this.weighted_average = weighted_average;
   }
 }

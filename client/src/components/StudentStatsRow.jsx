@@ -1,16 +1,15 @@
 import { Badge, Row, Col } from 'react-bootstrap';
 
 function StudentStatsRow({ student }) {
-  const getWeightedAverageDisplay = (average) => {
-    if (average === null || average === undefined) {
-      return 'N/A';
-    }
-    return `${average.toFixed(1)}/30`;
-  };
-
-  const weightedAverage = student.weighted_average;
-  const weightedAverageDisplay = getWeightedAverageDisplay(weightedAverage);
-  const isNumber = typeof weightedAverage === 'number' && !isNaN(weightedAverage);
+  
+  const average = student.weighted_average;
+  
+  const averageDisplay = student.total_assignments === 0 || average == null 
+    ? 'N/A' 
+    : `${average.toFixed(1)}/30`;
+  const averageClass = student.total_assignments > 0 && average != null 
+    ? (average >= 18 ? 'text-success' : 'text-danger') 
+    : '';
 
   return (
     <Row className="border-bottom py-3 align-items-center">
@@ -24,19 +23,11 @@ function StudentStatsRow({ student }) {
         {student.closed_assignments || 0}
       </Col>
       <Col md={2} className="text-center">
-        {student.open_assignments + student.closed_assignments || 0}
+        {student.total_assignments || 0}
       </Col>
       <Col md={2} className="text-center">
-        <span
-          className={
-            !isNumber
-              ? ''
-              : weightedAverage >= 18
-              ? 'text-success'
-              : 'text-danger'
-          }
-        >
-          {weightedAverageDisplay}
+        <span className={averageClass}>
+          {averageDisplay}
         </span>
       </Col>
     </Row>
