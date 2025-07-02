@@ -58,7 +58,7 @@ function Navigation({ onLogout }) {
 
             <Nav>
               <Navbar.Text className="me-3">
-                Benvenuto, <strong>{user.name}</strong> ({user.role === 'teacher' ? 'Docente' : 'Studente'})
+                <strong>{user.name}</strong> ({user.role === 'teacher' ? 'Docente' : 'Studente'})
               </Navbar.Text>
               <Button variant="outline-light" onClick={onLogout}>
                 Logout

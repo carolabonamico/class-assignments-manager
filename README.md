@@ -303,6 +303,7 @@ Student statistics for teacher's assigned tasks (teachers only)
 - `StudentStatsRow.jsx`: row component for student statistics display
 - `ProtectedRoute.jsx`: helper component to protect routes based on user role
 - `AuthenticatedLayout.jsx`: layout component for authenticated routes with navigation and outlet
+- `Header.jsx`: header component for page titles
 
 ### Pages
 
@@ -323,29 +324,29 @@ Student statistics for teacher's assigned tasks (teachers only)
 
 ## Users Credentials
 
-| Username                             | Password    | Role    | Name                |
-| ------------------------------------ | ----------- | ------- | ------------------- |
-| mario.rossi@polito.it                | password123 | teacher | Prof. Mario Rossi   |
-| anna.verdi@polito.it                 | password456 | teacher | Prof.ssa Anna Verdi |
-| giulia.bianchi@studenti.polito.it    | student123  | student | Giulia Bianchi      |
-| marco.ferrari@studenti.polito.it     | student123  | student | Marco Ferrari       |
-| laura.russo@studenti.polito.it       | student123  | student | Laura Russo         |
-| alessandro.bruno@studenti.polito.it  | student123  | student | Alessandro Bruno    |
-| francesca.romano@studenti.polito.it  | student123  | student | Francesca Romano    |
-| davide.ricci@studenti.polito.it      | student123  | student | Davide Ricci        |
-| chiara.marino@studenti.polito.it     | student123  | student | Chiara Marino       |
-| luca.greco@studenti.polito.it        | student123  | student | Luca Greco          |
-| valentina.conti@studenti.polito.it   | student123  | student | Valentina Conti     |
-| simone.deluca@studenti.polito.it     | student123  | student | Simone De Luca      |
-| elena.galli@studenti.polito.it       | student123  | student | Elena Galli         |
-| matteo.lombardi@studenti.polito.it   | student123  | student | Matteo Lombardi     |
-| sara.moretti@studenti.polito.it      | student123  | student | Sara Moretti        |
-| andrea.barbieri@studenti.polito.it   | student123  | student | Andrea Barbieri     |
-| martina.fontana@studenti.polito.it   | student123  | student | Martina Fontana     |
-| riccardo.serra@studenti.polito.it    | student123  | student | Riccardo Serra      |
-| federica.vitale@studenti.polito.it   | student123  | student | Federica Vitale     |
-| nicola.pellegrini@studenti.polito.it | student123  | student | Nicola Pellegrini   |
-| roberta.caruso@studenti.polito.it    | student123  | student | Roberta Caruso      |
-| stefano.fiore@studenti.polito.it     | student123  | student | Stefano Fiore       |
-| alessia.desantis@studenti.polito.it  | student123  | student | Alessia De Santis   |
-| emanuele.marini@studenti.polito.it   | student123  | student | Emanuele Marini     |
+| Username                             | Password    | Role    | Name              |
+| ------------------------------------ | ----------- | ------- | ----------------- |
+| mario.rossi@polito.it                | password123 | teacher | Mario Rossi       |
+| anna.verdi@polito.it                 | password456 | teacher | Anna Verdi        |
+| giulia.bianchi@studenti.polito.it    | student123  | student | Giulia Bianchi    |
+| marco.ferrari@studenti.polito.it     | student123  | student | Marco Ferrari     |
+| laura.russo@studenti.polito.it       | student123  | student | Laura Russo       |
+| alessandro.bruno@studenti.polito.it  | student123  | student | Alessandro Bruno  |
+| francesca.romano@studenti.polito.it  | student123  | student | Francesca Romano  |
+| davide.ricci@studenti.polito.it      | student123  | student | Davide Ricci      |
+| chiara.marino@studenti.polito.it     | student123  | student | Chiara Marino     |
+| luca.greco@studenti.polito.it        | student123  | student | Luca Greco        |
+| valentina.conti@studenti.polito.it   | student123  | student | Valentina Conti   |
+| simone.deluca@studenti.polito.it     | student123  | student | Simone De Luca    |
+| elena.galli@studenti.polito.it       | student123  | student | Elena Galli       |
+| matteo.lombardi@studenti.polito.it   | student123  | student | Matteo Lombardi   |
+| sara.moretti@studenti.polito.it      | student123  | student | Sara Moretti      |
+| andrea.barbieri@studenti.polito.it   | student123  | student | Andrea Barbieri   |
+| martina.fontana@studenti.polito.it   | student123  | student | Martina Fontana   |
+| riccardo.serra@studenti.polito.it    | student123  | student | Riccardo Serra    |
+| federica.vitale@studenti.polito.it   | student123  | student | Federica Vitale   |
+| nicola.pellegrini@studenti.polito.it | student123  | student | Nicola Pellegrini |
+| roberta.caruso@studenti.polito.it    | student123  | student | Roberta Caruso    |
+| stefano.fiore@studenti.polito.it     | student123  | student | Stefano Fiore     |
+| alessia.desantis@studenti.polito.it  | student123  | student | Alessia De Santis |
+| emanuele.marini@studenti.polito.it   | student123  | student | Emanuele Marini   |

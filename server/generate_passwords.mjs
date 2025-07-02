@@ -22,8 +22,8 @@ function generatePasswordData(password) {
 async function generateAllPasswords() {
   // Teachers
   const teachers = [
-    { name: 'Prof. Mario Rossi', email: 'mario.rossi@polito.it', password: 'password123' },
-    { name: 'Prof.ssa Anna Verdi', email: 'anna.verdi@polito.it', password: 'password456' }
+    { name: 'Mario Rossi', email: 'mario.rossi@polito.it', password: 'password123' },
+    { name: 'Anna Verdi', email: 'anna.verdi@polito.it', password: 'password456' }
   ];
 
   for (const teacher of teachers) {
