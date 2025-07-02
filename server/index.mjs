@@ -22,7 +22,7 @@ passport.use(new LocalStrategy(async function verify(username, password, cb) {
   try {
     const user = await dao.getUser(username, password);
     if (!user)
-      return cb(null, false, 'Incorrect username or password');
+      return cb(null, false, 'Username o password errati');
     return cb(null, user);
   } catch (err) {
     return cb(err);
@@ -181,7 +181,7 @@ app.get('/api/assignments/open', isLoggedIn, async (req, res) => {
 app.post('/api/groups/validate', 
   isTeacher,
   [
-    check('studentIds').isArray({ min: 2, max: 6 }).withMessage('Select 2-6 students')
+    check('studentIds').isArray({ min: 2, max: 6 }).withMessage('Seleziona tra 2 e 6 studenti'),
   ],
   async (req, res) => {
     
@@ -214,8 +214,8 @@ app.post('/api/groups/validate',
 app.post('/api/assignments', 
   isTeacher,
   [
-    check('question').isLength({ min: 1 }).withMessage('Question is required'),
-    check('studentIds').isArray({ min: 2, max: 6 }).withMessage('Select 2-6 students')
+    check('question').isLength({ min: 1 }).withMessage('La domanda non può essere vuota'),
+    check('studentIds').isArray({ min: 2, max: 6 }).withMessage('Seleziona 2-6 studenti')
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -289,7 +289,7 @@ app.put('/api/assignments/:id/answer',
 app.put('/api/assignments/:id/evaluate',
   isTeacher,
   [
-    check('score').isInt({ min: 0, max: 30 }).withMessage('Score must be between 0 and 30')
+    check('score').isInt({ min: 0, max: 30 }).withMessage('Il punteggio deve essere un numero tra 0 e 30')
   ],
   async (req, res) => {
     const errors = validationResult(req);
