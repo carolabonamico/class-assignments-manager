@@ -19,7 +19,7 @@ function CreateAssignment() {
 
   async function createAssignmentAction(prevState, formData) {
     const questionText = formData.get('question') || question;
-    const studentIds = selectedStudents; // Using local state for selected students
+    const studentIds = selectedStudents; // Using local state for selected students because we want to validate the current selection
 
     if (!questionText || questionText.trim().length === 0) {
       return { error: 'La domanda è obbligatoria' };
