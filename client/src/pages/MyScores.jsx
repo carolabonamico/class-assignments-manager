@@ -3,6 +3,7 @@ import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StudentAverageCard from '../components/StudentAverageCard';
 import ClosedAssignmentTable from '../components/ClosedAssignmentTable';
+import Header from '../components/Header';
 
 function MyScores() {
   const [data, setData] = useState({ assignments: [], weightedAverage: null });
@@ -29,10 +30,8 @@ function MyScores() {
   const { assignments, weightedAverage } = data;
 
   return (
-    <div className="desktop-layout">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="text-primary-blue">I Miei Punteggi</h1>
-      </div>
+    <>
+      <Header title="I miei Punteggi" />
 
       {error && (
         <Alert variant="danger">{error}</Alert>
@@ -47,7 +46,7 @@ function MyScores() {
       {/* Assignments Table */}
       <ClosedAssignmentTable assignments={assignments}/>
 
-    </div>
+    </>
   );
 }
 

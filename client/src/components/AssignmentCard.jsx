@@ -1,67 +1,63 @@
-import { useState } from 'react';
-import { Card, Form, Button, } from 'react-bootstrap';
+import { useState, useActionState } from 'react';
+import { Card, Form, Button, Alert } from 'react-bootstrap';
 import API from '../API/api';
 import useAuth from '../hooks/useAuth';
 
-function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment, onError }) {
+function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) {
   const { user } = useAuth();
-  const [submitting, setSubmitting] = useState(false);
   const [answer, setAnswer] = useState(assignment.answer || '');
   const [evaluation, setEvaluation] = useState('');
 
-  const handleAnswerChange = (value) => {
-    setAnswer(value);
-  };
+  // useActionState per gestire il form di risposta
+  const [answerState, answerFormAction, isAnswerPending] = useActionState(submitAnswerAction, {});
 
-  const handleSubmitAnswer = async (e) => {
-    e.preventDefault();
+  async function submitAnswerAction(prevState, formData) {
+    const answerText = formData.get('answer');
     
-    if (!answer.trim()) {
-      onError('La risposta non può essere vuota');
-      return;
+    if (!answerText || !answerText.trim()) {
+      return { error: 'La risposta non può essere vuota' };
     }
 
-    setSubmitting(true);
-    
     try {
-      await API.updateAssignmentAnswer(assignment.id, answer);
+      await API.updateAssignmentAnswer(assignment.id, answerText);
       
       // Update the assignment with the new answer
-      onUpdateAssignment(assignment.id, { ...assignment, answer });
+      onUpdateAssignment(assignment.id, { ...assignment, answer: answerText });
       
+      return { success: 'Risposta salvata con successo!' };
     } catch (err) {
-      onError(err.error || err.message || 'Errore nel salvare la risposta');
-    } finally {
-      setSubmitting(false);
+      return { error: err.error || err.message || 'Errore nel salvare la risposta' };
     }
-  };
+  }
 
-  const handleEvaluationChange = (value) => {
-    setEvaluation(value);
-  };
+  // useActionState per gestire il form di valutazione
+  const [evalState, evalFormAction, isEvalPending] = useActionState(submitEvaluationAction, {});
 
-  const handleSubmitEvaluation = async (e) => {
-    e.preventDefault();
+  async function submitEvaluationAction(prevState, formData) {
+    const score = parseInt(formData.get('evaluation'));
     
-    const score = parseInt(evaluation);
     if (isNaN(score) || score < 0 || score > 30) {
-      onError('Il punteggio deve essere un numero tra 0 e 30');
-      return;
+      return { error: 'Il punteggio deve essere un numero tra 0 e 30' };
     }
 
-    setSubmitting(true);
-    
     try {
       await API.evaluateAssignment(assignment.id, score);
       
       // Remove the assignment from the list since it's now closed
       onRemoveAssignment(assignment.id);
       
+      return { success: 'Valutazione salvata con successo!' };
     } catch (err) {
-      onError(err.error || err.message || 'Errore nella valutazione');
-    } finally {
-      setSubmitting(false);
+      return { error: err.error || err.message || 'Errore nella valutazione' };
     }
+  }
+
+  const handleAnswerChange = (value) => {
+    setAnswer(value);
+  };
+
+  const handleEvaluationChange = (value) => {
+    setEvaluation(value);
   };
 
   return (
@@ -78,23 +74,30 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment, on
         {user.role === 'student' && (
           <div>
             <h6 className="fw-bold">La tua risposta:</h6>
-            <Form onSubmit={handleSubmitAnswer}>
+            
+            {/* Show loading/error states */}
+            {isAnswerPending && <Alert variant="warning">Salvando risposta...</Alert>}
+            {answerState.error && <Alert variant="danger">{answerState.error}</Alert>}
+            {answerState.success && <Alert variant="success">{answerState.success}</Alert>}
+            
+            <Form action={answerFormAction}>
               <Form.Group className="mb-3">
                 <Form.Control
                   as="textarea"
                   rows={4}
+                  name="answer"
                   value={answer}
                   onChange={(e) => handleAnswerChange(e.target.value)}
                   placeholder="Scrivi qui la tua risposta..."
-                  disabled={submitting}
+                  disabled={isAnswerPending}
                 />
               </Form.Group>
               <Button
                 type="submit"
                 variant="success"
-                disabled={submitting || !answer.trim()}
+                disabled={isAnswerPending || !answer.trim()}
               >
-                {submitting ? 'Salvando...' : 'Salva Risposta'}
+                {isAnswerPending ? 'Salvando...' : 'Salva Risposta'}
               </Button>
             </Form>
           </div>
@@ -110,26 +113,33 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment, on
                 </div>
                 
                 <h6 className="fw-bold">Valutazione:</h6>
-                <Form onSubmit={handleSubmitEvaluation}>
+                
+                {/* Show loading/error states */}
+                {isEvalPending && <Alert variant="warning">Salvando valutazione...</Alert>}
+                {evalState.error && <Alert variant="danger">{evalState.error}</Alert>}
+                {evalState.success && <Alert variant="success">{evalState.success}</Alert>}
+                
+                <Form action={evalFormAction}>
                   <Form.Group className="mb-3">
                     <div className="d-flex align-items-center gap-2">
                       <Form.Control
                         type="number"
+                        name="evaluation"
                         min="0"
                         max="30"
                         style={{ width: '100px' }}
                         value={evaluation}
                         onChange={(e) => handleEvaluationChange(e.target.value)}
                         placeholder="0-30"
-                        disabled={submitting}
+                        disabled={isEvalPending}
                       />
                       <span>/30</span>
                       <Button
                         type="submit"
                         variant="success"
-                        disabled={submitting || !evaluation}
+                        disabled={isEvalPending || !evaluation}
                       >
-                        {submitting ? 'Valutando...' : 'Valuta'}
+                        {isEvalPending ? 'Valutando...' : 'Valuta'}
                       </Button>
                     </div>
                   </Form.Group>

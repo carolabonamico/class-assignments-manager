@@ -37,7 +37,7 @@ function LoginForm({ handleLogin }) {
                             <Form.Group className="mb-3">
                                 <Form.Control
                                     type="email"
-                                    name="email"
+                                    name="username"
                                     required
                                     placeholder="Email"
                                     className="login-input"

@@ -12,6 +12,7 @@ function QuestionFormCard({ question, onQuestionChange }) {
           <Form.Control
             as="textarea"
             rows={8}
+            name="question"
             value={question}
             onChange={(e) => onQuestionChange(e.target.value)}
             placeholder="Es: Implementa un algoritmo di ordinamento merge sort in JavaScript e spiega la complessità temporale..."

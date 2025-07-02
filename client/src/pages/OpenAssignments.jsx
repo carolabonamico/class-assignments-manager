@@ -4,6 +4,7 @@ import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import AssignmentCard from '../components/AssignmentCard';
 import useAuth from '../hooks/useAuth';
+import Header from '../components/Header';
 
 function OpenAssignments() {
   const { user } = useAuth();
@@ -36,19 +37,11 @@ function OpenAssignments() {
     setAssignments(prev => prev.filter(assignment => assignment.id !== assignmentId));
   };
 
-  const handleError = (errorMessage) => {
-    setError(errorMessage);
-  };
-
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="desktop-layout">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="text-primary-blue">
-          {user.role === 'teacher' ? 'Compiti Aperti da Valutare' : 'Compiti Aperti'}
-        </h1>
-      </div>
+    <>
+      <Header title={user.role === 'teacher' ? 'Compiti Aperti da Valutare' : 'Compiti Aperti'} />
 
       {error && (
         <Alert variant="danger" onClose={() => setError('')} dismissible>
@@ -74,12 +67,11 @@ function OpenAssignments() {
               assignment={assignment}
               onUpdateAssignment={handleUpdateAssignment}
               onRemoveAssignment={handleRemoveAssignment}
-              onError={handleError}
             />
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
