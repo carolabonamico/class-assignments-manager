@@ -14,7 +14,11 @@ function LoginForm({ handleLogin }) {
             await handleLogin(credentials);
             return { success: true };
         } catch {
-            return { error: 'Email o password errate, riprovare.' };
+            return { 
+                error: 'Email o password errate, riprovare.',
+                username: credentials.username,
+                password: '' // Reset password (more secure)
+            };
         }
     }
 
@@ -29,7 +33,11 @@ function LoginForm({ handleLogin }) {
                 </div>
 
                 {isPending && <Alert variant="warning">Attendere la risposta del server...</Alert>}
-                {state.error && <Alert variant="danger">{state.error}</Alert>}
+                {state.error && 
+                    <Alert variant="danger" onClose={() => state.error = ''} dismissible>
+                        {state.error}
+                    </Alert>
+                }
                 
                 <Row className="justify-content-center">
                     <Col md={12}>
@@ -41,6 +49,7 @@ function LoginForm({ handleLogin }) {
                                     required
                                     placeholder="Email"
                                     className="login-input"
+                                    defaultValue={state.username || ''}
                                 />
                             </Form.Group>
 
@@ -52,6 +61,7 @@ function LoginForm({ handleLogin }) {
                                     minLength={8}
                                     placeholder="Password"
                                     className="login-input"
+                                    defaultValue={state.password || ''}
                                 />
                             </Form.Group>
 

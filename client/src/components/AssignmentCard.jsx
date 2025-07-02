@@ -72,13 +72,21 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
         </div>
 
         {user.role === 'student' && (
-          <div>
+          <>
             <h6 className="fw-bold">La tua risposta:</h6>
             
             {/* Show loading/error states */}
             {isAnswerPending && <Alert variant="warning">Salvando risposta...</Alert>}
-            {answerState.error && <Alert variant="danger">{answerState.error}</Alert>}
-            {answerState.success && <Alert variant="success">{answerState.success}</Alert>}
+            {answerState.error && 
+              <Alert variant="danger" dismissible onClose={() => answerState.error = ''}>
+                {answerState.error}
+              </Alert>
+            }
+            {answerState.success && 
+              <Alert variant="success" dismissible onClose={() => answerState.success = ''}>
+                {answerState.success}
+              </Alert>
+            }
             
             <Form action={answerFormAction}>
               <Form.Group className="mb-3">
@@ -100,57 +108,55 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
                 {isAnswerPending ? 'Salvando...' : 'Salva Risposta'}
               </Button>
             </Form>
-          </div>
+          </>
         )}
 
         {user.role === 'teacher' && (
-          <div>
-            {assignment.answer ? (
-              <div>
-                <h6 className="fw-bold">Risposta dello studente:</h6>
-                <div className="bg-light p-3 rounded mb-3">
-                  <p className="mb-0">{assignment.answer}</p>
-                </div>
-                
-                <h6 className="fw-bold">Valutazione:</h6>
-                
-                {/* Show loading/error states */}
-                {isEvalPending && <Alert variant="warning">Salvando valutazione...</Alert>}
-                {evalState.error && <Alert variant="danger">{evalState.error}</Alert>}
-                {evalState.success && <Alert variant="success">{evalState.success}</Alert>}
-                
-                <Form action={evalFormAction}>
-                  <Form.Group className="mb-3">
-                    <div className="d-flex align-items-center gap-2">
-                      <Form.Control
-                        type="number"
-                        name="evaluation"
-                        min="0"
-                        max="30"
-                        style={{ width: '100px' }}
-                        value={evaluation}
-                        onChange={(e) => handleEvaluationChange(e.target.value)}
-                        placeholder="0-30"
-                        disabled={isEvalPending}
-                      />
-                      <span>/30</span>
-                      <Button
-                        type="submit"
-                        variant="success"
-                        disabled={isEvalPending || !evaluation}
-                      >
-                        {isEvalPending ? 'Valutando...' : 'Valuta'}
-                      </Button>
-                    </div>
-                  </Form.Group>
-                </Form>
+          assignment.answer ? (
+            <>
+              <h6 className="fw-bold">Risposta dello studente:</h6>
+              <div className="bg-light rounded mb-3">
+                <p className="mb-0">{assignment.answer}</p>
               </div>
-            ) : (
-              <div className="text-muted">
-                <em>Nessuna risposta ancora fornita dagli studenti.</em>
-              </div>
-            )}
-          </div>
+              
+              <h6 className="fw-bold">Valutazione:</h6>
+              
+              {/* Show loading/error states */}
+              {isEvalPending && <Alert variant="warning">Salvando valutazione...</Alert>}
+              {evalState.error && <Alert variant="danger">{evalState.error}</Alert>}
+              {evalState.success && <Alert variant="success">{evalState.success}</Alert>}
+              
+              <Form action={evalFormAction}>
+                <Form.Group className="mb-3">
+                  <div className="d-flex align-items-center gap-2">
+                    <Form.Control
+                      type="number"
+                      name="evaluation"
+                      min="0"
+                      max="30"
+                      style={{ width: '100px' }}
+                      value={evaluation}
+                      onChange={(e) => handleEvaluationChange(e.target.value)}
+                      placeholder="0-30"
+                      disabled={isEvalPending}
+                    />
+                    <span>/30</span>
+                    <Button
+                      type="submit"
+                      variant="success"
+                      disabled={isEvalPending || !evaluation}
+                    >
+                      {isEvalPending ? 'Valutando...' : 'Valuta'}
+                    </Button>
+                  </div>
+                </Form.Group>
+              </Form>
+            </>
+          ) : (
+            <div className="text-muted">
+              <em>Nessuna risposta ancora fornita dagli studenti.</em>
+            </div>
+          )
         )}
       </Card.Body>
     </Card>
