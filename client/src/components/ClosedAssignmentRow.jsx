@@ -5,9 +5,7 @@ function ClosedAssignmentRow({ assignment }) {
         
     <Row key={assignment.id}>
         <Col md={8}>
-            <div>
-                {assignment.question}
-            </div>
+          {assignment.question}
         </Col>
         <Col className="text-center" md={4}>
             <span className={`${assignment.score >= 18 ? 'text-success' : 'text-danger'}`}>

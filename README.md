@@ -12,7 +12,7 @@
 - `/assignments/new` — Create new assignment with live constraint validation (teachers only) (protected)
 - `/statistics` — Student statistics with sortable data (teachers only) (protected)
 - `/my/scores` — Student's closed assignments and weighted average (students only) (protected)
-- `*` — Any other route redirects to `/assignments` if authenticated, or to `/login` if not authenticated
+- `*` — 404 Not Found page for any unrecognized route
 
 ## API Server
 
@@ -292,6 +292,7 @@ Student statistics for teacher's assigned tasks (teachers only)
 - `Navigation.jsx`: navigation bar with role-based menu and logout functionality
 - `LoginForm.jsx`: authentication form with validation and error handling
 - `LoadingSpinner.jsx`: reusable loading indicator component
+- `NotFound.jsx`: 404 error page component for unrecognized routes
 - `QuestionFormCard.jsx`: card component for assignment question input
 - `StudentSelectionCard.jsx`: component for student selection with real-time constraint validation
 - `AssignmentCard.jsx`: modular card component for assignment display and interaction

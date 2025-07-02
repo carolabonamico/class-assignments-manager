@@ -1,4 +1,4 @@
-import { Alert, Container, Row } from 'react-bootstrap';
+import { Alert, Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 import Navigation from './Navigation';
 

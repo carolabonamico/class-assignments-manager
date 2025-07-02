@@ -15,12 +15,11 @@ function CreateAssignment() {
   const [constraintError, setConstraintError] = useState('');
   const [checkingConstraints, setCheckingConstraints] = useState(false);
 
-  // useActionState per gestire il form submission
   const [state, formAction, isPending] = useActionState(createAssignmentAction, {});
 
   async function createAssignmentAction(prevState, formData) {
     const questionText = formData.get('question') || question;
-    const studentIds = selectedStudents; // Usiamo lo stato locale per gli studenti selezionati
+    const studentIds = selectedStudents; // Using local state for selected students
 
     if (!questionText || questionText.trim().length === 0) {
       return { error: 'La domanda è obbligatoria' };

@@ -15,8 +15,9 @@ function MyScores() {
       try {
         const result = await API.getClosedAvg();
         setData(result);
-      } catch {
-        setError('Errore nel caricamento dei punteggi');
+      } catch (err) {
+        setError(err.message || 'Errore nel caricamento dei punteggi');
+        setData({ assignments: [], weightedAverage: null });
       } finally {
         setLoading(false);
       }
@@ -38,10 +39,7 @@ function MyScores() {
       )}
 
       {/* Weighted Average Card */}
-      <StudentAverageCard 
-        average={weightedAverage} 
-        label="Media Ponderata" 
-      />
+      <StudentAverageCard average={weightedAverage}/>
 
       {/* Assignments Table */}
       <ClosedAssignmentTable assignments={assignments}/>

@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import AuthenticatedLayout from "./components/AuthenticatedLayout";
 import LoginForm from "./components/LoginForm";
+import NotFound from "./components/NotFound";
 import OpenAssignments from "./pages/OpenAssignments";
 import MyScores from "./pages/MyScores";
 import CreateAssignment from "./pages/CreateAssignment";
@@ -102,7 +103,7 @@ function App() {
           />
         </Route>
         <Route path="/login" element={loggedIn ? <Navigate replace to="/assignments" /> : <LoginForm handleLogin={handleLogin} />} />
-        <Route path="*" element={loggedIn ? <Navigate to="/assignments" replace /> : <Navigate to="/login" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthProvider>
   );

@@ -8,7 +8,7 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
   const [answer, setAnswer] = useState(assignment.answer || '');
   const [evaluation, setEvaluation] = useState('');
 
-  // useActionState per gestire il form di risposta
+  // Handle answer submission
   const [answerState, answerFormAction, isAnswerPending] = useActionState(submitAnswerAction, {});
 
   async function submitAnswerAction(prevState, formData) {
@@ -30,7 +30,7 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
     }
   }
 
-  // useActionState per gestire il form di valutazione
+  // Handle evaluation submission
   const [evalState, evalFormAction, isEvalPending] = useActionState(submitEvaluationAction, {});
 
   async function submitEvaluationAction(prevState, formData) {

@@ -18,7 +18,7 @@ export class User {
  * Assignment model - represents a homework/assignment
  */
 export class Assignment {
-  constructor(id, question, teacher_id, teacher_name, status = 'open', answer = null, score = null) {
+  constructor(id, question, teacher_id, teacher_name, status = 'open', answer = null, score = null, groupSize = 0) {
     this.id = id;
     this.question = question;
     this.teacher_id = teacher_id;
@@ -26,7 +26,7 @@ export class Assignment {
     this.status = status; // 'open' or 'closed'
     this.answer = answer;
     this.score = score; // 0-30
-    this.groupSize = 0; // Set by queries when needed
+    this.groupSize = groupSize; // Size of the group for this assignment
   }
 }
 
