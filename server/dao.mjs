@@ -225,8 +225,7 @@ export const getStudentStats = (teacherId) => {
             row.id, 
             row.name,
             row.open_assignments || 0,
-            row.closed_assignments || 0, 
-            row.open_assignments + row.closed_assignments,
+            row.closed_assignments || 0,
             weightedAverage
           );
         });
