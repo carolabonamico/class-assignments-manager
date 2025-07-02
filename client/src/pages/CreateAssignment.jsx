@@ -95,7 +95,7 @@ function CreateAssignment() {
           setConstraintError('');
         }
       } catch (err) {
-        console.warn('Error checking constraints:', err);
+        console.warn('Errore controllando i vincoli:', err);
         setConstraintError('');
       } finally {
         setCheckingConstraints(false);
