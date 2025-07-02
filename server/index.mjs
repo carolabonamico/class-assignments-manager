@@ -1,4 +1,3 @@
-// Imports
 import express from 'express';
 import cors from 'cors';
 import { check, validationResult } from 'express-validator';
@@ -66,17 +65,17 @@ const isLoggedIn = (req, res, next) => {
  */
 const requireRole = (requiredRole) => {
   return (req, res, next) => {
+    
     if (!req.isAuthenticated()) {
       return res.status(401).json({ error: 'Non autenticato' });
     }
+
     if (!req.user || req.user.role !== requiredRole) {
       const roleCapitalized = requiredRole.charAt(0).toUpperCase() + requiredRole.slice(1);
       return res.status(403).json({ 
         error: `Accesso negato. ${roleCapitalized} ruolo richiesto.` 
       });
     }
-    // User is authenticated and has the required role
-    // next() allows the request to proceed
     return next();
   };
 };
@@ -220,6 +219,7 @@ app.post('/api/assignments',
   ],
   async (req, res) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -249,14 +249,17 @@ app.post('/api/assignments',
  */
 app.put('/api/assignments/:id/answer',
   isStudent,
-  [check('answer').custom(value => {
+  [
+    check('answer').custom(value => {
     if (!value || typeof value !== 'string' || value.trim().length === 0) {
       throw new Error('La risposta non può essere vuota o contenere solo spazi');
     }
     return true;
-  })],
+    })
+  ],
   async (req, res) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -285,9 +288,12 @@ app.put('/api/assignments/:id/answer',
  */
 app.put('/api/assignments/:id/evaluate',
   isTeacher,
-  [check('score').isInt({ min: 0, max: 30 }).withMessage('Score must be between 0 and 30')],
+  [
+    check('score').isInt({ min: 0, max: 30 }).withMessage('Score must be between 0 and 30')
+  ],
   async (req, res) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }

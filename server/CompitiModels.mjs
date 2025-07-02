@@ -1,6 +1,4 @@
-/**
- * Data models for the Compiti (Assignment) management system
- */
+/* Data models for the Compiti (Assignment) management system */
 
 /**
  * User model - represents both students and teachers
