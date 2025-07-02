@@ -2,9 +2,8 @@ import { Row, Col } from "react-bootstrap";
 
 function ClosedAssignmentRow({ assignment }) {
   return (
-        
-    <Row key={assignment.id}>
-      <Col md={8} className="ps-3">
+    <Row className="border-bottom py-3 align-items-center">
+      <Col md={8}>
         {assignment.question}
       </Col>
       <Col className="text-center" md={4}>
@@ -13,7 +12,6 @@ function ClosedAssignmentRow({ assignment }) {
           </span>
       </Col>
     </Row>
-
   );
 }
 

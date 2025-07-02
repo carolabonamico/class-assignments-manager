@@ -13,7 +13,7 @@ function StatsTable({ stats, sortBy, onSortChange }) {
         {stats.length === 0 ? (
           <p className="text-muted text-center">Nessuna statistica disponibile.</p>
         ) : (
-          <div>
+          <>
             {/* Header Row */}
             <Row className="fw-bold border-bottom pb-2 mb-3">
               <Col md={4}>Studente</Col>
@@ -27,7 +27,7 @@ function StatsTable({ stats, sortBy, onSortChange }) {
             {stats.map(student => (
               <StudentStatsRow key={student.id} student={student} />
             ))}
-          </div>
+          </>
         )}
       </Card.Body>
     </Card>

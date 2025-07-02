@@ -15,7 +15,7 @@ function ClosedAssignmentTable({ assignments }) {
               <p className="text-muted">Non hai ancora completato nessun compito.</p>
             </div>
           ) : (
-            <div>
+            <>
               {/* Header Row */}
               <Row className="fw-bold border-bottom pb-2 mb-3">
                 <Col md={8} className="ps-3">Domanda</Col>
@@ -26,7 +26,7 @@ function ClosedAssignmentTable({ assignments }) {
               {assignments.map(assignment => (
                 <ClosedAssignmentRow key={assignment.id} assignment={assignment} />
               ))}
-            </div>
+            </>
           )}
         </Card.Body>
       </Card>

@@ -60,7 +60,7 @@ function OpenAssignments() {
           </Card.Body>
         </Card>
       ) : (
-        <div>
+        <>
           {assignments.map(assignment => (
             <AssignmentCard
               key={assignment.id}
@@ -69,7 +69,7 @@ function OpenAssignments() {
               onRemoveAssignment={handleRemoveAssignment}
             />
           ))}
-        </div>
+        </>
       )}
     </>
   );
