@@ -120,9 +120,9 @@ const API = {
         throw "Not authenticated";
       } else if (response.status === 403) {
         throw "Not a teacher";
-      } else if (response.status === 400) {
-        const errData = await response.json();
-        throw errData.error || "Invalid student IDs array (must be 2-6 students)";
+      } else if (response.status === 422) {
+        const errMessage = await response.json();
+        throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
       } else if (response.status === 500) {
         throw "Internal server error";
       } else {
@@ -163,12 +163,8 @@ const API = {
       } else if (response.status === 500) {
         throw "Internal server error";
       } else {
-        let errMessage = await response.json();
-        if (response.status === 422)
-          errMessage = `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`
-        else
-          errMessage = errMessage.error;
-        throw errMessage;
+        const errMessage = await response.json();
+        throw errMessage.error || "Internal server error";
       }
     }
   },
@@ -197,21 +193,17 @@ const API = {
         throw "Not authenticated";
       } else if (response.status === 403) {
         throw "Not a student";
-      } else if (response.status === 400) {
+      } else if (response.status === 404) {
         const errData = await response.json();
-        throw errData.error || "Empty/invalid answer, assignment not open";
+        throw errData.error || "Student not assigned to this assignment/assignment not open";
       } else if (response.status === 422) {
         const errMessage = await response.json();
         throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
       } else if (response.status === 500) {
         throw "Internal server error";
       } else {
-        let errMessage = await response.json();
-        if (response.status === 422)
-          errMessage = `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`
-        else
-          errMessage = errMessage.error;
-        throw errMessage;
+        const errMessage = await response.json();
+        throw errMessage.error || "Internal server error";
       }
     }
   },
@@ -240,21 +232,17 @@ const API = {
         throw "Not authenticated";
       } else if (response.status === 403) {
         throw "Not a teacher";
-      } else if (response.status === 400) {
+      } else if (response.status === 404) {
         const errData = await response.json();
-        throw errData.error || "Invalid score, assignment not open";
+        throw errData.error;
       } else if (response.status === 422) {
         const errMessage = await response.json();
         throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
       } else if (response.status === 500) {
         throw "Internal server error";
       } else {
-        let errMessage = await response.json();
-        if (response.status === 422)
-          errMessage = `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`
-        else
-          errMessage = errMessage.error;
-        throw errMessage;
+        const errMessage = await response.json();
+        throw errMessage.error || "Internal server error";
       }
     }
   },

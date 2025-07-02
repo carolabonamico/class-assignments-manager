@@ -78,7 +78,11 @@ List all students
 - **Response Body:**
   ```json
   [
-    { "id": "integer", "name": "string", "email": "string", "role": "student" },
+    { "id": "integer", 
+      "name": "string", 
+      "email": "string", 
+      "role": "student" 
+    },
     ...
   ]
   ```
@@ -136,7 +140,7 @@ Check group constraints before assignment creation (teachers only)
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a teacher
-  - `400 Bad Request`: invalid student IDs array (must be 2-6 students)
+  - `422 Unprocessable Entity`: invalid student IDs array (must be 2-6 students)
   - `500 Internal Server Error`: server/database error
 
 ### POST `/api/assignments`
@@ -153,7 +157,8 @@ Create new assignment (teachers only)
 - **Response Body:**
   ```json
   {
-    "id": "integer"
+    "id": "integer",
+    "message": "Assignment created successfully"
   }
   ```
 - **Success Codes:**
@@ -161,7 +166,7 @@ Create new assignment (teachers only)
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a teacher
-  - `400 Bad Request`: missing/invalid fields or validation errors (2-6 students required)
+  - `422 Unprocessable Entity`: missing/invalid fields or validation errors (2-6 students required)
   - `500 Internal Server Error`: server/database error
 
 ### PUT `/api/assignments/:id/answer`
@@ -188,7 +193,8 @@ Submit answer (students only)
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a student
-  - `400 Bad Request`: empty/invalid answer, assignment not open
+  - `404 Not Found`: assignment not found or not open
+  - `422 Unprocessable Entity`: empty/invalid answer
   - `500 Internal Server Error`: server/database error
 
 ### PUT `/api/assignments/:id/evaluate`
@@ -217,7 +223,8 @@ Evaluate assignment (teachers only)
 - **Error Codes:**
   - `401 Unauthorized`: not authenticated
   - `403 Forbidden`: not a teacher
-  - `400 Bad Request`: invalid score, assignment not open
+  - `404 Not Found`: assignment not found or not open
+  - `422 Unprocessable Entity`: invalid score
   - `500 Internal Server Error`: server/database error
 
 ### GET `/api/assignments/closed-with-average`

@@ -119,9 +119,9 @@ export const updateAssignmentAnswer = (assignmentId, answer, studentId) => {
       if (err) {
         reject(err);
       } else if (row === undefined) {
-        resolve({error: "Studente non autorizzato per questo compito."});
+        resolve({error: "Student not assigned to this assignment."});
       } else if (row.status !== 'open') {
-        resolve({error: "Il compito è chiuso, non è possibile modificare la risposta."});
+        resolve({error: "Assignment is closed, cannot modify the answer."});
       } else {
         const sql = 'UPDATE assignments SET answer = ? WHERE id = ?';
         
@@ -154,11 +154,11 @@ export const evaluateAssignment = (assignmentId, score, teacherId) => {
       if (err) {
         reject(err);
       } else if (row === undefined) {
-        resolve({error: "Compito non trovato."});
+        resolve({error: "Assignment not found."});
       } else if (row.teacher_id !== teacherId) {
-        resolve({error: "Non autorizzato a valutare questo compito."});
+        resolve({error: "Not authorized to evaluate this assignment."});
       } else if (!row.answer) {
-        resolve({error: "Impossibile valutare il compito senza risposta."});
+        resolve({error: "Cannot evaluate assignment without answer."});
       } else {
         const sql = 'UPDATE assignments SET score = ?, status = ? WHERE id = ?';
         
@@ -287,7 +287,7 @@ export const checkGroupConstraints = (studentIds, teacherId) => {
           
           resolve(new GroupValidation(
             false, 
-            `Alcuni studenti hanno già lavorato insieme in 2 o più compiti: ${conflictingPairs.map(p => `${p.student1} e ${p.student2} (${p.count} volte)`).join(', ')}`,
+            `Some students have already worked together in 2 or more assignments: ${conflictingPairs.map(p => `${p.student1} and ${p.student2} (${p.count} times)`).join(', ')}`,
             conflictingPairs
           ));
         } else {
