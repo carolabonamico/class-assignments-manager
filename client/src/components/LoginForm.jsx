@@ -32,7 +32,6 @@ function LoginForm({ handleLogin }) {
                     <h2 className="app-title">Sistema Gestione Compiti</h2>
                 </div>
 
-                {isPending && <Alert variant="warning">Attendere la risposta del server...</Alert>}
                 {state.error && 
                     <Alert variant="danger" onClose={() => state.error = ''} dismissible>
                         {state.error}

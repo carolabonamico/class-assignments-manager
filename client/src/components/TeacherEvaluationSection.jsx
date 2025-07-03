@@ -88,7 +88,7 @@ function TeacherEvaluationSection({ assignment, onRemoveAssignment, onEvaluation
                   variant="success"
                   disabled={isEvalPending || !evaluation}
                 >
-                  {isEvalPending ? 'Salvando...' : 'Salva'}
+                  {isEvalPending ? 'Salva...' : 'Salva'}
                 </Button>
                 <Button
                   type="button"

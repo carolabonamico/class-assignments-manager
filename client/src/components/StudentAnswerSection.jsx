@@ -104,7 +104,7 @@ function StudentAnswerSection({ assignment, onUpdateAssignment }) {
               variant="success"
               disabled={isAnswerPending || !answer.trim()}
             >
-              {isAnswerPending ? 'Salvando...' : 'Salva Risposta'}
+              {isAnswerPending ? 'Salvando...' : 'Salva'}
             </Button>
             <Button
               type="button"
