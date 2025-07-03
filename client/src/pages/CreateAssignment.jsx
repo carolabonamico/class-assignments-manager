@@ -137,7 +137,6 @@ function CreateAssignment() {
               students={students}
               selectedStudents={selectedStudents}
               onStudentToggle={handleStudentSelection}
-              submitting={isPending}
               constraintError={constraintError}
               checkingConstraints={checkingConstraints}
             />

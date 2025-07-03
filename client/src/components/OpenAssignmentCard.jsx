@@ -128,19 +128,21 @@ function OpenAssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment
               
               <Form action={evalFormAction}>
                 <Form.Group>
-                  <div className="d-flex align-items-center gap-2">
-                    <Form.Control
-                      type="number"
-                      name="evaluation"
-                      min="0"
-                      max="30"
-                      style={{ width: '100px' }}
-                      value={evaluation}
-                      onChange={(e) => handleEvaluationChange(e.target.value)}
-                      placeholder="0-30"
-                      disabled={isEvalPending}
-                    />
-                    <span>/30</span>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div className="d-flex align-items-center">
+                      <Form.Control
+                        type="number"
+                        name="evaluation"
+                        min="0"
+                        max="30"
+                        style={{ width: '100px' }}
+                        value={evaluation}
+                        onChange={(e) => handleEvaluationChange(e.target.value)}
+                        placeholder="0-30"
+                        disabled={isEvalPending}
+                      />
+                      <span className="ms-2">/30</span>
+                    </div>
                     <Button
                       type="submit"
                       variant="success"
