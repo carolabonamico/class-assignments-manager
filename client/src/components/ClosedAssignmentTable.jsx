@@ -17,7 +17,7 @@ function ClosedAssignmentTable({ assignments }) {
           ) : (
             <>
               {/* Header Row */}
-              <Row className="fw-bold border-bottom pb-2 mb-3">
+              <Row className="fw-bold border-bottom pb-2">
                 <Col md={8} className="ps-3">Domanda</Col>
                 <Col md={4} className="text-center">Punteggio</Col>
               </Row>

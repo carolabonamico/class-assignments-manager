@@ -32,7 +32,10 @@ function MyScores() {
 
   return (
     <>
-      <PageHeader title="I miei Punteggi" />
+      <PageHeader 
+        title="I miei Punteggi" 
+        description="Visualizza i tuoi compiti chiusi e la media ponderata dei punteggi."
+      />
 
       {error && (
         <Alert variant="danger">{error}</Alert>

@@ -11,6 +11,7 @@ function OpenAssignments() {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [evaluationAlert, setEvaluationAlert] = useState(null); // { type: 'success'|'error', message: string }
 
   useEffect(() => {
     const fetchOpenAssignments = async () => {
@@ -41,11 +42,26 @@ function OpenAssignments() {
 
   return (
     <>
-      <PageHeader title={user.role === 'teacher' ? 'Compiti Aperti da Valutare' : 'Compiti Aperti'} />
+      <PageHeader 
+        title={user.role === 'teacher' ? 'Compiti Aperti da Valutare' : 'Compiti Aperti'} 
+        description={user.role === 'teacher' 
+          ? 'Valuta i compiti aperti dagli studenti.' 
+          : 'Invia le tue risposte ai compiti aperti.'}
+      />
 
       {error && (
         <Alert variant="danger" onClose={() => setError('')} dismissible>
           {error}
+        </Alert>
+      )}
+
+      {evaluationAlert && (
+        <Alert 
+          variant={evaluationAlert.type === 'success' ? 'success' : 'danger'} 
+          onClose={() => setEvaluationAlert(null)} 
+          dismissible
+        >
+          {evaluationAlert.message}
         </Alert>
       )}
 
@@ -67,6 +83,7 @@ function OpenAssignments() {
               assignment={assignment}
               onUpdateAssignment={handleUpdateAssignment}
               onRemoveAssignment={handleRemoveAssignment}
+              onEvaluationAlert={setEvaluationAlert}
             />
           ))}
         </>

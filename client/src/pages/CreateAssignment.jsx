@@ -109,7 +109,10 @@ function CreateAssignment() {
 
   return (
     <>
-      <PageHeader title="Crea Nuovo Compito" />
+      <PageHeader
+        title="Crea Nuovo Compito" 
+        description="Crea un nuovo compito per gli studenti selezionati."
+      />
 
       {/* Show loading state */}
       {isPending && <Alert variant="warning">Creazione compito in corso...</Alert>}

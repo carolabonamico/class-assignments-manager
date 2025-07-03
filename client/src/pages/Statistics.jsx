@@ -43,10 +43,10 @@ function Statistics() {
 
   return (
     <>
-      <PageHeader title="Statistiche della Classe" />
-      <p className="text-muted mb-4">
-        Panoramica dello stato dei compiti per tutti gli studenti della classe.
-      </p>
+      <PageHeader 
+        title="Statistiche della Classe" 
+        description="Panoramica dello stato dei compiti per tutti gli studenti della classe."
+      />
 
       {error && (
         <Alert variant="danger">{error}</Alert>

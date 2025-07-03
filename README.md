@@ -311,7 +311,9 @@ Student statistics for teacher's assigned tasks (teachers only)
 - `StatsRow.jsx`: row component for student statistics display
 - `ProtectedRoute.jsx`: helper component to protect routes based on user role
 - `AuthenticatedLayout.jsx`: layout component for authenticated routes with navigation and outlet
-- `PageHeader.jsx`: header component for page titles
+- `PageHeader.jsx`: header component for page titles and descriptions
+- `StudentAnswerSection.jsx`: section for students to submit answers with validation
+- `TeacherEvaluationSection.jsx`: section for teachers to evaluate assignments with validation
 
 ### Pages
 
