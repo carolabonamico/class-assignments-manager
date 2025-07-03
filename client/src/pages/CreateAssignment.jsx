@@ -125,7 +125,7 @@ function CreateAssignment() {
       )}
 
       {/* Form for creating a new assignment */}
-      <Form action={formAction}>
+      <Form id="createAssignmentForm" action={formAction}>
         <div className="desktop-form">
           <div className="desktop-grid">
             <NewQuestionFormCard
@@ -147,6 +147,7 @@ function CreateAssignment() {
       <Button 
         type="submit" 
         variant="success" 
+        form="createAssignmentForm"
         disabled={
           isPending || 
           selectedStudents.length < 2 || 
