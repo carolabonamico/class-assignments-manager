@@ -46,10 +46,10 @@ app.use(passport.authenticate('session'));
 
 /**
  * Middleware to check if the user is logged in
- * @param {object} req - The request object
- * @param {object} res - The response object
- * @param {function} next - The next middleware function
- * @returns {void} - Calls next() if authenticated, otherwise sends a 401 response
+ * @param {object} req The request object
+ * @param {object} res The response object
+ * @param {function} next The next middleware function
+ * @returns {void} Calls next() if authenticated, otherwise sends a 401 response
  */
 const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -60,8 +60,8 @@ const isLoggedIn = (req, res, next) => {
 
 /**
  * Role-based authorization middleware
- * @param {string} requiredRole - The role required to access the route
- * @returns {function} - Middleware function
+ * @param {string} requiredRole The role required to access the route
+ * @returns {function} Middleware function
  */
 const requireRole = (requiredRole) => {
   return (req, res, next) => {
@@ -89,8 +89,8 @@ const isStudent = requireRole('student');
  * Route to create a new session (login)
  * Uses Passport.js for local authentication.
  * @route POST /api/sessions
- * @param {string} req.body.username - The username of the user.
- * @param {string} req.body.password - The password of the user.
+ * @param {string} req.body.username The username of the user.
+ * @param {string} req.body.password The password of the user.
  * @returns {object} The authenticated user object on success.
  * @returns {object} An error message on failure.
  */
@@ -178,7 +178,7 @@ app.get('/api/assignments/open', isLoggedIn, async (req, res) => {
  * Route to check group constraints before assignment creation
  * Allows teachers to validate if a group of students can work together.
  * @route POST /api/groups/validate
- * @param {Array} req.body.studentIds - An array of student IDs to check (2-6 students).
+ * @param {Array} req.body.studentIds An array of student IDs to check (2-6 students).
  * @returns {object} Validation result with isValid boolean and error message if applicable.
  */
 app.post('/api/groups/validate', 
@@ -209,8 +209,8 @@ app.post('/api/groups/validate',
  * Route to create a new assignment
  * Allows teachers to create a new assignment for a group of students.
  * @route POST /api/assignments
- * @param {string} req.body.question - The question for the assignment.
- * @param {Array} req.body.studentIds - An array of student IDs to assign the assignment to (2-6 students).
+ * @param {string} req.body.question The question for the assignment.
+ * @param {Array} req.body.studentIds An array of student IDs to assign the assignment to (2-6 students).
  * @returns {object} The created assignment object on success.
  * @returns {object} An error message if validation fails or if the user is not a teacher.
  */
@@ -248,8 +248,8 @@ app.post('/api/assignments',
  * Route to update an assignment's answer
  * Allows students to submit their answers for an assignment.
  * @route PUT /api/assignments/:id/answer
- * @param {string} req.params.id - The ID of the assignment.
- * @param {string} req.body.answer - The answer to the assignment.
+ * @param {string} req.params.id The ID of the assignment.
+ * @param {string} req.body.answer The answer to the assignment.
  * @returns {object} The updated assignment object on success.
  * @returns {object} An error message if validation fails or if the user is not a student.
  */
@@ -290,8 +290,8 @@ app.put('/api/assignments/:id/answer',
  * Route to evaluate an assignment
  * Allows teachers to evaluate a student's assignment and assign a score.
  * @route PUT /api/assignments/:id/evaluate
- * @param {string} req.params.id - The ID of the assignment.
- * @param {number} req.body.score - The score to assign (0-30).
+ * @param {string} req.params.id The ID of the assignment.
+ * @param {number} req.body.score The score to assign (0-30).
  * @returns {object} The updated assignment object on success.
  * @returns {object} An error message if validation fails or if the user is not a teacher.
  */

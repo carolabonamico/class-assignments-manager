@@ -2,7 +2,7 @@
 
 /**
  * Calculates the weighted average of a student
- * @param {Array} assignments - Array of assignments with score and groupSize
+ * @param {Array} assignments Array of assignments with score and groupSize
  * @returns {number|null} Weighted average or null if no assignments evaluated
  * @description It is just necessary to pass as input an array of objects with 'score' and 'groupSize' properties.
  */
@@ -27,7 +27,7 @@ function calculateWeightedAverage(assignments) {
 
 /**
  * Generates student pairs from an array of IDs
- * @param {Array} studentIds - Array of student IDs
+ * @param {Array} studentIds Array of student IDs
  * @returns {Array} Array of pairs [id1, id2] where id1 < id2
  * @description This function generates all unique pairs of students from the provided IDs.
  */

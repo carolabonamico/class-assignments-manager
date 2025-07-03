@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 /**
  * Generates password data (salt and hashed password) using the scrypt algorithm.
- * @param {string} password - The password to hash.
+ * @param {string} password The password to hash.
  * @returns {Promise<object>} A promise that resolves to an object containing the salt and hashed password.
  */
 function generatePasswordData(password) {

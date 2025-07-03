@@ -14,9 +14,9 @@ const db = new sqlite.Database('compiti.sqlite', (err) => {
 
 /**
  * Get a user by email and password
- * @param {string} email - The email of the user
- * @param {string} password - The password of the user
- * @returns {Promise<User|boolean>} - Returns a User object if authentication is successful, false otherwise
+ * @param {string} email The email of the user
+ * @param {string} password The password of the user
+ * @returns {Promise<User|boolean>} Returns a User object if authentication is successful, false otherwise
  */
 export const getUser = (email, password) => {
   return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ export const getUser = (email, password) => {
 
 /**
  * List all students in the system
- * @returns {Promise<User[]>} - Returns an array of User objects representing students
+ * @returns {Promise<User[]>} Returns an array of User objects representing students
  */
 export const listStudents = () => {
   return new Promise((resolve, reject) => {
@@ -67,11 +67,11 @@ export const listStudents = () => {
 
 /**
  * Add a new assignment
- * @param {string} question - The question or task of the assignment
- * @param {number[]} studentIds - Array of student IDs to assign the homework to
- * @param {number} teacherId - The ID of the teacher creating the assignment
- * @returns {Promise<number>} - Returns the ID of the created assignment
- * @throws {Error} - Throws an error if the assignment creation fails
+ * @param {string} question The question or task of the assignment
+ * @param {number[]} studentIds Array of student IDs to assign the homework to
+ * @param {number} teacherId The ID of the teacher creating the assignment
+ * @returns {Promise<number>} Returns the ID of the created assignment
+ * @throws {Error} Throws an error if the assignment creation fails
  */
 export const addAssignment = (question, studentIds, teacherId) => {
   return new Promise((resolve, reject) => {
@@ -101,11 +101,11 @@ export const addAssignment = (question, studentIds, teacherId) => {
 
 /**
  * Update an assignment's question
- * @param {number} assignmentId - The ID of the assignment to update
- * @param {string} question - The new question for the assignment
- * @param {number} teacherId - The ID of the teacher updating the assignment
- * @returns {Promise<number>} - Returns the number of rows updated
- * @throws {Error} - Throws an error if the update fails or if the teacher is not authorized
+ * @param {number} assignmentId The ID of the assignment to update
+ * @param {string} question The new question for the assignment
+ * @param {number} teacherId The ID of the teacher updating the assignment
+ * @returns {Promise<number>} Returns the number of rows updated
+ * @throws {Error} Throws an error if the update fails or if the teacher is not authorized
  */
 export const updateAssignmentAnswer = (assignmentId, answer, studentId) => {
   return new Promise((resolve, reject) => {
@@ -139,11 +139,11 @@ export const updateAssignmentAnswer = (assignmentId, answer, studentId) => {
 
 /**
  * Evaluate an assignment
- * @param {number} assignmentId - The ID of the assignment to evaluate
- * @param {number} score - The score to assign to the assignment (0-30)
- * @param {number} teacherId - The ID of the teacher evaluating the assignment
- * @returns {Promise<number|{error: string}>} - Returns the number of rows updated, or an error object if evaluation fails
- * @throws {Error} - Throws an error if the evaluation fails or if the teacher is not authorized
+ * @param {number} assignmentId The ID of the assignment to evaluate
+ * @param {number} score The score to assign to the assignment (0-30)
+ * @param {number} teacherId The ID of the teacher evaluating the assignment
+ * @returns {Promise<number|{error: string}>} Returns the number of rows updated, or an error object if evaluation fails
+ * @throws {Error} Throws an error if the evaluation fails or if the teacher is not authorized
  */
 export const evaluateAssignment = (assignmentId, score, teacherId) => {
   return new Promise((resolve, reject) => {
@@ -178,9 +178,9 @@ export const evaluateAssignment = (assignmentId, score, teacherId) => {
 
 /**
  * Get statistics for all students of a teacher
- * @param {number} teacherId - The ID of the teacher
- * @returns {Promise<StudentStats[]>} - Returns an array of StudentStats objects
- * @throws {Error} - Throws an error if the query fails
+ * @param {number} teacherId The ID of the teacher
+ * @returns {Promise<StudentStats[]>} Returns an array of StudentStats objects
+ * @throws {Error} Throws an error if the query fails
  */
 export const getStudentStats = (teacherId) => {
   return new Promise((resolve, reject) => {
@@ -244,9 +244,9 @@ export const getStudentStats = (teacherId) => {
 
 /**
  * Check if a group of students can be formed based on collaboration constraints
- * @param {number[]} studentIds - Array of student IDs to check
- * @param {number} teacherId - The ID of the teacher
- * @returns {Promise<GroupValidation>} - Returns a GroupValidation object indicating if the group is valid or not
+ * @param {number[]} studentIds Array of student IDs to check
+ * @param {number} teacherId The ID of the teacher
+ * @returns {Promise<GroupValidation>} Returns a GroupValidation object indicating if the group is valid or not
  */
 export const checkGroupConstraints = (studentIds, teacherId) => {
   return new Promise((resolve, reject) => {
@@ -304,9 +304,9 @@ export const checkGroupConstraints = (studentIds, teacherId) => {
 
 /**
  * Get open assignments for a user (both students and teachers)
- * @param {number} userId - The ID of the user
- * @param {string} userRole - The role of the user ('teacher' or 'student')
- * @returns {Promise<Assignment[]>} - Returns an array of open Assignment objects
+ * @param {number} userId The ID of the user
+ * @param {string} userRole The role of the user ('teacher' or 'student')
+ * @returns {Promise<Assignment[]>} Returns an array of open Assignment objects
  */
 export const getOpenAssignments = (userId, userRole) => {
   return new Promise((resolve, reject) => {
@@ -350,8 +350,8 @@ export const getOpenAssignments = (userId, userRole) => {
 
 /**
  * Get closed assignments and their average score for a student
- * @param {number} studentId - The ID of the student
- * @returns {Promise<{assignments: Assignment[], weightedAverage: number|null}>} - Returns assignments and weighted average
+ * @param {number} studentId The ID of the student
+ * @returns {Promise<{assignments: Assignment[], weightedAverage: number|null}>} Returns assignments and weighted average
  */
 export const getClosedAvg = (studentId) => {
   return new Promise((resolve, reject) => {
