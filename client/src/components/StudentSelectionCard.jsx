@@ -1,4 +1,4 @@
-import { Card, Form, Button, Alert } from 'react-bootstrap';
+import { Card, Form, Alert } from 'react-bootstrap';
 
 function StudentSelectionCard(props) {
   
@@ -51,21 +51,6 @@ function StudentSelectionCard(props) {
             <small>{props.constraintError}</small>
           </Alert>
         )}
-
-        <div className="d-grid">
-          <Button 
-            type="submit" 
-            variant="success" 
-            disabled={
-              props.submitting || 
-              props.selectedStudents.length < 2 || 
-              props.checkingConstraints || 
-              !!props.constraintError // It must be boolean for ||
-            }
-          >
-            {props.submitting ? 'Creazione in corso...' : 'Crea Compito'}
-          </Button>
-        </div>
         
       </Card.Body>
       

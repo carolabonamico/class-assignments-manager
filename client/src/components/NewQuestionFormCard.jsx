@@ -1,6 +1,6 @@
 import { Card, Form } from 'react-bootstrap';
 
-function QuestionFormCard({ question, onQuestionChange }) {
+function NewQuestionFormCard({ question, onQuestionChange }) {
   return (
     <Card className="desktop-card mb-4">
       <Card.Header>
@@ -24,4 +24,4 @@ function QuestionFormCard({ question, onQuestionChange }) {
   );
 }
 
-export default QuestionFormCard;
+export default NewQuestionFormCard;

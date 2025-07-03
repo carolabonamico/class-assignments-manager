@@ -1,6 +1,6 @@
 import { Card, Row, Col } from 'react-bootstrap';
 import StatsSortFilter from './StatsSortFilter';
-import StudentStatsRow from './StudentStatsRow';
+import StatsRow from './StatsRow';
 
 function StatsTable({ stats, sortBy, onSortChange }) {
   return (
@@ -25,7 +25,7 @@ function StatsTable({ stats, sortBy, onSortChange }) {
 
             {/* Data Rows */}
             {stats.map(student => (
-              <StudentStatsRow key={student.id} student={student} />
+              <StatsRow key={student.id} student={student} />
             ))}
           </>
         )}

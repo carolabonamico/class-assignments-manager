@@ -2,7 +2,7 @@ import { useState, useEffect, Alert } from 'react';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StatsTable from '../components/StatsTable';
-import Header from '../components/Header';
+import PageHeader from '../components/PageHeader';
 
 function Statistics() {
   const [stats, setStats] = useState([]);
@@ -43,7 +43,7 @@ function Statistics() {
 
   return (
     <>
-      <Header title="Statistiche della Classe" />
+      <PageHeader title="Statistiche della Classe" />
       <p className="text-muted mb-4">
         Panoramica dello stato dei compiti per tutti gli studenti della classe.
       </p>

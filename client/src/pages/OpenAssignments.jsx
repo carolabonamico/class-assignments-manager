@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Card, Alert } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
-import AssignmentCard from '../components/AssignmentCard';
+import OpenAssignmentCard from '../components/OpenAssignmentCard';
 import useAuth from '../hooks/useAuth';
-import Header from '../components/Header';
+import PageHeader from '../components/PageHeader';
 
 function OpenAssignments() {
   const { user } = useAuth();
@@ -41,7 +41,7 @@ function OpenAssignments() {
 
   return (
     <>
-      <Header title={user.role === 'teacher' ? 'Compiti Aperti da Valutare' : 'Compiti Aperti'} />
+      <PageHeader title={user.role === 'teacher' ? 'Compiti Aperti da Valutare' : 'Compiti Aperti'} />
 
       {error && (
         <Alert variant="danger" onClose={() => setError('')} dismissible>
@@ -62,7 +62,7 @@ function OpenAssignments() {
       ) : (
         <>
           {assignments.map(assignment => (
-            <AssignmentCard
+            <OpenAssignmentCard
               key={assignment.id}
               assignment={assignment}
               onUpdateAssignment={handleUpdateAssignment}

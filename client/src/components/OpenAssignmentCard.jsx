@@ -3,7 +3,7 @@ import { Card, Form, Button, Alert } from 'react-bootstrap';
 import API from '../API/api';
 import useAuth from '../hooks/useAuth';
 
-function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) {
+function OpenAssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) {
   const { user } = useAuth();
   const [answer, setAnswer] = useState(assignment.answer || '');
   const [evaluation, setEvaluation] = useState('');
@@ -64,24 +64,26 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
     <Card className="desktop-card mb-4">
       <Card.Header>
         <h5 className="mb-0">Domanda</h5>
-    </Card.Header>
+      </Card.Header>
       
       <Card.Body>
-        <div className="mb-4">
-          <p className="mb-0">{assignment.question}</p>
-        </div>
+        <p>{assignment.question}</p>
 
         {user.role === 'student' && (
           <>
+            <h6 className="fw-bold">Assegnato da:</h6>
+            <p>{assignment.teacher_name}</p>
             <h6 className="fw-bold">La tua risposta:</h6>
             
             {/* Show loading/error states */}
             {isAnswerPending && <Alert variant="warning">Salvando risposta...</Alert>}
+
             {answerState.error && 
               <Alert variant="danger" dismissible onClose={() => answerState.error = ''}>
                 {answerState.error}
               </Alert>
             }
+
             {answerState.success && 
               <Alert variant="success" dismissible onClose={() => answerState.success = ''}>
                 {answerState.success}
@@ -115,9 +117,7 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
           assignment.answer ? (
             <>
               <h6 className="fw-bold">Risposta dello studente:</h6>
-              <div className="bg-light rounded mb-3">
-                <p className="mb-0">{assignment.answer}</p>
-              </div>
+              <p className="mb-3">{assignment.answer}</p>
               
               <h6 className="fw-bold">Valutazione:</h6>
               
@@ -127,7 +127,7 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
               {evalState.success && <Alert variant="success">{evalState.success}</Alert>}
               
               <Form action={evalFormAction}>
-                <Form.Group className="mb-3">
+                <Form.Group>
                   <div className="d-flex align-items-center gap-2">
                     <Form.Control
                       type="number"
@@ -153,9 +153,7 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
               </Form>
             </>
           ) : (
-            <div className="text-muted">
-              <em>Nessuna risposta ancora fornita dagli studenti.</em>
-            </div>
+              <em className="text-muted">Nessuna risposta ancora fornita dagli studenti.</em>
           )
         )}
       </Card.Body>
@@ -163,4 +161,4 @@ function AssignmentCard({ assignment, onUpdateAssignment, onRemoveAssignment }) 
   );
 }
 
-export default AssignmentCard;
+export default OpenAssignmentCard;

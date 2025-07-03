@@ -29,14 +29,14 @@ export const getUser = (email, password) => {
         resolve(false); 
       }
       else {
-        const user = {id: row.id, username: row.email, name: row.name, role: row.role};
-        
         crypto.scrypt(password, row.salt, 16, function(err, hashedPassword) {
           if (err) reject(err);
           if(!crypto.timingSafeEqual(Buffer.from(row.password, 'hex'), hashedPassword))
             resolve(false);
-          else
+          else {
+            const user = new User(row.id, row.name, row.email, row.role);
             resolve(user);
+          }
         });
       }
     });
@@ -206,19 +206,23 @@ export const getStudentStats = (teacherId) => {
       WHERE u.role = 'student'
       GROUP BY u.id, u.name, u.email`;
     
+    // GROUP_CONCAT will return a string like "28/2,25/3,30/2" for scores_and_sizes
+    
     db.all(sql, [teacherId], (err, rows) => {
       if (err) {
         reject(err);
       } else {
+
         const stats = rows.map((row) => {
           let weightedAverage = null;
           
           if (row.scores_and_sizes) {
-            const scoreData = row.scores_and_sizes.split(',').map(item => {
+            const data = row.scores_and_sizes.split(',').map(item => {
               const [score, size] = item.split('/');
               return { score: parseInt(score), groupSize: parseInt(size) };
             });
-            weightedAverage = calculateWeightedAverage(scoreData);
+            // data is now an array of objects like [{ score: 28, groupSize: 2 }, ...]
+            weightedAverage = calculateWeightedAverage(data);
           }
           
           return new StudentStats(
@@ -229,6 +233,7 @@ export const getStudentStats = (teacherId) => {
             weightedAverage
           );
         });
+
         resolve(stats);
       }
     });
@@ -310,6 +315,8 @@ export const getOpenAssignments = (userId, userRole) => {
     
     if (userRole === 'teacher') {
       // Teachers see all open assignments they created
+      // TODO: the theacher name would not be used in this query, so it can be removed
+      // but it is useful for the client to display the teacher's name
       sql = `SELECT a.*, u.name as teacher_name 
              FROM assignments a 
              JOIN users u ON a.teacher_id = u.id 
@@ -334,6 +341,7 @@ export const getOpenAssignments = (userId, userRole) => {
         const assignments = rows.map((a) => new Assignment(
           a.id, a.question, a.teacher_id, a.teacher_name, a.status, a.answer, a.score
         ));
+        // At this point, groupSize is not needed for open assignments
         resolve(assignments);
       }
     });
@@ -374,15 +382,7 @@ export const getClosedAvg = (studentId) => {
           );
         });
         
-        // Calculate weighted average
-        let weightedAverage = null;
-        if (assignments.length > 0) {
-          const scoreData = assignments.map(a => ({
-            score: a.score,
-            groupSize: a.groupSize
-          }));
-          weightedAverage = calculateWeightedAverage(scoreData);
-        }
+        const weightedAverage = calculateWeightedAverage(assignments);
         
         resolve({
           assignments,

@@ -2,7 +2,7 @@ import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
-function Navigation({ onLogout }) {
+function NavHeader({ onLogout }) {
   const location = useLocation();
   const { user } = useAuth();
 
@@ -72,4 +72,4 @@ function Navigation({ onLogout }) {
   );
 }
 
-export default Navigation;
+export default NavHeader;

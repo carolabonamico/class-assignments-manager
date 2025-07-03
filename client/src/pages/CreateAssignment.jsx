@@ -1,10 +1,10 @@
 import { useState, useEffect, useActionState } from 'react';
-import { Alert, Form } from 'react-bootstrap';
+import { Alert, Form, Button } from 'react-bootstrap';
 import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
-import QuestionFormCard from '../components/QuestionFormCard';
+import NewQuestionFormCard from '../components/NewQuestionFormCard';
 import StudentSelectionCard from '../components/StudentSelectionCard';
-import Header from '../components/Header';
+import PageHeader from '../components/PageHeader';
 
 function CreateAssignment() {
   const [students, setStudents] = useState([]);
@@ -109,7 +109,7 @@ function CreateAssignment() {
 
   return (
     <>
-      <Header title="Crea Nuovo Compito" />
+      <PageHeader title="Crea Nuovo Compito" />
 
       {/* Show loading state */}
       {isPending && <Alert variant="warning">Creazione compito in corso...</Alert>}
@@ -128,7 +128,7 @@ function CreateAssignment() {
       <Form action={formAction}>
         <div className="desktop-form">
           <div className="desktop-grid">
-            <QuestionFormCard
+            <NewQuestionFormCard
               question={question}
               onQuestionChange={setQuestion}
             />
@@ -144,6 +144,25 @@ function CreateAssignment() {
           </div>
         </div>
       </Form>
+      
+      <Button 
+        type="submit" 
+        variant="success" 
+        disabled={
+          isPending || 
+          selectedStudents.length < 2 || 
+          checkingConstraints || 
+          !!constraintError ||
+          !question || question.trim().length === 0 
+        }
+        title={isPending ? 'Creazione in corso...' : 'Crea Compito'}
+      >
+        {isPending ? (
+          <span className="visually-hidden">Creazione in corso...</span>
+        ) : (
+          <span>Crea Compito</span>
+        )}
+      </Button>
     </>
   );
 }

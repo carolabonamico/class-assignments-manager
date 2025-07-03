@@ -1,6 +1,6 @@
-import { Badge, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
-function StudentStatsRow({ student }) {
+function StatsRow({ student }) {
   
   const average = student.weighted_average;
   
@@ -35,4 +35,4 @@ function StudentStatsRow({ student }) {
   );
 }
 
-export default StudentStatsRow;
+export default StatsRow;

@@ -3,7 +3,7 @@ import API from '../API/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import StudentAverageCard from '../components/StudentAverageCard';
 import ClosedAssignmentTable from '../components/ClosedAssignmentTable';
-import Header from '../components/Header';
+import PageHeader from '../components/PageHeader';
 
 function MyScores() {
   const [data, setData] = useState({ assignments: [], weightedAverage: null });
@@ -32,7 +32,7 @@ function MyScores() {
 
   return (
     <>
-      <Header title="I miei Punteggi" />
+      <PageHeader title="I miei Punteggi" />
 
       {error && (
         <Alert variant="danger">{error}</Alert>

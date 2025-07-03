@@ -296,22 +296,22 @@ Student statistics for teacher's assigned tasks (teachers only)
 
 ### Components
 
-- `Navigation.jsx`: navigation bar with role-based menu and logout functionality
+- `NavHeader.jsx`: navigation bar with role-based menu and logout functionality
 - `LoginForm.jsx`: authentication form with validation and error handling
 - `LoadingSpinner.jsx`: reusable loading indicator component
 - `NotFound.jsx`: 404 error page component for unrecognized routes
-- `QuestionFormCard.jsx`: card component for assignment question input
+- `NewQuestionFormCard.jsx`: card component for assignment question input
 - `StudentSelectionCard.jsx`: component for student selection with real-time constraint validation
-- `AssignmentCard.jsx`: modular card component for assignment display and interaction
+- `OpenAssignmentCard.jsx`: modular card component for open assignment display and interaction
 - `StudentAverageCard.jsx`: component displaying student's weighted average score
 - `ClosedAssignmentTable.jsx`: table component for displaying closed assignments
 - `ClosedAssignmentRow.jsx`: row component for closed assignment display
 - `StatsTable.jsx`: table component for student statistics display
 - `StatsSortFilter.jsx`: sorting and filtering controls for statistics
-- `StudentStatsRow.jsx`: row component for student statistics display
+- `StatsRow.jsx`: row component for student statistics display
 - `ProtectedRoute.jsx`: helper component to protect routes based on user role
 - `AuthenticatedLayout.jsx`: layout component for authenticated routes with navigation and outlet
-- `Header.jsx`: header component for page titles
+- `PageHeader.jsx`: header component for page titles
 
 ### Pages
 

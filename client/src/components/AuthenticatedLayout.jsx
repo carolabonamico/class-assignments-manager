@@ -1,11 +1,11 @@
 import { Alert, Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
-import Navigation from './Navigation';
+import NavHeader from './NavHeader';
 
 function AuthenticatedLayout({ message, setMessage, onLogout }) {
   return (
     <>
-      <Navigation onLogout={onLogout} />
+      <NavHeader onLogout={onLogout} />
       <Container fluid className="mt-3">
         <div className="desktop-layout">
           {message && (
