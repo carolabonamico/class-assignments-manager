@@ -33,6 +33,16 @@ function CreateAssignment() {
       return { error: 'Seleziona massimo 6 studenti' };
     }
 
+    // Final constraint validation before submission
+    try {
+      const constraintResult = await API.checkPairConstraints(studentIds);
+      if (!constraintResult.isValid) {
+        return { error: constraintResult.error || 'Vincolo sulle coppie violato. Modifica la selezione degli studenti.' };
+      }
+    } catch {
+      return { error: 'Impossibile verificare i vincoli sulle coppie. Controlla la connessione e riprova.' };
+    }
+
     try {
       const assignmentData = {
         question: questionText.trim(),
@@ -87,6 +97,8 @@ function CreateAssignment() {
     // Check constraints after updating selection
     if (newSelection.length >= 2) {
       setCheckingConstraints(true);
+      setConstraintError('');
+      
       try {
         const result = await API.checkPairConstraints(newSelection);
         if (!result.isValid) {
@@ -95,13 +107,14 @@ function CreateAssignment() {
           setConstraintError('');
         }
       } catch {
-        // Silently fail constraint check, constraint validation will be handled server-side
-        setConstraintError('');
+        // If constraint check fails, show a warning but allow user to continue
+        setConstraintError('Impossibile verificare i vincoli in tempo reale.');
       } finally {
         setCheckingConstraints(false);
       }
     } else {
       setConstraintError('');
+      setCheckingConstraints(false);
     }
   };
 
