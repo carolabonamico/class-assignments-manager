@@ -12,7 +12,7 @@ import Statistics from "./pages/Statistics";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import API from "./API/api";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext.jsx";
 import "./App.css";
 
 function App() {

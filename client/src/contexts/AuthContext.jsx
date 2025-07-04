@@ -1,6 +1,7 @@
-import { createContext } from 'react';
-
-export const AuthContext = createContext();
+/* This file only contains the provider for the AuthContext.
+ * The context itself is defined in AuthContext.js.
+ */
+import { AuthContext } from './AuthContext.js';
 
 export const AuthProvider = ({ children, user, logout }) => {
   const handleApiError = (error) => {
