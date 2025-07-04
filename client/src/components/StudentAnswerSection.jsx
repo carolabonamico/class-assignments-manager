@@ -6,11 +6,14 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 function StudentAnswerSection({ assignment, onUpdateAssignment }) {
   const [answer, setAnswer] = useState(assignment.answer || '');
   const [isEditing, setIsEditing] = useState(false);
+  const [showAlerts, setShowAlerts] = useState({ error: true, success: true });
 
   // Handle answer submission
   const [answerState, answerFormAction, isAnswerPending] = useActionState(submitAnswerAction, {});
 
   async function submitAnswerAction(prevState, formData) {
+    setShowAlerts({ error: true, success: true }); // Reset alert visibility
+    
     const answerText = formData.get('answer');
     
     if (!answerText || !answerText.trim()) {
@@ -44,14 +47,14 @@ function StudentAnswerSection({ assignment, onUpdateAssignment }) {
       {/* Show loading/error states */}
       {isAnswerPending && <Alert variant="warning">Salvando risposta...</Alert>}
 
-      {answerState.error && 
-        <Alert variant="danger" dismissible onClose={() => answerState.error = ''}>
+      {answerState.error && showAlerts.error && 
+        <Alert variant="danger" dismissible onClose={() => setShowAlerts(prev => ({ ...prev, error: false }))}>
           {answerState.error}
         </Alert>
       }
 
-      {answerState.success && 
-        <Alert variant="success" dismissible onClose={() => answerState.success = ''}>
+      {answerState.success && showAlerts.success && 
+        <Alert variant="success" dismissible onClose={() => setShowAlerts(prev => ({ ...prev, success: false }))}>
           {answerState.success}
         </Alert>
       }

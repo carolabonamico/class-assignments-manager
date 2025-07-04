@@ -94,8 +94,8 @@ function CreateAssignment() {
         } else {
           setConstraintError('');
         }
-      } catch (err) {
-        console.warn('Errore controllando i vincoli:', err);
+      } catch {
+        // Silently fail constraint check, constraint validation will be handled server-side
         setConstraintError('');
       } finally {
         setCheckingConstraints(false);

@@ -1,10 +1,13 @@
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { Form, Button, Alert, Row, Col } from 'react-bootstrap';
 
 function LoginForm({ handleLogin }) {
     const [state, formAction, isPending] = useActionState(loginFunction, { username: '', password: '' });
+    const [showError, setShowError] = useState(true);
 
     async function loginFunction(prevState, formData) {
+        setShowError(true); // Reset error visibility on new attempt
+        
         const credentials = {
             username: formData.get('username'),
             password: formData.get('password'),
@@ -32,8 +35,8 @@ function LoginForm({ handleLogin }) {
                     <h2 className="app-title">Sistema Gestione Compiti</h2>
                 </div>
 
-                {state.error && 
-                    <Alert variant="danger" onClose={() => state.error = ''} dismissible>
+                {state.error && showError && 
+                    <Alert variant="danger" onClose={() => setShowError(false)} dismissible>
                         {state.error}
                     </Alert>
                 }
