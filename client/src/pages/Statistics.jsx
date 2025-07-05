@@ -15,8 +15,8 @@ function Statistics() {
       try {
         const data = await API.getStatistics();
         setStats(data);
-      } catch {
-        setError('Errore nel caricamento delle statistiche');
+      } catch (err) {
+        setError(err.message || 'Errore nel caricamento delle statistiche');
       } finally {
         setLoading(false);
       }

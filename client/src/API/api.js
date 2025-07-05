@@ -5,7 +5,7 @@ const API = {
    * Login a user with the provided credentials
    * @param {Object} credentials The user's credentials containing email and password
    * @returns {Promise<Object>} Returns the user data if login is successful
-   * @throws {string} Throws an error message if login fails
+   * @throws {Error} Throws an error if login fails
    */
   async login(credentials) {
     const response = await fetch(APIURL + '/sessions', {
@@ -22,12 +22,12 @@ const API = {
       return user;
     } else {
       if (response.status === 401) {
-        throw "Invalid credentials";
+        throw new Error("Invalid credentials");
       } else if (response.status === 500) {
-        throw "Internal server error";
+        throw new Error("Internal server error");
       } else {
         const errDetails = await response.text();
-        throw errDetails;
+        throw new Error(errDetails || "Login failed");
       }
     }
   },
@@ -35,23 +35,24 @@ const API = {
   /**
    * Get the current user session
    * @return {Promise<Object>} Returns the current user data if session is valid
-   * @throws {Object} Throws an error object if session is invalid or user is not logged in
+   * @throws {Error} Throws an error if session is invalid or user is not logged in
    */
   async getCurrentUser() {
     const response = await fetch(APIURL + '/sessions/current', {
       credentials: 'include'
     });
     
-    const user = await response.json();
     if (response.ok) {
+      const user = await response.json();
       return user;
     } else {
       if (response.status === 401) {
-        throw {error: "Not authenticated"};
+        throw new Error("Not authenticated");
       } else if (response.status === 500) {
-        throw {error: "Internal server error"};
+        throw new Error("Internal server error");
       } else {
-        throw user; // an object with the error coming from the server
+        const errDetails = await response.text();
+        throw new Error(errDetails || "Failed to fetch current user");
       }
     }
   },
@@ -59,7 +60,7 @@ const API = {
   /**
    * Logout the current user
    * @returns {Promise<null>} Returns null if logout is successful
-   * @throws {string} Throws an error message if logout fails
+   * @throws {Error} Throws an error if logout fails
    */
   async logout() {
     const response = await fetch(APIURL + '/sessions/current', {
@@ -69,15 +70,20 @@ const API = {
     
     if (response.ok) {
       return null;
-    } else if (response.status === 500) {
-      throw "Internal server error";
+    } else {
+      if (response.status === 500) {
+        throw new Error("Internal server error");
+      } else {
+        const errDetails = await response.text();
+        throw new Error(errDetails || "Logout failed");
+      }
     }
   },
 
   /**
    * Get the list of students
    * @returns {Promise<Array>} Returns an array of student objects
-   * @throws {string} Throws an error message if fetching students fails
+   * @throws {Error} Throws an error if fetching students fails
    */
   async getStudents() {
     const response = await fetch(APIURL + '/students', {
@@ -88,11 +94,12 @@ const API = {
       return await response.json();
     } else {
       if (response.status === 401) {
-        throw "Not authenticated";
+        throw new Error("Not authenticated");
       } else if (response.status === 500) {
-        throw "Internal server error";
-      } else {
         throw new Error("Internal server error");
+      } else {
+        const errDetails = await response.text();
+        throw new Error(errDetails || "Failed to fetch students");
       }
     }
   },
@@ -101,7 +108,7 @@ const API = {
    * Check if creating an assignment with selected students would violate pair constraints
    * @param {Array<number>} studentIds Array of student IDs to check
    * @returns {Promise<Object>} Returns {isValid: boolean, error?: string}
-   * @throws {string} Throws an error message if checking constraints fails
+   * @throws {Error} Throws an error if checking constraints fails
    */
   async checkPairConstraints(studentIds) {
     const response = await fetch(APIURL + '/groups/validate', {
@@ -117,16 +124,17 @@ const API = {
       return await response.json();
     } else {
       if (response.status === 401) {
-        throw "Not authenticated";
+        throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw "Not a teacher";
+        throw new Error("Not a teacher");
       } else if (response.status === 422) {
         const errMessage = await response.json();
-        throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
+        throw new Error(`${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`);
       } else if (response.status === 500) {
-        throw "Internal server error";
-      } else {
         throw new Error("Internal server error");
+      } else {
+        const errDetails = await response.text();
+        throw new Error(errDetails || "Failed to check pair constraints");
       }
     }
   },
@@ -135,7 +143,7 @@ const API = {
    * Create a new assignment (teacher only)
    * @param {Object} assignmentData The data for the new assignment
    * @returns {Promise<Object>} Returns the created assignment object
-   * @throws {string} Throws an error message if creating the assignment fails
+   * @throws {Error} Throws an error if creating the assignment fails
    */
   async createAssignment(assignmentData) {
     const response = await fetch(APIURL + '/assignments', {
@@ -151,20 +159,20 @@ const API = {
       return await response.json();
     } else {
       if (response.status === 401) {
-        throw "Not authenticated";
+        throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw "Not a teacher";
+        throw new Error("Not a teacher");
       } else if (response.status === 400) {
         const errData = await response.json();
-        throw errData.error || "Missing/invalid fields or validation errors (2-6 students required)";
+        throw new Error(errData.error || "Missing/invalid fields or validation errors (2-6 students required)");
       } else if (response.status === 422) {
         const errMessage = await response.json();
-        throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
+        throw new Error(`${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`);
       } else if (response.status === 500) {
-        throw "Internal server error";
+        throw new Error("Internal server error");
       } else {
         const errMessage = await response.json();
-        throw errMessage.error || "Internal server error";
+        throw new Error(errMessage.error || "Failed to create assignment");
       }
     }
   },
@@ -174,7 +182,7 @@ const API = {
    * @param {string} assignmentId The ID of the assignment to update
    * @param {string} answer The answer to submit
    * @returns {Promise<Object>} Returns the updated assignment object
-   * @throws {string} Throws an error message if updating the answer fails
+   * @throws {Error} Throws an error if updating the answer fails
    */
   async updateAssignmentAnswer(assignmentId, answer) {
     const response = await fetch(APIURL + `/assignments/${assignmentId}/answer`, {
@@ -190,20 +198,20 @@ const API = {
       return await response.json();
     } else {
       if (response.status === 401) {
-        throw "Not authenticated";
+        throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw "Not a student";
+        throw new Error("Not a student");
       } else if (response.status === 404) {
         const errData = await response.json();
-        throw errData.error || "Student not assigned to this assignment/assignment not open";
+        throw new Error(errData.error || "Student not assigned to this assignment/assignment not open");
       } else if (response.status === 422) {
         const errMessage = await response.json();
-        throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
+        throw new Error(`${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`);
       } else if (response.status === 500) {
-        throw "Internal server error";
+        throw new Error("Internal server error");
       } else {
         const errMessage = await response.json();
-        throw errMessage.error || "Internal server error";
+        throw new Error(errMessage.error || "Failed to update assignment answer");
       }
     }
   },
@@ -213,8 +221,8 @@ const API = {
    * @param {string} assignmentId The ID of the assignment to evaluate
    * @param {number} score The score to assign to the assignment
    * @returns {Promise<Object>} Returns the updated assignment object with the evaluation score
-   * @throws {string} Throws an error message if evaluating the assignment fails
-   */
+   * @throws {Error} Throws an error if evaluating the assignment fails
+  */
   async evaluateAssignment(assignmentId, score) {
     const response = await fetch(APIURL + `/assignments/${assignmentId}/evaluate`, {
       method: 'PUT',
@@ -229,20 +237,20 @@ const API = {
       return await response.json();
     } else {
       if (response.status === 401) {
-        throw "Not authenticated";
+        throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw "Not a teacher";
+        throw new Error("Not a teacher");
       } else if (response.status === 404) {
         const errData = await response.json();
-        throw errData.error;
+        throw new Error(errData.error);
       } else if (response.status === 422) {
         const errMessage = await response.json();
-        throw `${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`;
+        throw new Error(`${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`);
       } else if (response.status === 500) {
-        throw "Internal server error";
+        throw new Error("Internal server error");
       } else {
         const errMessage = await response.json();
-        throw errMessage.error || "Internal server error";
+        throw new Error(errMessage.error || "Failed to evaluate assignment");
       }
     }
   },
@@ -250,7 +258,7 @@ const API = {
   /**
    * Get statistics for the current user (teacher only)
    * @returns {Promise<Array>} Returns an array of statistics objects for each student
-   * @throws {string} Throws an error message if fetching statistics fails
+   * @throws {Error} Throws an error if fetching statistics fails
    */
   async getStatistics() {
     const response = await fetch(APIURL + '/students/statistics', {
@@ -261,13 +269,14 @@ const API = {
       return await response.json();
     } else {
       if (response.status === 401) {
-        throw "Not authenticated";
+        throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw "Not a teacher";
+        throw new Error("Not a teacher");
       } else if (response.status === 500) {
-        throw "Internal server error";
+        throw new Error("Internal server error");
       } else {
-        throw "Internal server error";
+        const errDetails = await response.text();
+        throw new Error(errDetails || "Failed to fetch statistics");
       }
     }
   },
@@ -275,7 +284,7 @@ const API = {
   /**
    * Get open assignments for the current user
    * @returns {Promise<Array>} Returns an array of open assignment objects
-   * @throws {string} Throws an error message if fetching assignments fails
+   * @throws {Error} Throws an error if fetching assignments fails
    */
   async getOpenAssignments() {
     const response = await fetch(APIURL + '/assignments/open', {
@@ -286,11 +295,12 @@ const API = {
       return await response.json();
     } else {
       if (response.status === 401) {
-        throw "Not authenticated";
+        throw new Error("Not authenticated");
       } else if (response.status === 500) {
-        throw "Internal server error";
+        throw new Error("Internal server error");
       } else {
-        throw "Internal server error";
+        const errDetails = await response.text();
+        throw new Error(errDetails || "Failed to fetch open assignments");
       }
     }
   },
@@ -298,7 +308,7 @@ const API = {
   /**
    * Get closed assignments and their average score for the current student
    * @returns {Promise<Object>} Returns object with assignments array and weightedAverage
-   * @throws {string} Throws an error message if fetching scores fails
+   * @throws {Error} Throws an error if fetching scores fails
    */
   async getClosedAvg() {
     const response = await fetch(APIURL + '/assignments/closed-with-average', {
@@ -309,13 +319,14 @@ const API = {
       return await response.json();
     } else {
       if (response.status === 401) {
-        throw "Not authenticated";
+        throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw "Not a student";
+        throw new Error("Not a student");
       } else if (response.status === 500) {
-        throw "Internal server error";
+        throw new Error("Internal server error");
       } else {
-        throw "Internal server error";
+        const errMessage = await response.json();
+        throw new Error(errMessage.error || "Failed to fetch closed assignments");
       }
     }
   },

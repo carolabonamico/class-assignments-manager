@@ -18,8 +18,8 @@ function OpenAssignments() {
       try {
         const data = await API.getOpenAssignments();
         setAssignments(data);
-      } catch {
-        setError('Errore nel caricamento dei compiti aperti');
+      } catch (err) {
+        setError(err.message || 'Errore nel caricamento dei compiti aperti');
       } finally {
         setLoading(false);
       }

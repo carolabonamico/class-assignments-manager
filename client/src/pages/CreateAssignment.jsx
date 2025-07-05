@@ -60,7 +60,7 @@ function CreateAssignment() {
       if (err.status === 401) {
         return { error: 'Sessione scaduta. Ricarica la pagina per effettuare nuovamente il login.' };
       } else {
-        return { error: 'Errore nella creazione del compito' };
+        return { error: err.message || 'Errore nella creazione del compito' };
       }
     }
   }
@@ -70,8 +70,8 @@ function CreateAssignment() {
       try {
         const data = await API.getStudents();
         setStudents(data);
-      } catch {
-        setError('Errore nel caricamento degli studenti. Ricarica la pagina per effettuare nuovamente il login.');
+      } catch (err) {
+        setError(err.message || 'Errore nel caricamento degli studenti. Ricarica la pagina per effettuare nuovamente il login.');
       } finally {
         setLoading(false);
       }
@@ -108,7 +108,7 @@ function CreateAssignment() {
         }
       } catch {
         // If constraint check fails, show a warning but allow user to continue
-        setConstraintError('Impossibile verificare i vincoli in tempo reale.');
+        setConstraintError('Impossibile verificare i vincoli.');
       } finally {
         setCheckingConstraints(false);
       }
