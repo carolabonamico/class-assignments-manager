@@ -315,8 +315,6 @@ export const getOpenAssignments = (userId, userRole) => {
     
     if (userRole === 'teacher') {
       // Teachers see all open assignments they created
-      // TODO: the theacher name would not be used in this query, so it can be removed
-      // but it is useful for the client to display the teacher's name
       sql = `SELECT a.*, u.name as teacher_name 
              FROM assignments a 
              JOIN users u ON a.teacher_id = u.id 

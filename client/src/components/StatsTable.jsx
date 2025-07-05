@@ -16,11 +16,10 @@ function StatsTable({ stats, sortBy, onSortChange }) {
           <>
             {/* Header Row */}
             <Row className="fw-bold border-bottom pb-2 mb-3">
-              <Col md={4}>Studente</Col>
-              <Col md={2} className="text-center">Compiti Aperti</Col>
-              <Col md={2} className="text-center">Compiti Chiusi</Col>
-              <Col md={2} className="text-center">Totale</Col>
-              <Col md={2} className="text-center">Media Ponderata</Col>
+              <Col md={3}>Studente</Col>
+              <Col md={3} className="text-center">Compiti Aperti</Col>
+              <Col md={3} className="text-center">Compiti Chiusi</Col>
+              <Col md={3} className="text-center">Media Ponderata</Col>
             </Row>
 
             {/* Data Rows */}

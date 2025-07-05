@@ -44,7 +44,7 @@ function TeacherEvaluationSection({ assignment, onRemoveAssignment, onEvaluation
 
   return (
     <>
-      <h6 className="fw-bold">Risposta dello studente:</h6>
+      <h6 className="fw-bold">Risposta al compito:</h6>
       <p>{assignment.answer}</p>
       
       {/* Show loading state only */}

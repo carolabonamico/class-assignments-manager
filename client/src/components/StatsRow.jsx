@@ -14,28 +14,21 @@ function StatsRow({ student }) {
 
   return (
     <Row className="border-bottom py-3 align-items-center">
-      <Col md={4}>
+      <Col md={3}>
         {student.name}
       </Col>
-      <Col md={2} className="text-center">
+      <Col md={3} className="text-center">
         <Badge bg="success">
           {student.open_assignments || 0}
         </Badge>
       </Col>
-      <Col md={2} className="text-center">
+      <Col md={3} className="text-center">
         <Badge bg="primary">
           {student.closed_assignments || 0}
         </Badge>
       </Col>
-      <Col md={2} className="text-center">
-        <Badge bg="secondary">
-          {student.total_assignments || 0}
-        </Badge>
-      </Col>
-      <Col md={2} className="text-center">
-        <span className={averageClass}>
-          {averageDisplay}
-        </span>
+      <Col md={3} className="text-center">
+        <span className={averageClass}>{averageDisplay}</span>
       </Col>
     </Row>
   );

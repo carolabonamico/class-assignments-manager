@@ -74,7 +74,7 @@ function StudentAnswerSection({ assignment, onUpdateAssignment }) {
       {/* If answer exists and not editing, show answer with edit button */}
       {assignment.answer && !isEditing && (
         <>
-          <h6 className="fw-bold">La tua risposta:</h6>
+          <h6 className="fw-bold">Risposta del gruppo:</h6>
           <p>{assignment.answer}</p>
           <Button
             variant="primary"
