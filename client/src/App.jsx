@@ -38,15 +38,10 @@ function App() {
   }, []);
 
   const handleLogin = async (credentials) => {
-    try {
-      const userData = await API.login(credentials);
-      setLoggedIn(true);
-      setUser(userData);
-      setMessage({ msg: `Benvenuto, ${userData.name}!`, type: 'success' });
-    } catch (err) {
-      setMessage({ msg: err, type: 'danger' });
-      throw err; // Re-throw per LoginForm
-    }
+    const userData = await API.login(credentials);
+    setLoggedIn(true);
+    setUser(userData);
+    setMessage({ msg: `Benvenuto, ${userData.name}!`, type: 'success' });
   };
 
   const handleLogout = async () => {

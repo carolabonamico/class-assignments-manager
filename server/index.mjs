@@ -154,7 +154,6 @@ app.get('/api/students', isLoggedIn, async (req, res) => {
     const students = await dao.listStudents();
     res.json(students);
   } catch (err) {
-    console.error(`ERROR: ${err.message}`);
     res.status(500).json({ error: 'Internal server error fetching students' });
   }
 });
@@ -336,7 +335,6 @@ app.get('/api/students/statistics', isTeacher, async (req, res) => {
     const stats = await dao.getStudentStats(req.user.id);
     res.json(stats);
   } catch (err) {
-    console.error(`ERROR: ${err.message}`);
     res.status(500).json({ error: 'Internal server error fetching statistics' });
   }
 });
