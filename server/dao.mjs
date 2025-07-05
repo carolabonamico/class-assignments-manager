@@ -129,7 +129,7 @@ export const updateAssignmentAnswer = (assignmentId, answer, studentId) => {
           if (err) {
             reject(err);
           } else {
-            resolve(this.changes);
+            resolve(this.changes); // Return number of updated rows
           }
         });
       }
@@ -380,6 +380,7 @@ export const getClosedAvg = (studentId) => {
           );
         });
         
+        // Calculate the weighted average score of all the closed assignments
         const weightedAverage = calculateWeightedAverage(assignments);
         
         resolve({

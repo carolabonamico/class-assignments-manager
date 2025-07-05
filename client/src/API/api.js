@@ -81,9 +81,9 @@ const API = {
   },
 
   /**
-   * Get the list of students
+   * Get the list of students (only accessible to teachers)
    * @returns {Promise<Array>} Returns an array of student objects
-   * @throws {Error} Throws an error if fetching students fails
+   * @throws {Error} Throws an error if fetching students fails or if user is Teacher role required
    */
   async getStudents() {
     const response = await fetch(APIURL + '/students', {
@@ -95,6 +95,8 @@ const API = {
     } else {
       if (response.status === 401) {
         throw new Error("Not authenticated");
+      } else if (response.status === 403) {
+        throw new Error("Teacher role required");
       } else if (response.status === 500) {
         throw new Error("Internal server error");
       } else {
@@ -126,7 +128,7 @@ const API = {
       if (response.status === 401) {
         throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw new Error("Not a teacher");
+        throw new Error("Teacher role required");
       } else if (response.status === 422) {
         const errMessage = await response.json();
         throw new Error(`${errMessage.errors[0].msg} for ${errMessage.errors[0].path}.`);
@@ -161,7 +163,7 @@ const API = {
       if (response.status === 401) {
         throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw new Error("Not a teacher");
+        throw new Error("Teacher role required");
       } else if (response.status === 400) {
         const errData = await response.json();
         throw new Error(errData.error || "Missing/invalid fields or validation errors (2-6 students required)");
@@ -200,7 +202,7 @@ const API = {
       if (response.status === 401) {
         throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw new Error("Not a student");
+        throw new Error("Student role required");
       } else if (response.status === 404) {
         const errData = await response.json();
         throw new Error(errData.error || "Student not assigned to this assignment/assignment not open");
@@ -239,7 +241,7 @@ const API = {
       if (response.status === 401) {
         throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw new Error("Not a teacher");
+        throw new Error("Teacher role required");
       } else if (response.status === 404) {
         const errData = await response.json();
         throw new Error(errData.error);
@@ -271,7 +273,7 @@ const API = {
       if (response.status === 401) {
         throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw new Error("Not a teacher");
+        throw new Error("Teacher role required");
       } else if (response.status === 500) {
         throw new Error("Internal server error");
       } else {
@@ -321,7 +323,7 @@ const API = {
       if (response.status === 401) {
         throw new Error("Not authenticated");
       } else if (response.status === 403) {
-        throw new Error("Not a student");
+        throw new Error("Student role required");
       } else if (response.status === 500) {
         throw new Error("Internal server error");
       } else {

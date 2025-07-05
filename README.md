@@ -84,9 +84,9 @@ URL: `/api/students`
 
 HTTP Method: GET.
 
-Description: Retrieve all students.
+Description: Retrieve all students (teachers only).
 
-Response: `200 OK` (success), `401 Unauthorized` (not authenticated), or `500 Internal Server Error` (generic error). In case of success, returns an array of students in JSON format (see below). Else, returns an error message.
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (teacher role required), or `500 Internal Server Error` (generic error). In case of success, returns an array of students in JSON format (see below). Else, returns an error message.
 
 Response body:
 ```json
@@ -157,7 +157,7 @@ Request body:
 }
 ```
 
-Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a teacher), `422 Unprocessable Entity` (invalid student IDs array), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (teacher role required), `422 Unprocessable Entity` (invalid student IDs array), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
 
 Response body:
 ```json
@@ -183,7 +183,7 @@ Request body:
 }
 ```
 
-Response: `201 Created` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a teacher), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
+Response: `201 Created` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (teacher role required), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
 
 Response body:
 ```json
@@ -208,7 +208,7 @@ Request body:
 }
 ```
 
-Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a student), `404 Not Found` (assignment not found or not open), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (student role required), `404 Not Found` (assignment not found or not open), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
 
 Response body:
 ```json
@@ -233,7 +233,7 @@ Request body:
 }
 ```
 
-Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a teacher), `404 Not Found` (assignment not found or not open), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (teacher role required), `404 Not Found` (assignment not found or not open), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
 
 Response body:
 ```json
@@ -253,7 +253,7 @@ HTTP Method: GET.
 
 Description: Get student's closed assignments and weighted average (students only).
 
-Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a student), or `500 Internal Server Error` (generic error). In case of success, returns assignments and average in JSON format (see below). Else, returns an error message.
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (student role required), or `500 Internal Server Error` (generic error). In case of success, returns assignments and average in JSON format (see below). Else, returns an error message.
 
 Response body:
 ```json
@@ -292,7 +292,7 @@ HTTP Method: GET.
 
 Description: Student statistics for teacher's assigned tasks (teachers only).
 
-Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a teacher), or `500 Internal Server Error` (generic error). In case of success, returns an array of student statistics in JSON format (see below). Else, returns an error message.
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (teacher role required), or `500 Internal Server Error` (generic error). In case of success, returns an array of student statistics in JSON format (see below). Else, returns an error message.
 
 Response body:
 ```json

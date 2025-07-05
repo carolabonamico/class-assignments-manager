@@ -144,15 +144,15 @@ app.get('/api/sessions/current', (req, res) => {
 
 /**
  * Route to list all students
- * Returns a list of all students in the system.
+ * Returns a list of all students in the system. Only accessible to teachers.
  * @route GET /api/students
  * @returns {Array} An array of student objects.
- * @returns {object} An error message if the request fails.
+ * @returns {object} An error message if the user is not a teacher or if the request fails.
  */
-app.get('/api/students', isLoggedIn, async (req, res) => {
+app.get('/api/students', isTeacher, async (req, res) => {
   try {
     const students = await dao.listStudents();
-    res.json(students);
+    res.status(200).json(students);
   } catch (err) {
     res.status(500).json({ error: 'Internal server error fetching students' });
   }
@@ -167,7 +167,7 @@ app.get('/api/students', isLoggedIn, async (req, res) => {
 app.get('/api/assignments/open', isLoggedIn, async (req, res) => {
   try {
     const assignments = await dao.getOpenAssignments(req.user.id, req.user.role);
-    res.json(assignments);
+    res.status(200).json(assignments);
   } catch (err) {
     res.status(500).json({ error: 'Internal server error fetching assignments' });
   }
@@ -189,7 +189,7 @@ app.post('/api/groups/validate',
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({ error: 'Invalid student IDs array (must be 2-6 students)' });
+      return res.status(422).json({ errors: errors.array() });
     }
 
     try {
@@ -216,8 +216,13 @@ app.post('/api/groups/validate',
 app.post('/api/assignments', 
   isTeacher,
   [
-    check('question').isLength({ min: 1 }).withMessage('Question cannot be empty'),
-    check('studentIds').isArray({ min: 2, max: 6 }).withMessage('Select 2-6 students')
+    check('studentIds').isArray({ min: 2, max: 6 }).withMessage('Select 2-6 students'),
+    check('question').custom(value => {
+      if (!value || typeof value !== 'string' || value.trim().length === 0) {
+        throw new Error('Question cannot be empty or contain only spaces');
+      }
+      return true;
+    })
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -333,7 +338,7 @@ app.put('/api/assignments/:id/evaluate',
 app.get('/api/students/statistics', isTeacher, async (req, res) => {
   try {
     const stats = await dao.getStudentStats(req.user.id);
-    res.json(stats);
+    res.status(200).json(stats);
   } catch (err) {
     res.status(500).json({ error: 'Internal server error fetching statistics' });
   }
@@ -348,7 +353,7 @@ app.get('/api/students/statistics', isTeacher, async (req, res) => {
 app.get('/api/assignments/closed-with-average', isStudent, async (req, res) => {
   try {
     const result = await dao.getClosedAvg(req.user.id);
-    res.json(result);
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: 'Internal server error fetching closed assignments' });
   }
