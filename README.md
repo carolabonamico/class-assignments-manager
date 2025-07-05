@@ -14,273 +14,315 @@
 - `/my/scores` — Student's closed assignments and weighted average (students only) (protected)
 - `*` — 404 Not Found page for any unrecognized route
 
-## API Server
+## APIs
 
-### POST `/api/sessions`
+Hereafter, we report the designed HTTP APIs, also implemented in the project.
 
-Login, create user session
+### __Login__
 
-- **Request Body:**
-  ```json
+URL: `/api/sessions`
+
+HTTP Method: POST.
+
+Description: Login, create user session.
+
+Request body:
+```json
+{
+  "username": "mario.rossi@polito.it",
+  "password": "password123"
+}
+```
+
+Response: `200 OK` (success), `401 Unauthorized` (invalid credentials), or `500 Internal Server Error` (generic error). In case of success, returns user data in JSON format (see below). Else, returns an error message.
+
+Response body:
+```json
+{
+  "id": 1,
+  "username": "mario.rossi@polito.it",
+  "name": "Mario Rossi",
+  "role": "teacher"
+}
+```
+
+### __Get current user__
+
+URL: `/api/sessions/current`
+
+HTTP Method: GET.
+
+Description: Get authenticated user.
+
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), or `500 Internal Server Error` (generic error).
+
+Response body:
+```json
+{
+  "id": 1,
+  "username": "mario.rossi@polito.it",
+  "name": "Mario Rossi",
+  "role": "teacher"
+}
+```
+
+### __Logout__
+
+URL: `/api/sessions/current`
+
+HTTP Method: DELETE.
+
+Description: Logout.
+
+Response: `200 OK` (success) or `500 Internal Server Error` (generic error).
+
+Response body: __None__
+
+### __List all students__
+
+URL: `/api/students`
+
+HTTP Method: GET.
+
+Description: Retrieve all students.
+
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), or `500 Internal Server Error` (generic error). In case of success, returns an array of students in JSON format (see below). Else, returns an error message.
+
+Response body:
+```json
+[
   {
-    "username": "string (email)",
-    "password": "string"
-  }
-  ```
-- **Response Body:**
-  ```json
+    "id": 3,
+    "name": "Giulia Bianchi",
+    "email": "giulia.bianchi@studenti.polito.it",
+    "role": "student"
+  },
   {
-    "id": "integer",
-    "username": "string",
-    "name": "string",
-    "role": "teacher|student"
+    "id": 4,
+    "name": "Marco Ferrari",
+    "email": "marco.ferrari@studenti.polito.it",
+    "role": "student"
   }
-  ```
-- **Success Codes:**
-  - `200 OK`: login successful
-- **Error Codes:**
-  - `401 Unauthorized`: invalid credentials
-  - `500 Internal Server Error`: server/database error
+]
+```
 
-### GET `/api/sessions/current`
+### __Get open assignments__
 
-Get authenticated user
+URL: `/api/assignments/open`
 
-- **Response Body:**
-  ```json
+HTTP Method: GET.
+
+Description: Get open assignments filtered by user role.
+
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), or `500 Internal Server Error` (generic error). In case of success, returns an array of assignments in JSON format (see below). Else, returns an error message.
+
+Response body:
+```json
+[
   {
-    "id": "integer",
-    "username": "string",
-    "name": "string",
-    "role": "teacher|student"
+    "id": 1,
+    "question": "Explain the difference between synchronous and asynchronous programming",
+    "teacher_id": 1,
+    "teacher_name": "Mario Rossi",
+    "status": "open",
+    "answer": "Synchronous programming executes code sequentially...",
+    "score": null,
+    "groupSize": 3
+  },
+  {
+    "id": 2,
+    "question": "What are the main principles of object-oriented programming?",
+    "teacher_id": 2,
+    "teacher_name": "Anna Verdi",
+    "status": "open",
+    "answer": null,
+    "score": null,
+    "groupSize": 2
   }
-  ```
-- **Success Codes:**
-  - `200 OK`: user data retrieved successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `500 Internal Server Error`: server/database error
+]
+```
 
-### DELETE `/api/sessions/current`
+### __Validate group constraints__
 
-Logout
+URL: `/api/groups/validate`
 
-- **Response Body:** (empty)
-- **Success Codes:**
-  - `200 OK`: logout successful
-- **Error Codes:**
-  - `500 Internal Server Error`: server/database error
+HTTP Method: POST.
 
-### GET `/api/students`
+Description: Check group constraints before assignment creation (teachers only).
 
-List all students
+Request body:
+```json
+{
+  "studentIds": [3, 4, 5]
+}
+```
 
-- **Response Body:**
-  ```json
-  [
-    { "id": "integer", 
-      "name": "string", 
-      "email": "string", 
-      "role": "student" 
-    },
-    ...
-  ]
-  ```
-- **Success Codes:**
-  - `200 OK`: students list retrieved successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `500 Internal Server Error`: server/database error
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a teacher), `422 Unprocessable Entity` (invalid student IDs array), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
 
-### GET `/api/assignments/open`
+Response body:
+```json
+{
+  "isValid": true,
+  "error": null
+}
+```
 
-Get open assignments filtered by user role
+### __Create new assignment__
 
-- **Response Body:**
-  ```json
-  [
+URL: `/api/assignments`
+
+HTTP Method: POST.
+
+Description: Create new assignment (teachers only).
+
+Request body:
+```json
+{
+  "question": "Explain the difference between synchronous and asynchronous programming",
+  "studentIds": [3, 4, 5]
+}
+```
+
+Response: `201 Created` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a teacher), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
+
+Response body:
+```json
+{
+  "id": 1,
+  "message": "Assignment created successfully"
+}
+```
+
+### __Submit answer__
+
+URL: `/api/assignments/<id>/answer`
+
+HTTP Method: PUT.
+
+Description: Submit answer (students only).
+
+Request body:
+```json
+{
+  "answer": "Synchronous programming executes code sequentially, blocking the thread until each operation completes. Asynchronous programming allows multiple operations to run concurrently without blocking the main thread."
+}
+```
+
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a student), `404 Not Found` (assignment not found or not open), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
+
+Response body:
+```json
+{
+  "id": 1,
+  "message": "Answer submitted successfully"
+}
+```
+
+### __Evaluate assignment__
+
+URL: `/api/assignments/<id>/evaluate`
+
+HTTP Method: PUT.
+
+Description: Evaluate assignment (teachers only).
+
+Request body:
+```json
+{
+  "score": 25
+}
+```
+
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a teacher), `404 Not Found` (assignment not found or not open), `422 Unprocessable Entity` (validation error), or `500 Internal Server Error` (generic error). If the request body is not valid, `422 Unprocessable Entity` (validation error).
+
+Response body:
+```json
+{
+  "id": 1,
+  "score": 25,
+  "status": "closed",
+  "message": "Assignment evaluated successfully"
+}
+```
+
+### __Get closed assignments with average__
+
+URL: `/api/assignments/closed-with-average`
+
+HTTP Method: GET.
+
+Description: Get student's closed assignments and weighted average (students only).
+
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a student), or `500 Internal Server Error` (generic error). In case of success, returns assignments and average in JSON format (see below). Else, returns an error message.
+
+Response body:
+```json
+{
+  "assignments": [
     {
-      "id": "integer",
-      "question": "string",
-      "teacher_id": "integer",
-      "teacher_name": "string",
-      "status": "open",
-      "answer": "string|null",
-      "score": "null",
-      "groupSize": "integer"
+      "id": 1,
+      "question": "Explain the difference between synchronous and asynchronous programming",
+      "teacher_id": 1,
+      "teacher_name": "Mario Rossi",
+      "status": "closed",
+      "answer": "Synchronous programming executes code sequentially...",
+      "score": 25,
+      "groupSize": 3
     },
-    ...
-  ]
-  ```
-- **Success Codes:**
-  - `200 OK`: assignments retrieved successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `500 Internal Server Error`: server/database error
-
-### POST `/api/groups/validate`
-
-Check group constraints before assignment creation (teachers only)
-
-- **Request Body:**
-  ```json
-  {
-    "studentIds": [ "integer", ... ]
-  }
-  ```
-- **Response Body:**
-  ```json
-  {
-    "isValid": "boolean",
-    "error": "string|null"
-  }
-  ```
-- **Success Codes:**
-  - `200 OK`: validation completed successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `403 Forbidden`: not a teacher
-  - `422 Unprocessable Entity`: invalid student IDs array (must be 2-6 students)
-  - `500 Internal Server Error`: server/database error
-
-### POST `/api/assignments`
-
-Create new assignment (teachers only)
-
-- **Request Body:**
-  ```json
-  {
-    "question": "string",
-    "studentIds": [ "integer", ... ]
-  }
-  ```
-- **Response Body:**
-  ```json
-  {
-    "id": "integer",
-    "message": "Assignment created successfully"
-  }
-  ```
-- **Success Codes:**
-  - `201 Created`: assignment created successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `403 Forbidden`: not a teacher
-  - `422 Unprocessable Entity`: missing/invalid fields or validation errors (2-6 students required)
-  - `500 Internal Server Error`: server/database error
-
-### PUT `/api/assignments/:id/answer`
-
-Submit answer (students only)
-
-- **Parameters:**
-  - `:id` — Assignment ID (integer, required)
-- **Request Body:**
-  ```json
-  {
-    "answer": "string"
-  }
-  ```
-- **Response Body:**
-  ```json
-  {
-    "id": "integer",
-    "message": "Answer submitted successfully"
-  }
-  ```
-- **Success Codes:**
-  - `200 OK`: answer submitted successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `403 Forbidden`: not a student
-  - `404 Not Found`: assignment not found or not open
-  - `422 Unprocessable Entity`: empty/invalid answer
-  - `500 Internal Server Error`: server/database error
-
-### PUT `/api/assignments/:id/evaluate`
-
-Evaluate assignment (teachers only)
-
-- **Parameters:**
-  - `:id` — Assignment ID (integer, required)
-- **Request Body:**
-  ```json
-  {
-    "score": "integer (0-30)"
-  }
-  ```
-- **Response Body:**
-  ```json
-  {
-    "id": "integer",
-    "score": "integer",
-    "status": "closed",
-    "message": "Assignment evaluated successfully"
-  }
-  ```
-- **Success Codes:**
-  - `200 OK`: assignment evaluated successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `403 Forbidden`: not a teacher
-  - `404 Not Found`: assignment not found or not open
-  - `422 Unprocessable Entity`: invalid score
-  - `500 Internal Server Error`: server/database error
-
-### GET `/api/assignments/closed-with-average`
-
-Get student's closed assignments and weighted average (students only)
-
-- **Response Body:**
-  ```json
-  {
-    "assignments": [
-      {
-        "id": "integer",
-        "question": "string",
-        "teacher_id": "integer",
-        "teacher_name": "string",
-        "status": "closed",
-        "answer": "string",
-        "score": "integer",
-        "groupSize": "integer"
-      },
-      ...
-    ],
-    "weightedAverage": "number|null"
-  }
-  ```
-- **Success Codes:**
-  - `200 OK`: data retrieved successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `403 Forbidden`: not a student
-  - `500 Internal Server Error`: server/database error
-
-### GET `/api/students/statistics`
-
-Student statistics for teacher's assigned tasks (teachers only)
-
-- **Response Body:**
-  ```json
-  [
     {
-      "id": "integer",
-      "name": "string",
-      "open_assignments": "integer",
-      "closed_assignments": "integer",
-      "total_assignments": "integer",
-      "weighted_average": "number|null"
-    },
-    ...
-  ]
-  ```
-- **Success Codes:**
-  - `200 OK`: statistics retrieved successfully
-- **Error Codes:**
-  - `401 Unauthorized`: not authenticated
-  - `403 Forbidden`: not a teacher
-  - `500 Internal Server Error`: server/database error
+      "id": 3,
+      "question": "What are the main principles of object-oriented programming?",
+      "teacher_id": 2,
+      "teacher_name": "Anna Verdi",
+      "status": "closed",
+      "answer": "The main principles are encapsulation, inheritance, polymorphism...",
+      "score": 28,
+      "groupSize": 2
+    }
+  ],
+  "weightedAverage": 26.5
+}
+```
+
+### __Get student statistics__
+
+URL: `/api/students/statistics`
+
+HTTP Method: GET.
+
+Description: Student statistics for teacher's assigned tasks (teachers only).
+
+Response: `200 OK` (success), `401 Unauthorized` (not authenticated), `403 Forbidden` (not a teacher), or `500 Internal Server Error` (generic error). In case of success, returns an array of student statistics in JSON format (see below). Else, returns an error message.
+
+Response body:
+```json
+[
+  {
+    "id": 3,
+    "name": "Giulia Bianchi",
+    "open_assignments": 2,
+    "closed_assignments": 5,
+    "total_assignments": 7,
+    "weighted_average": 24.2
+  },
+  {
+    "id": 4,
+    "name": "Marco Ferrari",
+    "open_assignments": 1,
+    "closed_assignments": 3,
+    "total_assignments": 4,
+    "weighted_average": 27.5
+  },
+  {
+    "id": 5,
+    "name": "Laura Russo",
+    "open_assignments": 3,
+    "closed_assignments": 2,
+    "total_assignments": 5,
+    "weighted_average": null
+  }
+]
+```
 
 ## Database Tables
 
