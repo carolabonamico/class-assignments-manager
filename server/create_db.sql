@@ -73,7 +73,7 @@ INSERT INTO users (name, email, password, salt, role) VALUES
 -- Example assignments insertion
 -- Assignment 1: CLOSED (with answer and evaluation)
 INSERT INTO assignments (question, teacher_id, status, answer, score) VALUES 
-('Implement a merge sort algorithm in JavaScript and explain the time complexity.', 
+('Implementare un algoritmo di ordinamento per unione in JavaScript e spiegare la complessità temporale.', 
  1, 
  'closed', 
  'function mergeSort(arr) {
@@ -101,12 +101,12 @@ function merge(left, right) {
     return result.concat(left.slice(i)).concat(right.slice(j));
 }
 
-The time complexity is O(n log n) in the best, average and worst case, where n is the number of elements to sort.',
+La complessità temporale è O(n log n) nel caso migliore, medio e peggiore, dove n è il numero di elementi da ordinare.',
  27);
 
 -- Assignment 2: OPEN (no answer yet)
 INSERT INTO assignments (question, teacher_id, status) VALUES 
-('Design and implement a library management system with React and Express. The system must allow managing books, users and loans.',
+('Implementa una semplice API RESTful con Express per gestire un elenco di libri (aggiunta, visualizzazione e cancellazione).',
  1,
  'open');
 
