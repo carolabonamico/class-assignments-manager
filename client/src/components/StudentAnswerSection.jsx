@@ -58,6 +58,10 @@ function StudentAnswerSection({ assignment, onUpdateAssignment }) {
           {answerState.success}
         </Alert>
       }
+
+      {assignment.answer && (
+        <h6 className="fw-bold">Risposta del gruppo:</h6>
+      )}
       
       {/* If no answer exists, show "Add Answer" button */}
       {!assignment.answer && !isEditing && (
@@ -67,14 +71,13 @@ function StudentAnswerSection({ assignment, onUpdateAssignment }) {
           className="mb-3"
         >
           <i className="bi bi-plus-circle me-2"></i>
-          Aggiungi
+          Rispondi
         </Button>
       )}
       
       {/* If answer exists and not editing, show answer with edit button */}
       {assignment.answer && !isEditing && (
         <>
-          <h6 className="fw-bold">Risposta del gruppo:</h6>
           <p>{assignment.answer}</p>
           <Button
             variant="primary"
